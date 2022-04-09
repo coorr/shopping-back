@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://admin.cw6f368mqpxq.ap-northeast-2.rds.amazonaws.com:3306/shop_db?serverTimezone=UTC&characterEncoding=UTF-8
+    username: admin
+    password: wlstjd0604
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show-sql: true
+logging:
+  level:
+    org.hibernate.SQL: debug
+
+server:
+  port: 8080
+
+# App Properties
+shop:
+  app:
+    jwtSecret: shopSecretKey
+    jwtExpirationMs: 1000

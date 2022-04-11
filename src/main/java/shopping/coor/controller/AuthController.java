@@ -35,10 +35,10 @@ import shopping.coor.repository.UserRepository;
 import shopping.coor.serviceImpl.UserDetailsImpl;
 
 
+// SecurityContextHolder ->" getContext() " 중간자 -> Authentication -> principal
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/user")
-// SecurityContextHolder ->" getContext() " 중간자 -> Authentication -> principal
 @RequiredArgsConstructor
 public class AuthController {
 	private final AuthenticationManager authenticationManager;
@@ -55,21 +55,24 @@ public class AuthController {
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws UnknownHostException {
         System.out.println(SecurityContextHolder.getContext().getAuthentication());
-	    
-	    System.out.println(loginRequest.getUsername());
-	    System.out.println(loginRequest.getPassword());
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())); 
+		Authentication authentication;
+	    try {
+			authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+		} catch (Exception e) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("아이디 또는 비밀번호가 일치하지 않습니다."));
+		}
+
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);  // 시큐리티 저장소인 SecurityContextHolder에 저장
 		String jwt = jwtUtils.generateJwtToken(authentication);
-		
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 		
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
-
 		return ResponseEntity.ok(new JwtResponse(jwt,
 												 userDetails.getId(), 
 												 userDetails.getUsername(), 
@@ -83,13 +86,13 @@ public class AuthController {
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity
 					.badRequest()  // 400 클라이언트 오류처리
-					.body(new MessageResponse("Error: Username is already taken!"));
+					.body(new MessageResponse("이미 존재하는 아이디입니다."));
 		}
 
 		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
 			return ResponseEntity
 					.badRequest() 
-					.body(new MessageResponse("Error: Email is already in use!"));
+					.body(new MessageResponse("이미 존재하는 이메일입니다."));
 		}
 
 		// Create new user's account
@@ -98,12 +101,11 @@ public class AuthController {
 							 encoder.encode(signUpRequest.getPassword()));
 
 		Set<String> strRoles = signUpRequest.getRole();
-		Set<Role> roles = new HashSet<>();   // 
+		Set<Role> roles = new HashSet<>();
 
 		if (strRoles == null) {
-			
-			Role userRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+					.orElseThrow(() -> new RuntimeException("권한 오류입니다."));
 			
 			roles.add(userRole);
 		} else {
@@ -111,13 +113,13 @@ public class AuthController {
 				switch (role) {
 				case "admin":
 					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+							.orElseThrow(() -> new RuntimeException("권한 오류입니다."));
 					roles.add(adminRole);
 
 					break;
 				default:
 					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+							.orElseThrow(() -> new RuntimeException("권한 오류입니다."));
 					roles.add(userRole);
 				}
 			});
@@ -126,6 +128,6 @@ public class AuthController {
 		user.setRoles(roles);
 		userRepository.save(user);
 
-		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+		return ResponseEntity.ok(new MessageResponse("회원가입 완료되었습니다."));
 	}
 }

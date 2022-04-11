@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 
 @Getter
@@ -18,10 +19,19 @@ public class Item {
     public Long id;
 
     @NotBlank
-    public String name;
+    public String title;
 
-    @NotBlank
+    @NotNull
     public int price;
 
-    public String image;
+    @NotNull
+    public int discount_price;
+
+    public String category;
+
+    public String size;
+
+    public String material;
+
+    public String info;
 }

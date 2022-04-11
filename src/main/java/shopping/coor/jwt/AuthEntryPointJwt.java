@@ -22,6 +22,6 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 			AuthenticationException authException) throws IOException, ServletException {
 		
 		logger.error("Unauthorized error: {}", authException.getMessage());
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.");  
+		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.");
 	}
 }

@@ -3,7 +3,6 @@ package shopping.coor.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import shopping.coor.model.Item;
-import shopping.coor.payload.request.ItemRequestDto;
 import shopping.coor.service.ItemService;
 
 import java.util.List;
@@ -22,7 +21,13 @@ public class ItemController {
     }
 
     @PostMapping("/insertItemAll")
-    public void insertItemAll(@RequestBody Item item) {
+    public void insertItemAll(@RequestBody Item item) throws Exception {
          itemService.insertItemAll(item);
+    }
+
+    @GetMapping("/request")
+    public String request(@RequestParam("itemId") String itemId) {
+        itemService.orderItem(itemId);
+        return "ok";
     }
 }

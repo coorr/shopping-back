@@ -15,7 +15,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import shopping.coor.serviceImpl.UserDetailsImpl;
+import shopping.coor.serviceImpl.user.UserDetailsImpl;
 
 @Component
 public class JwtUtils {

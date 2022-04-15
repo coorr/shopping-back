@@ -10,4 +10,6 @@ public class CoorApplication {
 		SpringApplication.run(CoorApplication.class, args);
 	}
 
+
+
 }

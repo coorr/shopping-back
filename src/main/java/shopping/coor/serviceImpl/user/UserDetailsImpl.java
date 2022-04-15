@@ -1,4 +1,4 @@
-package shopping.coor.serviceImpl;
+package shopping.coor.serviceImpl.user;
 
 import java.util.Collection;
 import java.util.List;

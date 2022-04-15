@@ -23,8 +23,15 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public void insertItemAll(Item item) {
+    public void insertItemAll(Item item) throws  Exception{
         itemRepository.save(item);
 
+    }
+
+    @Override
+    public void orderItem(String itemId) {
+        if (itemId.equals("ex")) {
+            throw new IllegalStateException("예외 발생!");
+        }
     }
 }

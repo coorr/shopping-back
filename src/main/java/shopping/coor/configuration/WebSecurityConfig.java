@@ -1,6 +1,6 @@
 package shopping.coor.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import shopping.coor.jwt.AuthEntryPointJwt;
 import shopping.coor.jwt.AuthTokenFilter;
-import shopping.coor.serviceImpl.UserDetailsServiceImpl;
+import shopping.coor.serviceImpl.user.UserDetailsServiceImpl;
 
 
 @Configuration
@@ -24,25 +24,19 @@ import shopping.coor.serviceImpl.UserDetailsServiceImpl;
 		// securedEnabled = true,
 		// jsr250Enabled = true,
 		prePostEnabled = true)
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	@Autowired
-    UserDetailsServiceImpl userDetailsService;
+    private  final UserDetailsServiceImpl userDetailsService;
+	private final AuthTokenFilter authenticationJwtTokenFilter;
+	private final AuthEntryPointJwt unauthorizedHandler;
 
-	@Autowired
-	private AuthEntryPointJwt unauthorizedHandler;
-
-	@Bean
-	public AuthTokenFilter authenticationJwtTokenFilter() {
-		return new AuthTokenFilter();
-	}
-
-	@Override  // passwordEncoder 설정
-	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+	@Override
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
 
 	@Bean
-	@Override  // 외부에 있는 값을 가져올 때 사용하는 빈
+	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
@@ -68,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/static/**").permitAll()
 			.anyRequest().authenticated();
 
-		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
 

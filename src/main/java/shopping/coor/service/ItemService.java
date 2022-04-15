@@ -6,6 +6,8 @@ import shopping.coor.payload.request.ItemRequestDto;
 import java.util.List;
 
 public interface ItemService {
-    public List<Item> getItem();
-    public void insertItemAll(Item item);
+    List<Item> getItem();
+    void insertItemAll(Item item) throws Exception;
+
+    void orderItem(String itemId);
 }

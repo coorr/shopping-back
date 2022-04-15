@@ -22,11 +22,17 @@ logging:
   level:
     org.hibernate.SQL: debug
 
+sentry:
+  dsn: https://ecf8dde803d84e3dbecde0428608850a@o1205153.ingest.sentry.io/6334921
+  traces-sample-rate: 1.0
+
 server:
   port: 8080
+
+
 
 # App Properties
 shop:
   app:
     jwtSecret: shopSecretKey
-    jwtExpirationMs: 1000
+    jwtExpirationMs: 60000

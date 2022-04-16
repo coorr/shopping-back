@@ -1,13 +1,18 @@
 package shopping.coor.serviceImpl.user;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import shopping.coor.jwt.JwtUtils;
@@ -22,6 +27,7 @@ import shopping.coor.repository.RoleRepository;
 import shopping.coor.repository.UserRepository;
 import shopping.coor.service.UserService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,12 +36,14 @@ import java.util.stream.Collectors;
 // SecurityContextHolder -> Authentication -> principal
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService  {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final RoleRepository roleRepository;
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
+
 
     @Override
     public List<User> selectAll() {
@@ -54,8 +62,7 @@ public class UserServiceImpl implements UserService  {
                     .body(new MessageResponse("아이디 또는 비밀번호가 일치하지 않습니다."));
         }
 
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);  // 시큐리티 저장소인 SecurityContextHolder에 저장
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
@@ -69,6 +76,8 @@ public class UserServiceImpl implements UserService  {
                 roles));
     }
 
+
+    @Transactional
     @Override
     public ResponseEntity<?> registerUser(SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -76,17 +85,15 @@ public class UserServiceImpl implements UserService  {
                     .badRequest()  // 400 클라이언트 오류처리
                     .body(new MessageResponse("이미 존재하는 아이디입니다."));
         }
-
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("이미 존재하는 이메일입니다."));
         }
-
-        // Create new user's account
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+                signUpRequest.getPassword());
+//                encoder.encode(signUpRequest.getPassword()));
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
@@ -112,12 +119,13 @@ public class UserServiceImpl implements UserService  {
                 }
             });
         }
-
         user.setRoles(roles);
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("회원가입 완료되었습니다."));
     }
+
+
 }
 
 

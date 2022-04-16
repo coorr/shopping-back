@@ -19,16 +19,13 @@ import shopping.coor.repository.UserRepository;
 public class UserDetailsServiceImpl implements UserDetailsService {
 	private final UserRepository userRepository;
 
-	private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
-	
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		logger.info("아이디 확인중");
 		User user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
 		return UserDetailsImpl.build(user);
-		
+
 	}
 }

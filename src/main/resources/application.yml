@@ -35,4 +35,5 @@ server:
 shop:
   app:
     jwtSecret: shopSecretKey
-    jwtExpirationMs: 60000
+    jwtExpirationMs: 600000
+# 600,000 = 10분

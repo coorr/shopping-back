@@ -20,19 +20,17 @@ import shopping.coor.serviceImpl.user.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-		// securedEnabled = true,
-		// jsr250Enabled = true,
-		prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private  final UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 	private final AuthTokenFilter authenticationJwtTokenFilter;
 	private final AuthEntryPointJwt unauthorizedHandler;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 	}
 
 	@Bean
@@ -41,25 +39,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return super.authenticationManagerBean();
 	}
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-
-
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable()   // 다른 http 통신이 올 경우 cors,csrf  정책을 off
+		http.cors().and().csrf().disable()
 			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 			.authorizeRequests()
 			.antMatchers("/api/user/**").permitAll()
-			.antMatchers("/api/item/**").permitAll()
-			.antMatchers("/api/manage/**").permitAll()
-			.antMatchers("/api/manage/equipment/**").permitAll()
-			.antMatchers("/static/**").permitAll()
+			.antMatchers("/api/item/**").hasAnyAuthority("ROLE_ADMIN")
 			.anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);

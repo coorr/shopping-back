@@ -1,6 +1,7 @@
 package shopping.coor.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import shopping.coor.model.Item;
 import shopping.coor.service.ItemService;
@@ -15,8 +16,10 @@ public class ItemController {
 
     private final ItemService itemService;
 
+
     @GetMapping("/getItem")
     public List<Item> getItem() {
+        System.out.println(SecurityContextHolder.getContext().getAuthentication());
         return itemService.getItem();
     }
 

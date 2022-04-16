@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,35 +21,34 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import shopping.coor.serviceImpl.user.UserDetailsServiceImpl;
+import shopping.coor.serviceImpl.user.UserServiceImpl;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class AuthTokenFilter extends OncePerRequestFilter {
 	private final JwtUtils jwtUtils;
-	private final  UserDetailsServiceImpl userDetailsService;
+	private final UserDetailsServiceImpl userDetailsService;
 
-	private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 	
 	
 
-	@Override // 로그인 시에 암호화해서 발급했던 토큰인지 확인
+	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		try {
 			String jwt = parseJwt(request);
 			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-				
 				String username = jwtUtils.getUserNameFromJwtToken(jwt);
-				
 				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				
-				SecurityContextHolder.getContext().setAuthentication(authentication);  // 인증에 사용자 정보 들어감
+				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 		} catch (Exception e) {
-			logger.error("Cannot set user authentication: {}", e);
+			log.error("Error logging in: {}", e.getMessage());
 		}
 		filterChain.doFilter(request, response);
 	}

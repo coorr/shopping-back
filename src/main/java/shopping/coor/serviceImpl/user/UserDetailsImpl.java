@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,9 +14,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import shopping.coor.model.User;
 
+@Getter
+@AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
-	private static final long serialVersionUID = 1L;
-
 	private Long id;
 
 	private String username;
@@ -26,19 +28,10 @@ public class UserDetailsImpl implements UserDetails {
 
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(Long id, String username, String email, String password,
-			Collection<? extends GrantedAuthority> authorities) {
-		this.id = id;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.authorities = authorities;
-	}
-
 	public static UserDetailsImpl build(User user) {
-		List<GrantedAuthority> authorities = user.getRoles().stream()   // stream 배열
-				.map(role -> new SimpleGrantedAuthority(role.getName().name())) // SimpleGrantedAuthority - 권한 명칭을 지칭
-				.collect(Collectors.toList()); //  마지막에 원하는 형태로 변환 , List 인스턴스로 수집하는 데 사용
+		List<GrantedAuthority> authorities = user.getRoles().stream()
+				.map(role -> new SimpleGrantedAuthority(role.getName().name()))
+				.collect(Collectors.toList());
 
 		return new UserDetailsImpl(
 				user.getId(), 
@@ -51,14 +44,6 @@ public class UserDetailsImpl implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return authorities;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public String getEmail() {
-		return email;
 	}
 
 	@Override

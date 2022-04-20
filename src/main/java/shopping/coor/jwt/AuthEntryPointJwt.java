@@ -26,6 +26,9 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 			AuthenticationException authException) throws IOException, ServletException {
 		
 		log.error("Unauthorized error: {}", authException.getMessage());
-		response.sendError(response.SC_UNAUTHORIZED, "유효한 권한이 없습니다.");
+
+		response.setContentType("application/json;charset=UTF-8");
+		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		response.getWriter().print("invalid authority");
 	}
 }

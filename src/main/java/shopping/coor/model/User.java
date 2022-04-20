@@ -27,16 +27,16 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    public Long id;
+    private Long id;
 
     @NotBlank
     @Size(max = 20)
-    public String username;
+    private String username;
 
     @NotBlank
     @Size(max = 50)
     @Email
-    public String email;
+    private String email;
 
     @NotBlank
     @Size(max = 120)

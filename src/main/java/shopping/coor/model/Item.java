@@ -1,11 +1,14 @@
 package shopping.coor.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -16,22 +19,26 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
-    public Long id;
+    private Long id;
 
     @NotBlank
-    public String title;
+    private String title;
 
     @NotNull
-    public int price;
+    private int price;
 
     @NotNull
-    public int discount_price;
+    private int discount_price;
 
-    public String category;
+    private String category;
 
-    public String size;
+    private String size;
 
-    public String material;
+    private String material;
 
-    public String info;
+    private String info;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "item")
+    private List<Image> images = new ArrayList<>();
 }

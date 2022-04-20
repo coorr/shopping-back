@@ -3,6 +3,7 @@ package shopping.coor.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import shopping.coor.model.Item;
 import shopping.coor.service.ItemService;
 
@@ -24,8 +25,8 @@ public class ItemController {
     }
 
     @PostMapping("/insertItemAll")
-    public void insertItemAll(@RequestBody Item item) throws Exception {
-         itemService.insertItemAll(item);
+    public List<Item> insertItemAll(MultipartFile[] multipartFiles, String itemData) throws Exception {
+         return itemService.insertItemAll(multipartFiles, itemData);
     }
 
     @GetMapping("/request")

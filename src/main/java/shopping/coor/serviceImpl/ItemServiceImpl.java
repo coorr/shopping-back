@@ -90,7 +90,7 @@ public class ItemServiceImpl implements ItemService {
                         .withCannedAcl(CannedAccessControlList.PublicRead));
             } catch (IOException e) {
                 return ResponseEntity
-                        .badRequest()  
+                        .badRequest()
                         .body(new MessageResponse("파일 업로드에 실패했습니다."));
 //                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
             }
@@ -104,7 +104,7 @@ public class ItemServiceImpl implements ItemService {
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 
-    private String createFileName(String fileName) { // 먼저 파일 업로드 시, 파일명을 난수화하기 위해 random으로 돌립니다.
+    private String createFileName(String fileName) {
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 

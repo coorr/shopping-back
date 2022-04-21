@@ -35,4 +35,4 @@ bin/
 ### config ###
 /logs/
 application.yml
-application-real-properties
+application-real.properties

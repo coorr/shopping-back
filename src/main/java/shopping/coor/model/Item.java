@@ -28,7 +28,7 @@ public class Item {
     private int price;
 
     @NotNull
-    private int discount_price;
+    private int discountPrice;
 
     private String category;
 
@@ -38,7 +38,27 @@ public class Item {
 
     private String info;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "item")
+//    @JsonIgnore
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
+
+    public void addImage(Image image) {
+        images.add(image);
+        image.setItem(this);
+    }
+
+    public static Item createItem(Item items, Image... images) {
+        Item item = new Item();
+        item.setTitle(items.getTitle());
+        item.setPrice(items.getPrice());
+        item.setDiscountPrice(items.getDiscountPrice());
+        item.setCategory(items.getCategory());
+        item.setSize(items.getSize());
+        item.setMaterial(items.getMaterial());
+        item.setInfo(items.getInfo());
+        for (Image image : images) {
+            item.addImage(image);
+        }
+        return item;
+    }
 }

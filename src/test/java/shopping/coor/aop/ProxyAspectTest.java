@@ -17,11 +17,10 @@ class ProxyAspectTest {
     ItemController itemController;
 
 
-
-    @Test
-    public void aopTest() throws Exception {
-        log.info("itemService = {}", itemController.getClass());
-        List<Item> item = itemController.getItem();
-        System.out.println("item = " + item);
-    }
+//    @Test
+//    public void aopTest() throws Exception {
+//        log.info("itemService = {}", itemController.getClass());
+//        List<Item> item = itemController.getItem();
+//        System.out.println("item = " + item);
+//    }
 }

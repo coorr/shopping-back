@@ -1,9 +1,7 @@
 package shopping.coor.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -15,8 +13,8 @@ import static javax.persistence.FetchType.*;
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@AllArgsConstructor
 public class Image {
 
     @Id
@@ -27,7 +25,15 @@ public class Image {
     @NotBlank
     private String location;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
+
+    public static Image createImage(String location, Item itemId) {
+        Image image = new Image();
+        image.setLocation(location);
+        image.setItem(itemId);
+        return image;
+    }
 }

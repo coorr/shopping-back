@@ -26,11 +26,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsServiceImpl userDetailsService;
 	private final AuthTokenFilter authenticationJwtTokenFilter;
 	private final AuthEntryPointJwt unauthorizedHandler;
-	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 	@Bean
@@ -46,7 +50,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 			.authorizeRequests()
 			.antMatchers("/api/user/**").permitAll()
-			.antMatchers("/api/item/**").hasAnyAuthority("ROLE_ADMIN")
+//			.antMatchers("/api/item/**").hasAnyAuthority("ROLE_ADMIN")
+			.antMatchers("/api/item/**").permitAll()
+			.antMatchers("/static/**").permitAll()
 			.anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);

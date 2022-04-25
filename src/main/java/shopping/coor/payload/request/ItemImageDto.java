@@ -8,9 +8,11 @@ import shopping.coor.model.Image;
 @Setter
 public class ItemImageDto {
 
-    private String src;
+    private Long id;
+    private String location;
 
     public ItemImageDto(Image image) {
-        src=image.getLocation();
+        id = image.getId();
+        location =image.getLocation();
     }
 }

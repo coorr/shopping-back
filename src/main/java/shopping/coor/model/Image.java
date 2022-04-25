@@ -13,7 +13,7 @@ import static javax.persistence.FetchType.*;
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor()
 //@AllArgsConstructor
 public class Image {
 

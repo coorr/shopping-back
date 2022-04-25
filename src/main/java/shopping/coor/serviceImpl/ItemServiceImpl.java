@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import shopping.coor.model.Image;
 import shopping.coor.model.Item;
 import shopping.coor.payload.request.ItemRequestDto;
+import shopping.coor.payload.request.ItemRequestOneDto;
 import shopping.coor.payload.response.MessageResponse;
 import shopping.coor.repository.ImageRepository;
 import shopping.coor.repository.ItemRepository;
@@ -27,10 +28,7 @@ import shopping.coor.service.ItemService;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -47,7 +45,7 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
-    public List<ItemRequestDto> getItem(Long lastId, int size) {
+    public List<ItemRequestDto> getItemAll(Long lastId, int size) {
         PageRequest pageRequest = PageRequest.of(0, size);
 
         if (lastId == 0) {
@@ -56,9 +54,33 @@ public class ItemServiceImpl implements ItemService {
             return result;
         }
 
-        List<Item> item = itemRepository.getItem(lastId, pageRequest);
+        List<Item> item = itemRepository.getItemAll(lastId, pageRequest);
         List<ItemRequestDto> result = getItemChangeDto(item);
         return result;
+    }
+
+    @Override
+    public ResponseEntity<?> getItemOne(Long id) {
+            List<Item> item = itemRepository.getItemOne(id);
+            if(item.isEmpty()) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("존재하지 않는 게시글입니다."));
+            }
+            List<ItemRequestOneDto> result = item.stream()
+                    .map(i -> new ItemRequestOneDto(i))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(result);
+
+    }
+
+    @Transactional
+    @Override
+    public ResponseEntity<?> removeItem(Long id) {
+        Item item = itemRepository.getItemEntity(id);
+        itemRepository.delete(item);
+        return null;
     }
 
     private List<ItemRequestDto> getItemChangeDto(List<Item> item) {
@@ -72,6 +94,8 @@ public class ItemServiceImpl implements ItemService {
     public ResponseEntity<?> insertItemAll(MultipartFile[] multipartFiles, String itemData) throws Exception {
         Item itemDto = new ObjectMapper().readValue(itemData, Item.class);
         Item itemId = itemRepository.save(itemDto);
+        String UPLOAD_PATH = "src/main/resources/static/";
+        String absolutePath = new File("").getAbsolutePath() + "\\";
 
         if (multipartFiles == null) {
             return null;
@@ -85,18 +109,85 @@ public class ItemServiceImpl implements ItemService {
             objectMetadata.setContentLength(file.getSize());
             objectMetadata.setContentType(file.getContentType());
 
-            try (InputStream inputStream = file.getInputStream()) {
-                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
-            } catch (IOException e) {
-                return ResponseEntity
-                        .badRequest()
-                        .body(new MessageResponse("파일 업로드에 실패했습니다."));
-//                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
-            }
+            File fileSave = new File(absolutePath + UPLOAD_PATH, fileName);
+            file.transferTo(fileSave);
+//            try (InputStream inputStream = file.getInputStream()) {
+//                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+//                        .withCannedAcl(CannedAccessControlList.PublicRead));
+//            } catch (IOException e) {
+//                return ResponseEntity
+//                        .badRequest()
+//                        .body(new MessageResponse("파일 업로드에 실패했습니다."));
+//            }
 
             imageRepository.saveImage(fileName, itemId);
         }
+        return null;
+    }
+
+    @Transactional
+    @Override
+    public ResponseEntity<?> revisedItem(MultipartFile[] multipartFiles, String itemData, String imagePath) throws Exception {
+        Item itemDto = new ObjectMapper().readValue(itemData, Item.class);
+        Long itemId = itemDto.getId();
+        Item itemList = itemRepository.updateItemOne(itemId);
+        itemList.setTitle(itemDto.getTitle());
+        itemList.setPrice(itemDto.getPrice());
+        itemList.setDiscountPrice(itemDto.getDiscountPrice());
+        itemList.setCategory(itemDto.getCategory());
+        itemList.setSize(itemDto.getSize());
+        itemList.setMaterial(itemDto.getMaterial());
+        itemList.setInfo(itemDto.getInfo());
+
+        List<Image> images = imageRepository.getItemToImage(itemId);
+        Image[] imageDto = new ObjectMapper().readValue(imagePath, Image[].class);
+        Set<Long> imageIds = images.stream().map(id -> id.getId()).collect(Collectors.toSet());  // 1 , 2 , 3
+        ArrayList currentImageId = new ArrayList();
+
+        for (Image imageList : imageDto) {
+            Image image = new Image();
+            image.setId(imageList.getId());
+            image.setLocation(imageList.getLocation());
+            image.setItem(itemDto);
+            imageRepository.saveAndFlush(image);
+
+            imageIds.remove(imageList.getId());
+        }
+        if(imageIds.size() != 0) {
+            imageRepository.deleteImage(imageIds);
+        }
+
+
+        if (multipartFiles == null) {
+            return null;
+        }
+
+        String UPLOAD_PATH = "src/main/resources/static/";
+        String absolutePath = new File("").getAbsolutePath() + "\\";
+
+        for (int i = 0; i < multipartFiles.length; i++) {
+            MultipartFile file = multipartFiles[i];
+            System.out.println("file = " + file);
+
+            String fileName = createFileName(file.getOriginalFilename());
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentLength(file.getSize());
+            objectMetadata.setContentType(file.getContentType());
+
+            File fileSave = new File(absolutePath + UPLOAD_PATH, fileName);
+            file.transferTo(fileSave);
+//            try (InputStream inputStream = file.getInputStream()) {
+//                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+//                        .withCannedAcl(CannedAccessControlList.PublicRead));
+//            } catch (IOException e) {
+//                return ResponseEntity
+//                        .badRequest()
+//                        .body(new MessageResponse("파일 업로드에 실패했습니다."));
+//            }
+
+            imageRepository.saveImage(fileName, itemDto);
+        }
+
         return null;
     }
 

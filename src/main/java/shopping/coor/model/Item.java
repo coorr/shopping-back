@@ -32,10 +32,13 @@ public class Item {
 
     private String category;
 
+    @Column(length = 1000)
     private String size;
 
+    @Column(length = 1000)
     private String material;
 
+    @Column(length = 1000)
     private String info;
 
 //    @JsonIgnore

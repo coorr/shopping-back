@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import shopping.coor.model.Image;
 import shopping.coor.model.Item;
 import shopping.coor.payload.request.ItemRequestDto;
+import shopping.coor.payload.request.ItemRequestOneDto;
 import shopping.coor.service.ItemService;
 
 
@@ -31,13 +32,28 @@ public class ItemController {
 
 
     @GetMapping("/getItem")
-    public List<ItemRequestDto> getItem(@RequestParam(required = false) Long lastId, @RequestParam(required = false) int size ) {
-        return itemService.getItem(lastId,size);
+    public List<ItemRequestDto> getItemAll(@RequestParam(required = false) Long lastId, @RequestParam(required = false) int size ) {
+        return itemService.getItemAll(lastId,size);
+    }
+
+    @GetMapping("/getItemOne/{id}")
+    public ResponseEntity<?> getItemOne(@PathVariable Long id) {
+        return itemService.getItemOne(id);
+    }
+
+    @PostMapping("/removeItem/{id}")
+    public ResponseEntity<?> removeItem(@PathVariable Long id) {
+        return itemService.removeItem(id);
     }
 
     @PostMapping("/insertItemAll")
     public ResponseEntity<?> insertItemAll(MultipartFile[] multipartFiles, String itemData) throws Exception {
          return itemService.insertItemAll(multipartFiles, itemData);
+    }
+
+    @PostMapping("/revisedItem")
+    public ResponseEntity<?> revisedItem(MultipartFile[] multipartFiles, String itemData, String imagePath) throws Exception {
+        return itemService.revisedItem(multipartFiles, itemData, imagePath);
     }
 
     @GetMapping("/getImage")

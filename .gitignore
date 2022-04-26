@@ -36,3 +36,6 @@ bin/
 /logs/
 application.yml
 application-real.properties
+.gradle
+#build/
+out/

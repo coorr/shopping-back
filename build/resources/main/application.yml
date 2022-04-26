@@ -50,8 +50,8 @@ shop:
 cloud:
   aws:
     credentials:
-      accessKey: AKIA26ZMMWJ7EWJ3PQWK
-      secretKey: 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
+      accessKey: AKIA26ZMMWJ7MPCZKE6E
+      secretKey: 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
     s3:
       bucket: shopping-back-s3
     region:

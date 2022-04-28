@@ -1,20 +1,14 @@
 package shopping.coor.serviceImpl.user;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import shopping.coor.jwt.JwtUtils;
 import shopping.coor.model.ERole;
 import shopping.coor.model.Role;
@@ -27,7 +21,6 @@ import shopping.coor.repository.RoleRepository;
 import shopping.coor.repository.UserRepository;
 import shopping.coor.service.UserService;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -82,7 +75,7 @@ public class UserServiceImpl implements UserService  {
     public ResponseEntity<?> registerUser(SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
-                    .badRequest()  // 400 클라이언트 오류처리
+                    .badRequest()
                     .body(new MessageResponse("이미 존재하는 아이디입니다."));
         }
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
@@ -92,8 +85,7 @@ public class UserServiceImpl implements UserService  {
         }
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
-                signUpRequest.getPassword());
-//                encoder.encode(signUpRequest.getPassword()));
+                encoder.encode(signUpRequest.getPassword()));
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();

@@ -19,7 +19,6 @@ public class ItemRequestDto {
     private String title;
     private int price;
     private int discount_price;
-    private String location;
     private List<ItemImageDto> images;
 
     public ItemRequestDto(Item item) {

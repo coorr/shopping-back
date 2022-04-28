@@ -30,6 +30,9 @@ public class Item {
     @NotNull
     private int discountPrice;
 
+    @NotNull
+    private int stockQuantity;
+
     private String category;
 
     @Column(length = 1000)

@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import shopping.coor.model.Image;
 import shopping.coor.model.Item;
+import shopping.coor.payload.request.BasketRequestDto;
 import shopping.coor.payload.request.ItemRequestDto;
 import shopping.coor.payload.request.ItemRequestOneDto;
 import shopping.coor.service.ItemService;
@@ -63,3 +64,23 @@ public class ItemController {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

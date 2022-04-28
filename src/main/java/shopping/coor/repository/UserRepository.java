@@ -19,4 +19,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     @Query("select u from User u")
     List<User> selectAll();
+
+    User getById(Long id);
 }

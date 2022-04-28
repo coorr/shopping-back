@@ -1,10 +1,8 @@
 package shopping.coor.serviceImpl;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +19,14 @@ import shopping.coor.model.Item;
 import shopping.coor.payload.request.ItemRequestDto;
 import shopping.coor.payload.request.ItemRequestOneDto;
 import shopping.coor.payload.response.MessageResponse;
+import shopping.coor.repository.BasketRepository;
 import shopping.coor.repository.ImageRepository;
 import shopping.coor.repository.ItemRepository;
+import shopping.coor.repository.UserRepository;
 import shopping.coor.service.ItemService;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,7 +41,6 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ImageRepository imageRepository;
     private final AmazonS3 amazonS3;
-
 
     @Override
     public List<ItemRequestDto> getItemAll(Long lastId, int size) {
@@ -190,6 +188,8 @@ public class ItemServiceImpl implements ItemService {
 
         return null;
     }
+
+
 
     public void deleteFile(String fileName) {
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));

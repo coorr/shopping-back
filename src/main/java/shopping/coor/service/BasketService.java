@@ -12,9 +12,11 @@ public interface BasketService {
 
     ResponseEntity<?> removeBasketById(Long basketId, Long userId);
 
-    ResponseEntity<?> basketDownUserById(Long basketId, Long userId);
+    ResponseEntity<?> downBasketUserById(Long basketId, Long userId);
 
-    ResponseEntity<?> basketPlusUserById(Long basketId, Long userId);
+    ResponseEntity<?> plusBasketUserById(Long basketId, Long userId);
 
     void basketEmpty(Long userId);
+
+    ResponseEntity<?> insertNotUserBasket(Long userId, List<BasketRequestDto> basketDto);
 }

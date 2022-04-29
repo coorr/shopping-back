@@ -1,13 +1,13 @@
 package shopping.coor.payload.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter @Setter
-//@AllArgsConstructor
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 public class LoginRequest {
 	@NotBlank
 	private String username;

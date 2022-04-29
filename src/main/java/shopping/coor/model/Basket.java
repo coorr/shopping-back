@@ -1,6 +1,8 @@
 package shopping.coor.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,6 +16,8 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Basket {
     @Id
     @Column(name = "basket_id")
@@ -35,6 +39,13 @@ public class Basket {
 
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate createDate;
+
+    public Basket(User users, int itemTotal) {
+        this.user=users;
+        this.itemTotal = itemTotal;
+    }
+
+
 
     @PrePersist
     public void createDate(){

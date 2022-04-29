@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import shopping.coor.model.User;
 import shopping.coor.payload.request.LoginRequest;
 import shopping.coor.payload.request.SignupRequest;
+import shopping.coor.payload.response.MessageResponse;
 
 import java.util.List;
 
@@ -12,5 +13,5 @@ import java.util.List;
 public interface UserService {
     List<User> selectAll();
     ResponseEntity<?> authenticateUser(LoginRequest loginRequest);
-    ResponseEntity<?> registerUser(SignupRequest signUpRequest);
+    ResponseEntity<MessageResponse> registerUser(SignupRequest signUpRequest);
 }

@@ -2,19 +2,15 @@ package shopping.coor.controller;
 
 import java.net.UnknownHostException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import shopping.coor.model.ERole;
-import shopping.coor.model.Role;
+import org.springframework.web.bind.annotation.*;
 import shopping.coor.model.User;
 import shopping.coor.payload.request.LoginRequest;
 import shopping.coor.payload.request.SignupRequest;
@@ -38,7 +34,34 @@ public class AuthController {
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+	public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 		return userService.registerUser(signUpRequest);
 	}
+
+	@GetMapping("/selectAll")
+	public ResponseEntity<List<User>> selectAll() {
+		return ResponseEntity.ok(userService.selectAll());
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

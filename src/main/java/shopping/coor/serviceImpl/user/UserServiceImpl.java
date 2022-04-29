@@ -1,6 +1,7 @@
 package shopping.coor.serviceImpl.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -72,7 +73,7 @@ public class UserServiceImpl implements UserService  {
 
     @Transactional
     @Override
-    public ResponseEntity<?> registerUser(SignupRequest signUpRequest) {
+    public ResponseEntity<MessageResponse> registerUser(SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
@@ -114,7 +115,9 @@ public class UserServiceImpl implements UserService  {
         user.setRoles(roles);
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("회원가입 완료되었습니다."));
+//        return ResponseEntity.ok(new MessageResponse("회원가입 완료되었습니다."));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new MessageResponse("회원가입 완료되었습니다."));
     }
 
 

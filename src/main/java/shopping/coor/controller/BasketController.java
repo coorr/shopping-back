@@ -29,16 +29,21 @@ public class BasketController {
         return basketService.removeBasketById(basketId, userId);
     }
     @PostMapping("/basketDownUserById/{basketId}/{userId}")
-    public ResponseEntity<?> basketDownUserById(@PathVariable Long basketId, @PathVariable Long userId) {
-        return basketService.basketDownUserById(basketId, userId);
+    public ResponseEntity<?> downBasketUserById(@PathVariable Long basketId, @PathVariable Long userId) {
+        return basketService.downBasketUserById(basketId, userId);
     }
     @PostMapping("/basketPlusUserById/{basketId}/{userId}")
-    public ResponseEntity<?> basketPlusUserById(@PathVariable Long basketId, @PathVariable Long userId) {
-        return basketService.basketPlusUserById(basketId, userId);
+    public ResponseEntity<?> plusBasketUserById(@PathVariable Long basketId, @PathVariable Long userId) {
+        return basketService.plusBasketUserById(basketId, userId);
     }
     @PostMapping("/basketEmpty/{userId}")
     public void basketEmpty(@PathVariable Long userId) {
          basketService.basketEmpty(userId);
+    }
+
+    @PostMapping("/insertNotUserBasket/{userId}")
+    public ResponseEntity<?> insertNotUserBasket(@PathVariable Long userId, @RequestBody List<BasketRequestDto> basketDto) {
+        return basketService.insertNotUserBasket(userId, basketDto);
     }
 }
 

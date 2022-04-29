@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -50,6 +51,13 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(Long id, String username, String email, String password) {
+        this.id=id;
         this.username = username;
         this.email = email;
         this.password = password;

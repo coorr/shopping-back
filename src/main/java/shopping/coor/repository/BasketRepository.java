@@ -44,4 +44,7 @@ public interface BasketRepository extends JpaRepository<Basket, Long> {
 
     @Query("select b from Basket b join fetch b.item join fetch b.user where b.item = ?1 and b.size = ?2 and b.user = ?3")
     Basket findItemByIdUserByIdSize(Item itemId, String size, User userId);
+
+
 }
+

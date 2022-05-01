@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shopping.coor.payload.request.BasketRequestDto;
+import shopping.coor.payload.response.BasketResponseDto;
+import shopping.coor.payload.response.MessageResponse;
 import shopping.coor.service.BasketService;
 
 import java.util.List;
@@ -17,11 +19,11 @@ public class BasketController {
     private final BasketService basketService;
 
     @PostMapping("/basketAddUser/{userId}")
-    public ResponseEntity<?> basketAddUser(@PathVariable Long userId, @RequestBody List<BasketRequestDto> basketRequestDto) throws Exception {
-        return basketService.basketAddUser(userId, basketRequestDto);
+    public ResponseEntity<MessageResponse> basketAddUser(@PathVariable Long userId, @RequestBody List<BasketRequestDto> basketRequestDto) throws Exception {
+          return basketService.basketAddUser(userId, basketRequestDto);
     }
     @GetMapping("/getBasketByUserId/{userid}")
-    public ResponseEntity<?> getBasketByUserId(@PathVariable Long userid) {
+    public List<BasketResponseDto> getBasketByUserId(@PathVariable Long userid) {
         return basketService.getBasketByUserId(userid);
     }
     @PostMapping("/removeBasketById/{basketId}/{userId}")

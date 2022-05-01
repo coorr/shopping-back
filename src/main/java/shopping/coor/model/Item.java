@@ -1,8 +1,7 @@
 package shopping.coor.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -14,6 +13,9 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Item {
 
     @Id
@@ -31,8 +33,15 @@ public class Item {
     private int discountPrice;
 
     @NotNull
-    private int stockQuantity;
+    private int quantityS;
 
+    @NotNull
+    private int quantityM;
+
+    @NotNull
+    private int quantityL;
+
+    @NotNull
     private String category;
 
     @Column(length = 1000)
@@ -44,7 +53,6 @@ public class Item {
     @Column(length = 1000)
     private String info;
 
-//    @JsonIgnore
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
@@ -66,5 +74,13 @@ public class Item {
             item.addImage(image);
         }
         return item;
+    }
+
+    public Item(Long id, String title, int  discountPrice, int quantityS) {
+        this.id = id;
+        this.title=title;
+        this.discountPrice = discountPrice;
+        this.quantityS = quantityS;
+
     }
 }

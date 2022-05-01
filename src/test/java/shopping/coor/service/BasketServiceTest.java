@@ -1,22 +1,37 @@
 package shopping.coor.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import shopping.coor.jwt.JwtUtils;
 import shopping.coor.model.Basket;
+import shopping.coor.model.Item;
 import shopping.coor.model.User;
+import shopping.coor.payload.request.BasketRequestDto;
 import shopping.coor.payload.request.LoginRequest;
+import shopping.coor.payload.request.SignupRequest;
+import shopping.coor.payload.response.BasketResponseDto;
 import shopping.coor.repository.BasketRepository;
+import shopping.coor.repository.ItemRepository;
 import shopping.coor.repository.UserRepository;
 import shopping.coor.serviceImpl.BasketServiceImpl;
 
@@ -27,8 +42,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 class BasketServiceTest {
 
     @InjectMocks
@@ -41,18 +57,74 @@ class BasketServiceTest {
     UserRepository userRepository;
 
     @Mock
-    JwtUtils jwtUtils;
+    ItemRepository itemRepository;
 
-    @Spy
-    AuthenticationManager authenticationManager;
+    @BeforeEach
+    void init() {
+        User.builder()
+                .id(1L)
+                .username("kim")
+                .email("kim@naver.com")
+                .build();
+
+        Item.builder()
+                .id(2L)
+                .title("시어서커 자켓 블랙진(다크네이비)")
+                .price(100000)
+                .discountPrice(90000)
+                .build();
+    }
+
 
     @Test
-    public void test2() throws Exception {
+    public void 장바구니_조회() throws Exception {
+        // given
         Long userId = 1L;
+        User user = new User();
+        when(userRepository.getById(userId)).thenReturn(user);
+        when(basketRepository.findAllByUserId(user)).thenReturn(basketList());
 
-        User byId = doReturn(userList()).when(userRepository).getById(userId);
+        // when
+        List<BasketResponseDto> basketByUserId = basketService.getBasketByUserId(userId);
 
+        // then
+        assertEquals(5, basketByUserId.size());
+    }
 
+    @Test
+    public void 장비추가_추가() throws Exception {
+        // given
+        Long user_id=1L;
+        User user = new User();
+        when(userRepository.getById(user_id)).thenReturn(user);
+        ArrayList<Long> userSameKey = new ArrayList<Long>();
+        userSameKey.add(1L);
+        when(basketRepository.findArrayOnlyById(user)).thenReturn(userSameKey);
+        Item item = new Item();
+        Basket basket = Basket.builder()
+                .item(item)
+                .user(user)
+                .itemTotal(30000)
+                .itemCount(5)
+                .build();
+        when(basketRepository.getById(1L)).thenReturn(basket);
+        when(itemRepository.getItemEntity(0L)).thenReturn(item);
+        when(basketRepository.save(any())).thenReturn(basket);
+
+        // when
+        basketService.basketAddUser(user_id, basketRequestDto());
+
+        // then
+        assertEquals(basket.getItemTotal(), 330000);
+        assertEquals(basket.getItemCount(), 10);
+    }
+
+    private List<Basket> basketList() {
+        List<Basket> basketList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            basketList.add(new Basket(userList().get(i), itemList().get(i),  30000+i, 5));
+        }
+        return basketList;
     }
 
     private LoginRequest loginRequest() {
@@ -62,14 +134,14 @@ class BasketServiceTest {
                 .build();
     }
 
-    @Test
-    public void test() throws Exception {
-        User user = new User();
-        user.setUsername("test");
-        user.setEmail("test@naver.com");
-        user.setPassword("123123");
-
+    private List<BasketRequestDto> basketRequestDto() {
+        List<BasketRequestDto> basketRequestDtoList = new ArrayList<>();
+        for (Long i = 0L; i < 5; i++) {
+            basketRequestDtoList.add(new BasketRequestDto(i, i, 300000, 5, null, 28000, null, 30000, "옷"));
+        }
+        return basketRequestDtoList;
     }
+
 
     private List<User> userList() {
         List<User> userList = new ArrayList<>();
@@ -80,11 +152,14 @@ class BasketServiceTest {
         return userList;
     }
 
-    private List<Basket> basketList() {
-        List<Basket> basketList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            basketList.add(new Basket(userList().get(1), 30000));
+    private List<Item> itemList() {
+        List<Item> itemList = new ArrayList<>();
+        Long i = null;
+        for (i = 0L; i < 5; i++) {
+            itemList.add(new Item(i, "시어서커 블랙 바지(레드)", 9000, 5));
         }
-        return basketList;
+        return itemList;
     }
+
+
 }

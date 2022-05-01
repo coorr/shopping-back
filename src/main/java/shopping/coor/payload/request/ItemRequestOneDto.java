@@ -43,6 +43,9 @@ public class ItemRequestOneDto {
     private String title;
     private int price;
     private int discount_price;
+    private int quantityS;
+    private int quantityM;
+    private int quantityL;
     private String category;
     private String size;
     private String material;
@@ -54,6 +57,9 @@ public class ItemRequestOneDto {
         title = item.getTitle();
         price = item.getPrice();
         discount_price = item.getDiscountPrice();
+        quantityS = item.getQuantityS();
+        quantityM = item.getQuantityM();
+        quantityL = item.getQuantityL();
         category = item.getCategory();
         size = item.getSize();
         material = item.getMaterial();

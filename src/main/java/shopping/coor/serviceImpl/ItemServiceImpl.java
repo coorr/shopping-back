@@ -132,6 +132,9 @@ public class ItemServiceImpl implements ItemService {
         itemList.setTitle(itemDto.getTitle());
         itemList.setPrice(itemDto.getPrice());
         itemList.setDiscountPrice(itemDto.getDiscountPrice());
+        itemList.setQuantityS(itemDto.getQuantityS());
+        itemList.setQuantityM(itemDto.getQuantityM());
+        itemList.setQuantityL(itemDto.getQuantityL());
         itemList.setCategory(itemDto.getCategory());
         itemList.setSize(itemDto.getSize());
         itemList.setMaterial(itemDto.getMaterial());

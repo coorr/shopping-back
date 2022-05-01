@@ -2,13 +2,15 @@ package shopping.coor.service;
 
 import org.springframework.http.ResponseEntity;
 import shopping.coor.payload.request.BasketRequestDto;
+import shopping.coor.payload.response.BasketResponseDto;
+import shopping.coor.payload.response.MessageResponse;
 
 import java.util.List;
 
 public interface BasketService {
-    ResponseEntity<?> basketAddUser(Long userId, List<BasketRequestDto> basketRequestDto) throws Exception;
+    ResponseEntity<MessageResponse> basketAddUser(Long userId, List<BasketRequestDto> basketRequestDto) throws Exception;
 
-    ResponseEntity<?> getBasketByUserId(Long userid);
+    List<BasketResponseDto> getBasketByUserId(Long userid);
 
     ResponseEntity<?> removeBasketById(Long basketId, Long userId);
 

@@ -28,4 +28,14 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Query("select distinct i from Item i where i.id > ?1  order by i.id desc ")
     List<Item> getItemFirst(Long lastId, PageRequest pageRequest);
 
+    @Query(value = "SELECT quantitys  FROM item WHERE item_id = ?1", nativeQuery = true)
+    int findQuantitySizeSCount(Long item_id);
+
+    @Query(value = "SELECT quantitym  FROM item WHERE item_id = ?1", nativeQuery = true)
+    int findQuantitySizeMCount(Long item_id);
+
+    @Query(value = "SELECT quantityl  FROM item WHERE item_id = ?1", nativeQuery = true)
+    int findQuantitySizeLCount(Long item_id);
+
+
 }

@@ -1,11 +1,10 @@
 package shopping.coor.service;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import shopping.coor.model.User;
-import shopping.coor.payload.request.LoginRequest;
-import shopping.coor.payload.request.SignupRequest;
-import shopping.coor.payload.response.MessageResponse;
+import shopping.coor.repository.user.dto.LoginRequest;
+import shopping.coor.repository.user.dto.SignupRequest;
+import shopping.coor.repository.user.dto.MessageResponse;
 
 import java.util.List;
 

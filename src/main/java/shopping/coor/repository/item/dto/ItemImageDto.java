@@ -1,4 +1,4 @@
-package shopping.coor.payload.request;
+package shopping.coor.repository.item.dto;
 
 import lombok.Getter;
 import lombok.Setter;

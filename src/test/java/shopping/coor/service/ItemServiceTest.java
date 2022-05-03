@@ -9,10 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import shopping.coor.model.Item;
-import shopping.coor.repository.ItemRepository;
-
-import java.util.HashMap;
-import java.util.Map;
+import shopping.coor.repository.item.ItemRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 

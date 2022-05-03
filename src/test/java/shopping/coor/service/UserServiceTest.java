@@ -1,10 +1,6 @@
 package shopping.coor.service;
 
-import io.sentry.protocol.Message;
 import lombok.Data;
-import org.junit.Before;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,28 +10,22 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import shopping.coor.jwt.JwtUtils;
 import shopping.coor.model.ERole;
 import shopping.coor.model.Role;
 import shopping.coor.model.User;
-import shopping.coor.payload.request.LoginRequest;
-import shopping.coor.payload.request.SignupRequest;
-import shopping.coor.payload.response.MessageResponse;
-import shopping.coor.repository.RoleRepository;
-import shopping.coor.repository.UserRepository;
-import shopping.coor.serviceImpl.user.UserDetailsImpl;
+import shopping.coor.repository.user.dto.LoginRequest;
+import shopping.coor.repository.user.dto.SignupRequest;
+import shopping.coor.repository.user.dto.MessageResponse;
+import shopping.coor.repository.user.RoleRepository;
+import shopping.coor.repository.user.UserRepository;
 import shopping.coor.serviceImpl.user.UserServiceImpl;
 
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;

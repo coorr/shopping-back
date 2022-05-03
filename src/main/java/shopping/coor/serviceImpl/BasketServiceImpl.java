@@ -8,17 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 import shopping.coor.model.Basket;
 import shopping.coor.model.Item;
 import shopping.coor.model.User;
-import shopping.coor.payload.request.BasketRequestDto;
-import shopping.coor.payload.response.BasketResponseDto;
-import shopping.coor.payload.response.MessageResponse;
-import shopping.coor.repository.BasketRepository;
-import shopping.coor.repository.ItemRepository;
-import shopping.coor.repository.UserRepository;
+import shopping.coor.repository.basket.dto.BasketRequestDto;
+import shopping.coor.repository.basket.dto.BasketResponseDto;
+import shopping.coor.repository.user.dto.MessageResponse;
+import shopping.coor.repository.basket.BasketRepository;
+import shopping.coor.repository.item.ItemRepository;
+import shopping.coor.repository.user.UserRepository;
 import shopping.coor.service.BasketService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -35,34 +34,46 @@ public class BasketServiceImpl implements BasketService {
     @Override
     public ResponseEntity<MessageResponse> basketAddUser(Long userId, List<BasketRequestDto> basketRequestDto) throws Exception {
         User userById = userRepository.getById(userId);
-        ArrayList<Long> arrayOnlyById = basketRepository.findArrayOnlyById(userById);
+        ArrayList<Long> arrayOnlyBasketId = basketRepository.findArrayOnlyById(userById);
 
         for (BasketRequestDto requestDto : basketRequestDto) {
             Item itemById = itemRepository.getById(requestDto.getItemId());
-            String errorMessage = String.format("상품의 수량이 재고수량 보다 많습니다. \n\n제품명 : %s", itemById.getTitle());
-            String size = requestDto.getSize();
 
-            if (requestDto.getSize() == size) {
+            String errorMessage = String.format("상품의 수량이 재고수량 보다 많습니다. \n\n제품명 : %s", itemById.getTitle());
+
+            if (requestDto.getSize().equals("S")) {
                 int quantitySizeSCount = itemRepository.findQuantitySizeSCount(requestDto.getItemId());
-                System.out.println("quantitySizeSCount = " + quantitySizeSCount);
-                if (quantitySizeSCount <= requestDto.getItemCount()) {
+                if (arrayOnlyBasketId.contains(requestDto.getKeyIndex())) {
+                    Basket basketDuplicate = basketRepository.getById(requestDto.getKeyIndex());
+                    if (quantitySizeSCount < requestDto.getItemCount() + basketDuplicate.getItemCount()) {
+                        return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
+                    }
+                } else if (quantitySizeSCount < requestDto.getItemCount()) {
                     return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
                 }
-            } else if (requestDto.getSize() == size) {
+            } else if (requestDto.getSize().equals("M")) {
                 int quantitySizeMCount = itemRepository.findQuantitySizeMCount(requestDto.getItemId());
-                System.out.println("quantitySizeSCount = " + quantitySizeMCount);
-                if (quantitySizeMCount <= requestDto.getItemCount()) {
+                if (arrayOnlyBasketId.contains(requestDto.getKeyIndex())) {
+                    Basket basketDuplicate = basketRepository.getById(requestDto.getKeyIndex());
+                    if (quantitySizeMCount < requestDto.getItemCount() + basketDuplicate.getItemCount()) {
+                        return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
+                    }
+                } else if (quantitySizeMCount < requestDto.getItemCount()) {
                     return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
                 }
-            } else if (requestDto.getSize() == size) {
+            } else if (requestDto.getSize().equals("L")) {
                 int quantitySizeLCount = itemRepository.findQuantitySizeLCount(requestDto.getItemId());
-                System.out.println("quantitySizeSCount = " + quantitySizeLCount);
-                if (quantitySizeLCount <= requestDto.getItemCount()) {
+                if (arrayOnlyBasketId.contains(requestDto.getKeyIndex())) {
+                    Basket basketDuplicate = basketRepository.getById(requestDto.getKeyIndex());
+                    if (quantitySizeLCount < requestDto.getItemCount() + basketDuplicate.getItemCount()) {
+                        return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
+                    }
+                } else if(quantitySizeLCount < requestDto.getItemCount()) {
                     return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
                 }
             }
 
-            if (arrayOnlyById.contains(requestDto.getKeyIndex())) {
+            if (arrayOnlyBasketId.contains(requestDto.getKeyIndex())) {
                 Basket basketDuplicate = basketRepository.getById(requestDto.getKeyIndex());
                 basketDuplicate.setItemTotal(basketDuplicate.getItemTotal() + requestDto.getItemTotal());
                 basketDuplicate.setItemCount(basketDuplicate.getItemCount() + requestDto.getItemCount());
@@ -75,6 +86,31 @@ public class BasketServiceImpl implements BasketService {
         return null;
     }
 
+    @Override
+    public ResponseEntity<MessageResponse> duplicateSizeQuantityCheck(List<BasketRequestDto> basketRequestDto) {
+        for (BasketRequestDto requestDto : basketRequestDto) {
+            Item itemById = itemRepository.getById(requestDto.getItemId());
+            String errorMessage = String.format("상품의 수량이 재고수량 보다 많습니다. \n\n제품명 : %s", itemById.getTitle());
+
+            if (requestDto.getSize().equals("S")) {
+                int quantitySizeSCount = itemRepository.findQuantitySizeSCount(requestDto.getItemId());
+                if (quantitySizeSCount <= requestDto.getItemCount()) {
+                    return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
+                }
+            } else if (requestDto.getSize().equals("M")) {
+                int quantitySizeMCount = itemRepository.findQuantitySizeMCount(requestDto.getItemId());
+                if (quantitySizeMCount <= requestDto.getItemCount()) {
+                    return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
+                }
+            } else if (requestDto.getSize().equals("L")) {
+                int quantitySizeLCount = itemRepository.findQuantitySizeLCount(requestDto.getItemId());
+                if (quantitySizeLCount <= requestDto.getItemCount()) {
+                    return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
+                }
+            }
+        }
+        return null;
+    }
 
 
 
@@ -110,6 +146,23 @@ public class BasketServiceImpl implements BasketService {
     @Override
     public ResponseEntity<?> plusBasketUserById(Long basketId, Long userId) {
         Basket itemPrice = basketRepository.findItemPriceById(basketId);
+        String errorMessage = String.format("상품의 수량이 재고수량 보다 많습니다. \n\n제품명 : %s", itemPrice.getItem().getTitle());
+        if (itemPrice.getSize().equals("S")) {
+            int quantitySizeSCount = itemRepository.findQuantitySizeSCount(itemPrice.getItem().getId());
+            if (quantitySizeSCount <= itemPrice.getItemCount()) {
+                return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
+            }
+        } else if (itemPrice.getSize().equals("M")) {
+            int quantitySizeMCount = itemRepository.findQuantitySizeMCount(itemPrice.getItem().getId());
+            if (quantitySizeMCount <= itemPrice.getItemCount()) {
+                return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
+            }
+        } else if (itemPrice.getSize().equals("L")) {
+            int quantitySizeLCount = itemRepository.findQuantitySizeLCount(itemPrice.getItem().getId());
+            if (quantitySizeLCount <= itemPrice.getItemCount()) {
+                return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
+            }
+        }
         basketRepository.updateCountPlusById(basketId, itemPrice.getItem().getDiscountPrice());
         User userById = userRepository.getById(userId);
         List<Basket> basketList = basketRepository.findAllByUserId(userById);
@@ -148,6 +201,8 @@ public class BasketServiceImpl implements BasketService {
         List<Basket> basketList = basketRepository.findAllByUserId(userById);
         return ResponseEntity.ok(basketResponseDtos(basketList));
     }
+
+
 
     protected List<BasketResponseDto> basketResponseDtos(List<Basket> basketList) {
         return basketList.stream().map(b -> new BasketResponseDto(b)).collect(Collectors.toList());

@@ -1,6 +1,8 @@
 package shopping.coor.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -48,6 +50,11 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<>();
+
 
     public User(String username, String email, String password) {
         this.username = username;

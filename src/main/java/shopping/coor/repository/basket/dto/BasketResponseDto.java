@@ -1,4 +1,4 @@
-package shopping.coor.payload.request;
+package shopping.coor.repository.basket.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BasketRequestDto {
+public class BasketResponseDto {
     private Long keyIndex;
 
     private Long itemId;
@@ -31,10 +31,21 @@ public class BasketRequestDto {
 
     private int discount;
 
-    private List<Object> image;
+    private List<Image> image;
 
     private int price;
 
     private String title;
 
+    public BasketResponseDto(Basket basket) {
+        this.keyIndex = basket.getId();
+        this.itemId = basket.getItem().getId();
+        this.itemTotal = basket.getItemTotal();
+        this.itemCount = basket.getItemCount();
+        this.size = basket.getSize();
+        this.discount = basket.getItem().getDiscountPrice();
+        this.image = basket.getItem().getImages();
+        this.price = basket.getItem().getPrice();
+        this.title = basket.getItem().getTitle();
+    }
 }

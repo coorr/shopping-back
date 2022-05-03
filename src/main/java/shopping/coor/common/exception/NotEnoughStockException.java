@@ -1,13 +1,13 @@
 package shopping.coor.common.exception;
 
-public class NotEnoughStockException extends Exception {
+public class NotEnoughStockException extends RuntimeException {
 
     public NotEnoughStockException() {
         super();
     }
 
     public NotEnoughStockException(String message) {
-        super();
+        super(message);
     }
 
     public NotEnoughStockException(String message, Throwable cause) {

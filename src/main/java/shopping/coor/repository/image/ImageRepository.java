@@ -1,4 +1,4 @@
-package shopping.coor.repository;
+package shopping.coor.repository.image;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

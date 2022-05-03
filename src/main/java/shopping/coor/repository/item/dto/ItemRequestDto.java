@@ -1,10 +1,7 @@
-package shopping.coor.payload.request;
+package shopping.coor.repository.item.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import shopping.coor.model.Image;
 import shopping.coor.model.Item;
 
 import java.util.List;

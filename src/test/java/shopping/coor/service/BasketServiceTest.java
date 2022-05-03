@@ -1,38 +1,20 @@
 package shopping.coor.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.OngoingStubbing;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-import shopping.coor.jwt.JwtUtils;
 import shopping.coor.model.Basket;
 import shopping.coor.model.Item;
 import shopping.coor.model.User;
-import shopping.coor.payload.request.BasketRequestDto;
-import shopping.coor.payload.request.LoginRequest;
-import shopping.coor.payload.request.SignupRequest;
-import shopping.coor.payload.response.BasketResponseDto;
-import shopping.coor.repository.BasketRepository;
-import shopping.coor.repository.ItemRepository;
-import shopping.coor.repository.UserRepository;
+import shopping.coor.repository.basket.dto.BasketRequestDto;
+import shopping.coor.repository.user.dto.LoginRequest;
+import shopping.coor.repository.basket.dto.BasketResponseDto;
+import shopping.coor.repository.basket.BasketRepository;
+import shopping.coor.repository.item.ItemRepository;
+import shopping.coor.repository.user.UserRepository;
 import shopping.coor.serviceImpl.BasketServiceImpl;
 
 import java.util.ArrayList;
@@ -40,7 +22,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 

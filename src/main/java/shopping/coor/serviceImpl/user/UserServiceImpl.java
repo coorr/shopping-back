@@ -14,12 +14,12 @@ import shopping.coor.jwt.JwtUtils;
 import shopping.coor.model.ERole;
 import shopping.coor.model.Role;
 import shopping.coor.model.User;
-import shopping.coor.payload.request.LoginRequest;
-import shopping.coor.payload.request.SignupRequest;
-import shopping.coor.payload.response.JwtResponse;
-import shopping.coor.payload.response.MessageResponse;
-import shopping.coor.repository.RoleRepository;
-import shopping.coor.repository.UserRepository;
+import shopping.coor.repository.user.dto.LoginRequest;
+import shopping.coor.repository.user.dto.SignupRequest;
+import shopping.coor.repository.user.dto.JwtResponse;
+import shopping.coor.repository.user.dto.MessageResponse;
+import shopping.coor.repository.user.RoleRepository;
+import shopping.coor.repository.user.UserRepository;
 import shopping.coor.service.UserService;
 
 import java.util.HashSet;

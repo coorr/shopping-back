@@ -2,6 +2,7 @@ package shopping.coor.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import shopping.coor.common.exception.NotEnoughStockException;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -59,6 +60,31 @@ public class Item {
     public void addImage(Image image) {
         images.add(image);
         image.setItem(this);
+    }
+
+    public void removeStock(int quantity, String size)  {
+        if (size.equals("S")) {
+            int restStock = this.quantityS - quantity;
+            if (restStock < 0) {
+                throw new NotEnoughStockException("need more stock");
+            }
+            this.quantityS = restStock;
+        }
+        if (size.equals("M")) {
+            int restStock = this.quantityM - quantity;
+            if (restStock < 0) {
+                throw new NotEnoughStockException("need more stock");
+            }
+            this.quantityM = restStock;
+        }
+        if (size.equals("L")) {
+            int restStock = this.quantityL - quantity;
+            if (restStock < 0) {
+                throw new NotEnoughStockException("need more stock");
+            }
+            this.quantityL = restStock;
+        }
+
     }
 
     public static Item createItem(Item items, Image... images) {

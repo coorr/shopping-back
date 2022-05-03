@@ -1,20 +1,17 @@
 package shopping.coor.controller;
 
 import java.net.UnknownHostException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shopping.coor.model.User;
-import shopping.coor.payload.request.LoginRequest;
-import shopping.coor.payload.request.SignupRequest;
-import shopping.coor.payload.response.MessageResponse;
+import shopping.coor.repository.user.dto.LoginRequest;
+import shopping.coor.repository.user.dto.SignupRequest;
+import shopping.coor.repository.user.dto.MessageResponse;
 import shopping.coor.service.UserService;
 
 

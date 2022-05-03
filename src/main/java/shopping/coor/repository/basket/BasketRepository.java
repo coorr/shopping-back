@@ -1,4 +1,4 @@
-package shopping.coor.repository;
+package shopping.coor.repository.basket;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,7 +24,7 @@ public interface BasketRepository extends JpaRepository<Basket, Long> {
     @Query("select b from Basket b join fetch b.user join fetch b.item where b.user = ?1")
     List<Basket> findAllByUserId(User userId);
 
-    @Query("select b from Basket b join fetch b.item where b.id = ?1")
+    @Query("select b from Basket b join fetch b.item join fetch b.user where b.id = ?1")
     Basket findItemPriceById(Long basketId);
 
     @Modifying(clearAutomatically=true)

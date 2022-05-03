@@ -16,13 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import shopping.coor.model.Image;
 import shopping.coor.model.Item;
-import shopping.coor.payload.request.ItemRequestDto;
-import shopping.coor.payload.request.ItemRequestOneDto;
-import shopping.coor.payload.response.MessageResponse;
-import shopping.coor.repository.BasketRepository;
-import shopping.coor.repository.ImageRepository;
-import shopping.coor.repository.ItemRepository;
-import shopping.coor.repository.UserRepository;
+import shopping.coor.repository.item.dto.ItemRequestDto;
+import shopping.coor.repository.item.dto.ItemRequestOneDto;
+import shopping.coor.repository.user.dto.MessageResponse;
+import shopping.coor.repository.image.ImageRepository;
+import shopping.coor.repository.item.ItemRepository;
 import shopping.coor.service.ItemService;
 
 import java.io.File;

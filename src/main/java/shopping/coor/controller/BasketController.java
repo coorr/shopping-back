@@ -3,9 +3,9 @@ package shopping.coor.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import shopping.coor.payload.request.BasketRequestDto;
-import shopping.coor.payload.response.BasketResponseDto;
-import shopping.coor.payload.response.MessageResponse;
+import shopping.coor.repository.basket.dto.BasketRequestDto;
+import shopping.coor.repository.basket.dto.BasketResponseDto;
+import shopping.coor.repository.user.dto.MessageResponse;
 import shopping.coor.service.BasketService;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class BasketController {
 
     @PostMapping("/basketAddUser/{userId}")
     public ResponseEntity<MessageResponse> basketAddUser(@PathVariable Long userId, @RequestBody List<BasketRequestDto> basketRequestDto) throws Exception {
-          return basketService.basketAddUser(userId, basketRequestDto);
+        return basketService.basketAddUser(userId, basketRequestDto);
     }
     @GetMapping("/getBasketByUserId/{userid}")
     public List<BasketResponseDto> getBasketByUserId(@PathVariable Long userid) {
@@ -47,6 +47,12 @@ public class BasketController {
     public ResponseEntity<?> insertNotUserBasket(@PathVariable Long userId, @RequestBody List<BasketRequestDto> basketDto) {
         return basketService.insertNotUserBasket(userId, basketDto);
     }
+    @PostMapping("/duplicateSizeQuantityCheck")
+    public ResponseEntity<?> duplicateSizeQuantityCheck(@RequestBody List<BasketRequestDto> basketDto) {
+        return basketService.duplicateSizeQuantityCheck(basketDto);
+    }
+
+
 }
 
 

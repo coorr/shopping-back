@@ -1,4 +1,4 @@
-package shopping.coor.payload.request;
+package shopping.coor.repository.user.dto;
 
 import lombok.*;
 

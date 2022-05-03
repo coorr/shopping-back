@@ -1,23 +1,11 @@
 package shopping.coor.controller;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 import shopping.coor.model.Image;
-import shopping.coor.model.Item;
-import shopping.coor.payload.request.BasketRequestDto;
-import shopping.coor.payload.request.ItemRequestDto;
-import shopping.coor.payload.request.ItemRequestOneDto;
+import shopping.coor.repository.item.dto.ItemRequestDto;
 import shopping.coor.service.ItemService;
 
 

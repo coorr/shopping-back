@@ -3,10 +3,7 @@ package shopping.coor.service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import shopping.coor.model.Image;
-import shopping.coor.model.Item;
-import shopping.coor.payload.request.BasketRequestDto;
-import shopping.coor.payload.request.ItemRequestDto;
-import shopping.coor.payload.request.ItemRequestOneDto;
+import shopping.coor.repository.item.dto.ItemRequestDto;
 
 import java.util.List;
 

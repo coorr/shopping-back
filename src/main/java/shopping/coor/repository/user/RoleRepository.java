@@ -1,4 +1,4 @@
-package shopping.coor.repository;
+package shopping.coor.repository.user;
 
 import java.util.Optional;
 

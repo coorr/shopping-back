@@ -79,24 +79,16 @@ class UserServiceTest {
 
     }
 
-
-    @BeforeEach
-    void init() {
-        User.builder()
-                .username("kim1")
-                .email("W@naver.com")
-                .password("123123")
-                .build();
-    }
-
     @Test
     public void 회원가입_동일회원_예외() throws Exception {
+        // given
         SignupRequest request = signupRequest();
         when(userRepository.existsByUsername(request.getUsername())).thenReturn(true);
 
-
+        // when
         ResponseEntity<MessageResponse> responseEntity = userService.registerUser(request);
 
+        // then
         assertEquals(responseEntity.getStatusCodeValue(), 400);
         assertEquals(responseEntity.getBody().getMessage(), "이미 존재하는 아이디입니다.");
     }

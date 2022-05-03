@@ -94,17 +94,17 @@ public class BasketServiceImpl implements BasketService {
 
             if (requestDto.getSize().equals("S")) {
                 int quantitySizeSCount = itemRepository.findQuantitySizeSCount(requestDto.getItemId());
-                if (quantitySizeSCount <= requestDto.getItemCount()) {
+                if (quantitySizeSCount < requestDto.getItemCount()) {
                     return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
                 }
             } else if (requestDto.getSize().equals("M")) {
                 int quantitySizeMCount = itemRepository.findQuantitySizeMCount(requestDto.getItemId());
-                if (quantitySizeMCount <= requestDto.getItemCount()) {
+                if (quantitySizeMCount < requestDto.getItemCount()) {
                     return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
                 }
             } else if (requestDto.getSize().equals("L")) {
                 int quantitySizeLCount = itemRepository.findQuantitySizeLCount(requestDto.getItemId());
-                if (quantitySizeLCount <= requestDto.getItemCount()) {
+                if (quantitySizeLCount < requestDto.getItemCount()) {
                     return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
                 }
             }
@@ -149,17 +149,17 @@ public class BasketServiceImpl implements BasketService {
         String errorMessage = String.format("상품의 수량이 재고수량 보다 많습니다. \n\n제품명 : %s", itemPrice.getItem().getTitle());
         if (itemPrice.getSize().equals("S")) {
             int quantitySizeSCount = itemRepository.findQuantitySizeSCount(itemPrice.getItem().getId());
-            if (quantitySizeSCount <= itemPrice.getItemCount()) {
+            if (quantitySizeSCount < itemPrice.getItemCount()) {
                 return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
             }
         } else if (itemPrice.getSize().equals("M")) {
             int quantitySizeMCount = itemRepository.findQuantitySizeMCount(itemPrice.getItem().getId());
-            if (quantitySizeMCount <= itemPrice.getItemCount()) {
+            if (quantitySizeMCount < itemPrice.getItemCount()) {
                 return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
             }
         } else if (itemPrice.getSize().equals("L")) {
             int quantitySizeLCount = itemRepository.findQuantitySizeLCount(itemPrice.getItem().getId());
-            if (quantitySizeLCount <= itemPrice.getItemCount()) {
+            if (quantitySizeLCount < itemPrice.getItemCount()) {
                 return ResponseEntity.badRequest().body(new MessageResponse(errorMessage));
             }
         }

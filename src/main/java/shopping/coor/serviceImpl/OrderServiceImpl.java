@@ -33,6 +33,7 @@ public class OrderServiceImpl implements OrderService {
     public ResponseEntity<MessageResponse> saveOrderDeliveryItem(Long userId, DeliveryRequestDto deliveryRequestDto) {
 
         User userById = userRepository.getById(userId);
+
         List<Basket> basketList = basketRepository.findAllByUserId(userById);
 
         Delivery delivery = Delivery.createDelivery(deliveryRequestDto.getName(), deliveryRequestDto.getEmail(),
@@ -71,17 +72,17 @@ public class OrderServiceImpl implements OrderService {
         for (Basket basket : basketListQuantity) {
             if (basket.getSize().equals("S")) {
                 int quantitySizeSCount = itemRepository.findQuantitySizeSCount(basket.getItem().getId());
-                if (quantitySizeSCount <= basket.getItemCount()) {
+                if (quantitySizeSCount < basket.getItemCount()) {
                     basketRepository.deleteById(basket.getId());
                 }
             } else if (basket.getSize().equals("M")) {
                 int quantitySizeMCount = itemRepository.findQuantitySizeMCount(basket.getItem().getId());
-                if (quantitySizeMCount <= basket.getItemCount()) {
+                if (quantitySizeMCount < basket.getItemCount()) {
                     basketRepository.deleteById(basket.getId());
                 }
             } else if (basket.getSize().equals("L")) {
                 int quantitySizeLCount = itemRepository.findQuantitySizeLCount(basket.getItem().getId());
-                if (quantitySizeLCount <= basket.getItemCount()) {
+                if (quantitySizeLCount < basket.getItemCount()) {
                     basketRepository.deleteById(basket.getId());
                 }
             }
@@ -101,17 +102,17 @@ public class OrderServiceImpl implements OrderService {
         for (Basket basket : basketList) {
             if (basket.getSize().equals("S")) {
                 int quantitySizeSCount = itemRepository.findQuantitySizeSCount(basket.getItem().getId());
-                if (quantitySizeSCount <= basket.getItemCount()) {
+                if (quantitySizeSCount < basket.getItemCount()) {
                     countOverString.add(basket.getItem().getTitle()+" "+basket.getSize()+"\n");
                 }
             } else if (basket.getSize().equals("M")) {
                 int quantitySizeMCount = itemRepository.findQuantitySizeMCount(basket.getItem().getId());
-                if (quantitySizeMCount <= basket.getItemCount()) {
+                if (quantitySizeMCount < basket.getItemCount()) {
                     countOverString.add(basket.getItem().getTitle()+" "+basket.getSize()+"\n");
                 }
             } else if (basket.getSize().equals("L")) {
                 int quantitySizeLCount = itemRepository.findQuantitySizeLCount(basket.getItem().getId());
-                if (quantitySizeLCount <= basket.getItemCount()) {
+                if (quantitySizeLCount < basket.getItemCount()) {
                     countOverString.add(basket.getItem().getTitle()+" "+basket.getSize()+"\n");
                 }
             }

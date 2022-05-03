@@ -1,9 +1,6 @@
 package shopping.coor.repository.basket.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import shopping.coor.model.Basket;
 import shopping.coor.model.Image;
@@ -18,6 +15,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BasketResponseDto {
     private Long keyIndex;
 

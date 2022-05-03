@@ -1,14 +1,12 @@
 package shopping.coor.repository.delivery.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import shopping.coor.model.Delivery;
 
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class DeliveryRequestDto {
 
     private String name;

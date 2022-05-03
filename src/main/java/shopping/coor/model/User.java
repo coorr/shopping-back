@@ -52,7 +52,7 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
 
 

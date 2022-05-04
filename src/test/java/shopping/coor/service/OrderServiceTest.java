@@ -122,7 +122,7 @@ class OrderServiceTest {
         assertEquals(responseEntity.getBody().getMessage(), "품절된 상품으로 주문할 수 없습니다.");
     }
 
-    
+
 
     private List<BasketResponseDto> basketResponseDto() {
         List<BasketResponseDto> basketResponseDtoList = Arrays.asList(

@@ -62,6 +62,18 @@ public class Item {
         image.setItem(this);
     }
 
+    public void addStock(int quantity, String orderSize) {
+        if (orderSize.equals("S")) {
+            this.quantityS += quantity;
+        }
+        if (orderSize.equals("M")) {
+            this.quantityM += quantity;
+        }
+        if (orderSize.equals("L")) {
+            this.quantityL += quantity;
+        }
+    }
+
     public void removeStock(int quantity, String size)  {
         if (size.equals("S")) {
             int restStock = this.quantityS - quantity;
@@ -109,4 +121,5 @@ public class Item {
         this.quantityS = quantityS;
 
     }
+
 }

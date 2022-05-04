@@ -1,4 +1,4 @@
 package shopping.coor.repository.order.dto;
 
-public class orderRequestDto {
+public class OrderRequestDto {
 }

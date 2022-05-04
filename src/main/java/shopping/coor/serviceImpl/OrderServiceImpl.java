@@ -8,12 +8,15 @@ import shopping.coor.model.*;
 import shopping.coor.repository.basket.dto.BasketResponseDto;
 import shopping.coor.repository.delivery.dto.DeliveryRequestDto;
 import shopping.coor.repository.item.ItemRepository;
+import shopping.coor.repository.order.dto.OrderResponseDto;
 import shopping.coor.repository.user.dto.MessageResponse;
 import shopping.coor.repository.basket.BasketRepository;
 import shopping.coor.repository.order.OrderRepository;
 import shopping.coor.repository.user.UserRepository;
 import shopping.coor.service.OrderService;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -95,6 +98,37 @@ public class OrderServiceImpl implements OrderService {
         return result;
     }
 
+    @Override
+    public List<OrderResponseDto> getOrderUserById(Long userId, String startDate, String endDate) {
+        User userById = userRepository.getById(userId);
+        LocalDateTime startTime = stringToLocalDateTime(startDate);
+        LocalDateTime endTime = stringToLocalDateTime(endDate);
+        List<Order> orderList = orderRepository.getOrderUserById(userById, startTime, endTime);
+        List<OrderResponseDto> result = orderList.stream().map(o -> new OrderResponseDto(o)).collect(Collectors.toList());
+        return result;
+    }
+
+    @Transactional
+    @Override
+    public List<OrderResponseDto> cancelOrderItem(Long orderId, String startDate, String endDate) {
+        Order order = orderRepository.getById(orderId);
+        order.cancel();
+        LocalDateTime startTime = stringToLocalDateTime(startDate);
+        LocalDateTime endTime = stringToLocalDateTime(endDate);
+        List<Order> orderList = orderRepository.getOrderUserById(order.getUser(), startTime, endTime);
+        List<OrderResponseDto> result = orderList.stream().map(o -> new OrderResponseDto(o)).collect(Collectors.toList());
+
+        return result;
+    }
+
+    private LocalDateTime stringToLocalDateTime(String time) {
+        DateTimeFormatter form = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        LocalDateTime startDateTimeChange= LocalDateTime.parse(time.substring(0,14),form);
+        String stringStartDate = startDateTimeChange.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime localDateTime = LocalDateTime.parse(stringStartDate,formatter);
+        return localDateTime;
+    }
 
 
     private List<String> quantityOverMethod(List<Basket> basketList) {

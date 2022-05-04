@@ -26,15 +26,16 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
+//    @JsonIgnore
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @JsonIgnore
+//    @JsonIgnore
     @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
@@ -77,21 +78,21 @@ public class Order {
         order.setStatus(OrderStatus.ORDER);
         return order;
     }
-//
-//    //==비즈니스 로직==//
-//    /**
-//     * 주문 취소
-//     */
-//    public void cancel() {
-//        if (delivery.getStatus() == DeliveryStatus.COMP) {
-//            throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
-//        }
-//
-//        this.setStatus(OrderStatus.CANCEL);
-//        for (OrderItem orderItem : orderItems) {
-//            orderItem.cancel();
-//        }
-//    }
+
+    //==비즈니스 로직==//
+    /**
+     * 주문 취소
+     */
+    public void cancel() {
+        if (delivery.getStatus() == DeliveryStatus.COMP) {
+            throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
+        }
+
+        this.setStatus(OrderStatus.CANCEL);
+        for (OrderItem orderItem : orderItems) {
+            orderItem.cancel(orderItem.getOrderSize());
+        }
+    }
 //
 //    //==조회 로직==//
 //    /**

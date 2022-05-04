@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shopping.coor.model.Delivery;
+import shopping.coor.model.Order;
 import shopping.coor.repository.basket.dto.BasketResponseDto;
 import shopping.coor.repository.delivery.dto.DeliveryRequestDto;
+import shopping.coor.repository.order.dto.OrderResponseDto;
 import shopping.coor.repository.user.dto.MessageResponse;
 import shopping.coor.service.OrderService;
 
@@ -23,12 +25,26 @@ public class OrderController {
     public ResponseEntity<MessageResponse> saveOrderDeliveryItem(@PathVariable Long userId, @RequestBody DeliveryRequestDto deliveryRequestDto) {
         return orderService.saveOrderDeliveryItem(userId, deliveryRequestDto);
     }
+
     @PostMapping("/quantityCheckOrder/{userId}")
-    public ResponseEntity<MessageResponse> quantityCheckOrder(@PathVariable Long userId ) {
+    public ResponseEntity<MessageResponse> quantityCheckOrder(@PathVariable Long userId) {
         return orderService.quantityCheckOrder(userId);
     }
+
     @PostMapping("/soldOutItemRemove/{userId}")
     public List<BasketResponseDto> soldOutItemRemove(@PathVariable Long userId) {
         return orderService.soldOutItemRemove(userId);
+    }
+
+    @GetMapping("/getOrderUserById/{userId}")
+    public List<OrderResponseDto> getOrderUserById(@PathVariable Long userId, @RequestParam(required = false) String startDate,
+                                                   @RequestParam(required = false) String endDate) {
+        return orderService.getOrderUserById(userId, startDate, endDate);
+    }
+
+    @PostMapping("/cancelOrderItem/{orderId}")
+    public List<OrderResponseDto> cancelOrderItem(@PathVariable Long orderId, @RequestParam(required = false) String startDate,
+                                                            @RequestParam(required = false) String endDate) {
+        return orderService.cancelOrderItem(orderId, startDate, endDate);
     }
 }

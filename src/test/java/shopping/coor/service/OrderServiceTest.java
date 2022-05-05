@@ -159,9 +159,9 @@ class OrderServiceTest {
     public void 주문_취소_예외() throws Exception {
         // given
         Long orderId = 1L;
-        when(orderRepository.getById(orderId)).thenReturn(orders().get(0));
+        when(orderRepository.getById(orderId)).thenReturn(ordersCancel().get(0));
         // when // then
-        assertThrows(IllegalStateException.class, () -> orderService.cancelOrderItem(orders().get(0).getId(), start, end));
+        assertThrows(IllegalStateException.class, () -> orderService.cancelOrderItem(ordersCancel().get(0).getId(), start, end));
     }
 
 

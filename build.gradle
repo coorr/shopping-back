@@ -21,6 +21,9 @@ repositories {
 jar {
 	enabled = false
 }
+test {
+	exclude '**/*'
+}
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
@@ -35,6 +38,7 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	implementation 'org.mariadb.jdbc:mariadb-java-client'
 	implementation 'io.sentry:sentry-spring-boot-starter:5.7.3'
+	implementation 'com.google.code.gson:gson:2.2.4'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -45,9 +49,6 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
-//	testImplementation("org.junit.vintage:junit-vintage-engine") {
-//		exclude group: "org.hamcrest", module: "hamcrest-core"
-//	}
 }
 
 tasks.named('test') {

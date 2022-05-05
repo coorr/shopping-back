@@ -37,14 +37,27 @@ public class OrderController {
     }
 
     @GetMapping("/getOrderUserById/{userId}")
-    public List<OrderResponseDto> getOrderUserById(@PathVariable Long userId, @RequestParam(required = false) String startDate,
-                                                   @RequestParam(required = false) String endDate) {
+    public List<OrderResponseDto> getOrderUserById(@PathVariable Long userId, @RequestParam String startDate,
+                                                   @RequestParam String endDate) {
         return orderService.getOrderUserById(userId, startDate, endDate);
     }
 
     @PostMapping("/cancelOrderItem/{orderId}")
-    public List<OrderResponseDto> cancelOrderItem(@PathVariable Long orderId, @RequestParam(required = false) String startDate,
-                                                            @RequestParam(required = false) String endDate) {
+    public List<OrderResponseDto> cancelOrderItem(@PathVariable Long orderId, @RequestParam String startDate,
+                                                  @RequestParam String endDate) {
         return orderService.cancelOrderItem(orderId, startDate, endDate);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

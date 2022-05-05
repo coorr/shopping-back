@@ -1,13 +1,16 @@
 package shopping.coor.service;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 import shopping.coor.model.Basket;
 import shopping.coor.model.Item;
+import shopping.coor.model.Order;
 import shopping.coor.model.User;
 import shopping.coor.repository.basket.dto.BasketRequestDto;
 import shopping.coor.repository.user.dto.LoginRequest;
@@ -15,9 +18,11 @@ import shopping.coor.repository.basket.dto.BasketResponseDto;
 import shopping.coor.repository.basket.BasketRepository;
 import shopping.coor.repository.item.ItemRepository;
 import shopping.coor.repository.user.UserRepository;
+import shopping.coor.repository.user.dto.MessageResponse;
 import shopping.coor.serviceImpl.BasketServiceImpl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,9 +61,9 @@ class BasketServiceTest {
                 .build();
     }
 
-
+    @DisplayName("장바구니_조회")
     @Test
-    public void 장바구니_조회() throws Exception {
+    public void getBasketByUserId() throws Exception {
         // given
         Long userId = 1L;
         User user = new User();
@@ -69,78 +74,102 @@ class BasketServiceTest {
         List<BasketResponseDto> basketByUserId = basketService.getBasketByUserId(userId);
 
         // then
-        assertEquals(5, basketByUserId.size());
+        assertEquals(2, basketByUserId.size());
     }
 
+    @DisplayName("장바구니_아이템_추가")
     @Test
-    public void 장비추가_추가() throws Exception {
+    public void basketAddUser_추가() throws Exception {
         // given
-        Long user_id=1L;
-        User user = new User();
-        when(userRepository.getById(user_id)).thenReturn(user);
-        ArrayList<Long> userSameKey = new ArrayList<Long>();
-        userSameKey.add(1L);
-        when(basketRepository.findArrayOnlyById(user)).thenReturn(userSameKey);
-        Item item = new Item();
-        Basket basket = Basket.builder()
-                .item(item)
-                .user(user)
-                .itemTotal(30000)
-                .itemCount(5)
-                .build();
-        when(basketRepository.getById(1L)).thenReturn(basket);
-        when(itemRepository.getItemEntity(0L)).thenReturn(item);
+        Basket basket = basketList().get(0);
+        when(userRepository.getById(any())).thenReturn(user());
+        when(itemRepository.getById(any())).thenReturn(item());
+        when(itemRepository.findQuantitySizeSCount(any())).thenReturn(5);
         when(basketRepository.save(any())).thenReturn(basket);
 
         // when
-        basketService.basketAddUser(user_id, basketRequestDto());
+        ResponseEntity<MessageResponse> result = basketService.basketAddUser(user().getId(), basketRequestDto());
 
         // then
-        assertEquals(basket.getItemTotal(), 330000);
-        assertEquals(basket.getItemCount(), 10);
+        assertEquals(null, result);
     }
 
+    @DisplayName("장바구니_아이템_추가_품절예외")
+    @Test
+    public void basketAddUser_예외() throws Exception {
+        // given
+        when(userRepository.getById(any())).thenReturn(user());
+        when(itemRepository.getById(any())).thenReturn(item());
+        when(itemRepository.findQuantitySizeSCount(any())).thenReturn(3);
+        when(itemRepository.findQuantitySizeMCount(any())).thenReturn(3);
+        // when
+        ResponseEntity<MessageResponse> result = basketService.basketAddUser(user().getId(), basketRequestDtoOVer());
+
+        // then
+        String errorMessage = String.format("상품의 수량이 재고수량 보다 많습니다. \n\n제품명 : %s", item().getTitle());
+        assertEquals(400, result.getStatusCodeValue());
+        assertEquals(errorMessage , result.getBody().getMessage());
+    }
+
+    @DisplayName("장바구니_품절체크")
+    @Test
+    public void duplicateSizeQuantityCheck() throws Exception {
+        // given
+        when(itemRepository.getById(any())).thenReturn(item());
+        when(itemRepository.findQuantitySizeSCount(any())).thenReturn(1);
+
+        // when
+        ResponseEntity<MessageResponse> result = basketService.duplicateSizeQuantityCheck(basketRequestDto());
+
+        // then
+        String errorMessage = String.format("상품의 수량이 재고수량 보다 많습니다. \n\n제품명 : %s", item().getTitle());
+        assertEquals(400, result.getStatusCodeValue());
+        assertEquals(errorMessage, result.getBody().getMessage());
+    }
+
+    private User user() {
+        List<Order> orders = new ArrayList<>();
+        return User.builder()
+                .id(1L)
+                .username("kim1")
+                .email("W@naver.com")
+                .password("123123")
+                .orders(orders)
+                .build();
+    }
+    private Item item() {
+        return Item.builder()
+                .id(1L)
+                .price(20000)
+                .discountPrice(18000)
+                .title("시어서커 크롭 자켓 (다크네이비)")
+                .quantityS(3)
+                .quantityM(3)
+                .quantityL(3)
+                .category("outwear")
+                .build();
+    }
     private List<Basket> basketList() {
-        List<Basket> basketList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            basketList.add(new Basket(userList().get(i), itemList().get(i),  30000+i, 5));
-        }
+        List<Basket> basketList = Arrays.asList(
+                Basket.builder().id(1L).item(item()).user(user()).itemTotal(60000).itemCount(2).size("S").build(),
+                Basket.builder().id(2L).item(item()).user(user()).itemTotal(30000).itemCount(1).size("M").build()
+        );
         return basketList;
     }
 
-    private LoginRequest loginRequest() {
-        return LoginRequest.builder()
-                .username("test")
-                .password("123123")
-                .build();
-    }
-
-    private List<BasketRequestDto> basketRequestDto() {
-        List<BasketRequestDto> basketRequestDtoList = new ArrayList<>();
-        for (Long i = 0L; i < 5; i++) {
-            basketRequestDtoList.add(new BasketRequestDto(i, i, 300000, 5, null, 28000, null, 30000, "옷"));
-        }
+    private List<BasketRequestDto> basketRequestDtoOVer() {
+        List<BasketRequestDto> basketRequestDtoList = Arrays.asList(
+                BasketRequestDto.builder().itemId(1L).itemTotal(30000).itemCount(2).size("S").discount(28000).price(15000).title("시어서커(다크 네이비)").build(),
+                BasketRequestDto.builder().itemId(1L).itemTotal(1500000).itemCount(50).size("M").discount(80000).price(30000).title("시어서커(다크 네이비)").build()
+        );
         return basketRequestDtoList;
     }
 
-
-    private List<User> userList() {
-        List<User> userList = new ArrayList<>();
-        Long i = null;
-        for (i = 0L; i < 5; i++) {
-            userList.add(new User(i,"test", "test@naver.com", "123123"));
-        }
-        return userList;
+    private List<BasketRequestDto> basketRequestDto() {
+        List<BasketRequestDto> basketRequestDtoList = Arrays.asList(
+                BasketRequestDto.builder().itemId(1L).itemTotal(30000).itemCount(2).size("S").discount(28000).price(15000).title("시어서커(다크 네이비)").build()
+        );
+        return basketRequestDtoList;
     }
-
-    private List<Item> itemList() {
-        List<Item> itemList = new ArrayList<>();
-        Long i = null;
-        for (i = 0L; i < 5; i++) {
-            itemList.add(new Item(i, "시어서커 블랙 바지(레드)", 9000, 5));
-        }
-        return itemList;
-    }
-
 
 }

@@ -7,20 +7,21 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import shopping.coor.common.exception.NotEnoughStockException;
-import shopping.coor.model.Basket;
-import shopping.coor.model.Item;
-import shopping.coor.model.Order;
-import shopping.coor.model.User;
+import shopping.coor.model.*;
 import shopping.coor.repository.basket.BasketRepository;
 import shopping.coor.repository.basket.dto.BasketResponseDto;
 import shopping.coor.repository.delivery.dto.DeliveryRequestDto;
 import shopping.coor.repository.item.ItemRepository;
 import shopping.coor.repository.order.OrderRepository;
+import shopping.coor.repository.order.dto.OrderItemResponseDto;
+import shopping.coor.repository.order.dto.OrderResponseDto;
 import shopping.coor.repository.user.UserRepository;
 import shopping.coor.repository.user.dto.MessageResponse;
 import shopping.coor.serviceImpl.BasketServiceImpl;
 import shopping.coor.serviceImpl.OrderServiceImpl;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,6 +48,9 @@ class OrderServiceTest {
 
     @Mock
     ItemRepository itemRepository;
+
+    String start = "20220504000000";
+    String end = "20220204000000";
 
     @Test
     public void 상품_주문_생성() throws Exception {
@@ -123,6 +127,83 @@ class OrderServiceTest {
     }
 
 
+    @Test
+    public void 상품_내역_조회() throws Exception {
+        // given
+        Long userId = 1L;
+        User user = user();
+        when(userRepository.getById(any())).thenReturn(user);
+        when(orderRepository.getOrderUserById(any(), any(),  any())).thenReturn(orders());
+        // when
+        List<OrderResponseDto> orderResponseDtoList = orderService.getOrderUserById(userId, start, end);
+        // then
+        assertEquals(orders().get(0).getOrderItems().get(0).getOrderSize(), orderResponseDtoList.get(0).getOrderItems().get(0).getSize(), "사이즈 비교");
+        assertEquals(orders().get(0).getOrderItems().get(0).getOrderCount(), orderResponseDtoList.get(0).getOrderItems().get(0).getCount(), "상품 수량 비교");
+        assertEquals(orders().get(0).getOrderItems().get(0).getOrderPrice(), orderResponseDtoList.get(0).getOrderItems().get(0).getTotal(), "상품 가격 비교");
+    }
+
+
+    @Test
+    public void 주문_취소() throws Exception {
+        // given
+        Long orderId = 1L;
+        when(orderRepository.getById(orderId)).thenReturn(orders().get(0));
+        when(orderRepository.getOrderUserById(any(), any(), any())).thenReturn(ordersCancel());
+        // when
+        List<OrderResponseDto> result = orderService.cancelOrderItem(orders().get(0).getId(), start, end);
+        // then
+        assertEquals(result.get(0).getOrderStatus(), ordersCancel().get(0).getStatus(), "취소 확인 상태");
+    }
+    
+    @Test
+    public void 주문_취소_예외() throws Exception {
+        // given
+        Long orderId = 1L;
+        when(orderRepository.getById(orderId)).thenReturn(orders().get(0));
+        // when // then
+        assertThrows(IllegalStateException.class, () -> orderService.cancelOrderItem(orders().get(0).getId(), start, end));
+    }
+
+
+    private LocalDateTime stringToLocalDateTime(String start) {
+        DateTimeFormatter form = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        LocalDateTime startDateTimeChange= LocalDateTime.parse(start.substring(0,14),form);
+        String stringStartDate = startDateTimeChange.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime result = LocalDateTime.parse(stringStartDate,formatter);
+
+        return result;
+    }
+
+    private List<Order> orders() {
+        List<Order> orders = Arrays.asList(
+                Order.builder().id(1L).orderDate(stringToLocalDateTime(start)).status(OrderStatus.ORDER).user(user()).orderItems(orderItems()).delivery(delivery()).build()
+        );
+        return orders;
+    }
+
+    private List<Order> ordersCancel() {
+        List<Order> orders = Arrays.asList(
+                Order.builder().id(1L).orderDate(stringToLocalDateTime(start)).status(OrderStatus.CANCEL).user(user()).orderItems(orderItems()).delivery(deliveryComp()).build()
+        );
+        return orders;
+    }
+
+    private List<OrderItem> orderItems() {
+        List<OrderItem> orderItems = Arrays.asList(
+                OrderItem.builder().id(5L).item(item()).orderCount(1).orderSize("S").orderPrice(18000).build(),
+                OrderItem.builder().id(6L).item(item()).orderCount(1).orderSize("M").orderPrice(18000).build()
+        );
+        return orderItems;
+    }
+
+    private List<OrderItemResponseDto> orderItemResponseDto() {
+        List<OrderItemResponseDto> orderItemResponseDtoList = Arrays.asList(
+                OrderItemResponseDto.builder().orderItemId(5L).count(1).size("S").title("시어서커 크롭 자켓 (다크네이비)").total(18000).image(null).build(),
+                OrderItemResponseDto.builder().orderItemId(5L).count(2).size("M").title("시어서커 크롭 자켓 (다크네이비)").total(36000).image(null).build()
+        );
+        return orderItemResponseDtoList;
+    }
 
     private List<BasketResponseDto> basketResponseDto() {
         List<BasketResponseDto> basketResponseDtoList = Arrays.asList(
@@ -173,4 +254,17 @@ class OrderServiceTest {
                 .message("22")
                 .build();
     }
+
+    private Delivery delivery() {
+        return Delivery.builder()
+                .status(DeliveryStatus.READY)
+                .build();
+    }
+
+    private Delivery deliveryComp() {
+        return Delivery.builder()
+                .status(DeliveryStatus.COMP)
+                .build();
+    }
+
 }

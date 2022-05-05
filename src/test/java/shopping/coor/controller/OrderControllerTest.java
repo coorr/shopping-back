@@ -18,12 +18,14 @@ import shopping.coor.model.Image;
 import shopping.coor.model.User;
 import shopping.coor.repository.basket.dto.BasketResponseDto;
 import shopping.coor.repository.delivery.dto.DeliveryRequestDto;
+import shopping.coor.repository.order.dto.OrderItemResponseDto;
+import shopping.coor.repository.order.dto.OrderResponseDto;
 import shopping.coor.repository.user.dto.MessageResponse;
 import shopping.coor.service.OrderService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -51,7 +53,7 @@ class OrderControllerTest {
 
 
     @Test
-    public void 주문_생성() throws Exception {
+    public void 주문_생성_요청() throws Exception {
         // given
         Long userId = 1L;
         DeliveryRequestDto deliveryRequestDto = deliveryRequestDto();
@@ -70,7 +72,7 @@ class OrderControllerTest {
     }
 
     @Test
-    public void 주문_상품_품절_체크() throws Exception {
+    public void 주문_상품_품절_체크_요청() throws Exception {
         // given
         Long userId = 1L;
         ResponseEntity<MessageResponse> responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageResponse());
@@ -86,7 +88,7 @@ class OrderControllerTest {
     }
     
     @Test
-    public void 상품_품절_삭제() throws Exception {
+    public void 상품_품절_삭제_요청() throws Exception {
         // given
         Long userId = 1L;
         List<BasketResponseDto> basketResponseDto = basketResponseDto();
@@ -99,6 +101,64 @@ class OrderControllerTest {
         result.andExpect(status().isOk()).andReturn();
         assertEquals(basketResponseDto.size(), 4);
     }
+
+    @Test
+    public void 상품_내역_조회_요청() throws Exception {
+        // given
+        Long userId = 1L;
+        List<OrderResponseDto> orderResponseDto = orderResponseDto();
+        when(orderService.getOrderUserById(any(), any(), any())).thenReturn(orderResponseDto);
+        // when
+        ResultActions result = mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/order/getOrderUserById/{userId}", userId )
+                        .contentType(APPLICATION_JSON)
+                .param("startDate","20220504000000")
+                .param("endDate","20220204000000")
+        );
+        // then
+        result.andExpect(status().isOk()).andReturn();
+        assertEquals(orderResponseDto.size(), 2, "상품 내역 제대로 조회가 되었는지 확인");
+    }
+
+    @Test
+    public void 상품_취소_요청() throws Exception {
+        // given
+        Long userId = 1L;
+        List<OrderResponseDto> orderResponseDto = orderResponseDto();
+        when(orderService.cancelOrderItem(any(), any(), any())).thenReturn(orderResponseDto);
+        // when
+        ResultActions result = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/order/cancelOrderItem/{userId}", userId )
+                        .contentType(APPLICATION_JSON)
+                        .param("startDate","20220504000000")
+                        .param("endDate","20220204000000")
+        );
+        // then
+        result.andExpect(status().isOk()).andReturn();
+        assertEquals(orderResponseDto.size(), 2, "상품 내역 제대로 조회가 되었는지 확인");
+    }
+
+
+
+    private List<OrderResponseDto> orderResponseDto() {
+        String str = "2022-05-04 01:55:40";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(str, formatter);
+        List<OrderResponseDto> orderResponseDtoList = Arrays.asList(
+                OrderResponseDto.builder().orderId(3L).orderDate(dateTime).orderItems(orderItemResponseDto()).build(),
+                OrderResponseDto.builder().orderId(2L).orderDate(dateTime).orderItems(orderItemResponseDto()).build()
+        );
+        return orderResponseDtoList;
+    }
+
+    private List<OrderItemResponseDto> orderItemResponseDto() {
+        List<OrderItemResponseDto> orderItemResponseDtoList = Arrays.asList(
+                OrderItemResponseDto.builder().orderItemId(5L).count(1).size("S").title("시어서커 크롭 자켓 (다크네이비)").total(18000).build(),
+                OrderItemResponseDto.builder().orderItemId(5L).count(2).size("M").title("시어서커 크롭 자켓 (다크네이비)").total(36000).build()
+        );
+        return orderItemResponseDtoList;
+    }
+
 
     private DeliveryRequestDto deliveryRequestDto() {
         return DeliveryRequestDto.builder()

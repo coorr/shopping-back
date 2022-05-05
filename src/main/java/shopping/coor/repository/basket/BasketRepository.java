@@ -19,9 +19,6 @@ public interface BasketRepository extends JpaRepository<Basket, Long> {
 
     void deleteById(Long id);
 
-    @Query("select distinct i from Item i  where i.id < ?1  order by i.id desc ")
-    List<Item> getItemAll(Long lastId, PageRequest pageRequest);
-
     @Query("select b from Basket b join fetch b.user join fetch b.item where b.user = ?1")
     List<Basket> findAllByUserId(User userId);
 

@@ -1,8 +1,10 @@
 package shopping.coor.serviceImpl;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,8 @@ import shopping.coor.service.ItemService;
 
 import java.io.File;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -105,16 +109,16 @@ public class ItemServiceImpl implements ItemService {
             objectMetadata.setContentLength(file.getSize());
             objectMetadata.setContentType(file.getContentType());
 
-            File fileSave = new File(absolutePath + UPLOAD_PATH, fileName);
-            file.transferTo(fileSave);
-//            try (InputStream inputStream = file.getInputStream()) {
-//                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-//                        .withCannedAcl(CannedAccessControlList.PublicRead));
-//            } catch (IOException e) {
-//                return ResponseEntity
-//                        .badRequest()
-//                        .body(new MessageResponse("파일 업로드에 실패했습니다."));
-//            }
+//            File fileSave = new File(absolutePath + UPLOAD_PATH, fileName);
+//            file.transferTo(fileSave);
+            try (InputStream inputStream = file.getInputStream()) {
+                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+            } catch (IOException e) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("파일 업로드에 실패했습니다."));
+            }
 
             imageRepository.saveImage(fileName, itemId);
         }
@@ -141,7 +145,6 @@ public class ItemServiceImpl implements ItemService {
         List<Image> images = imageRepository.getItemToImage(itemId);
         Image[] imageDto = new ObjectMapper().readValue(imagePath, Image[].class);
         Set<Long> imageIds = images.stream().map(id -> id.getId()).collect(Collectors.toSet());  // 1 , 2 , 3
-        ArrayList currentImageId = new ArrayList();
 
         for (Image imageList : imageDto) {
             Image image = new Image();
@@ -173,16 +176,16 @@ public class ItemServiceImpl implements ItemService {
             objectMetadata.setContentLength(file.getSize());
             objectMetadata.setContentType(file.getContentType());
 
-            File fileSave = new File(absolutePath + UPLOAD_PATH, fileName);
-            file.transferTo(fileSave);
-//            try (InputStream inputStream = file.getInputStream()) {
-//                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-//                        .withCannedAcl(CannedAccessControlList.PublicRead));
-//            } catch (IOException e) {
-//                return ResponseEntity
-//                        .badRequest()
-//                        .body(new MessageResponse("파일 업로드에 실패했습니다."));
-//            }
+//            File fileSave = new File(absolutePath + UPLOAD_PATH, fileName);
+//            file.transferTo(fileSave);
+            try (InputStream inputStream = file.getInputStream()) {
+                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+            } catch (IOException e) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("파일 업로드에 실패했습니다."));
+            }
 
             imageRepository.saveImage(fileName, itemDto);
         }

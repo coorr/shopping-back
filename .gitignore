@@ -37,5 +37,5 @@ bin/
 application.yml
 application-real.properties
 .gradle
-#build/
+build/
 out/

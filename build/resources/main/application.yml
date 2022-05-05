@@ -6,12 +6,17 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
   datasource:
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#      url: jdbc:mysql://localhost:3307/shop_db?serverTimezone=UTC&characterEncoding=UTF-8
+#      username: root
+#      password: 6040
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://admin.cw6f368mqpxq.ap-northeast-2.rds.amazonaws.com:3306/shop_db?serverTimezone=UTC&characterEncoding=UTF-8
     username: admin
     password: wlstjd0604
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#    database-platform: org.hibernate.dialect.MySQL8Dialect
     open-in-view: true
     hibernate:
       ddl-auto: update

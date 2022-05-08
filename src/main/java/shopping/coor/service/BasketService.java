@@ -16,4 +16,5 @@ public interface BasketService {
     void basketEmpty(Long userId);
     ResponseEntity<?> insertNotUserBasket(Long userId, List<BasketRequestDto> basketDto);
     ResponseEntity<MessageResponse> duplicateSizeQuantityCheck(List<BasketRequestDto> basketRequestDto);
+    int getBasketToUserLength(Long userId);
 }

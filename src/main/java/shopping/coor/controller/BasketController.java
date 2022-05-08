@@ -51,7 +51,10 @@ public class BasketController {
     public ResponseEntity<?> duplicateSizeQuantityCheck(@RequestBody List<BasketRequestDto> basketDto) {
         return basketService.duplicateSizeQuantityCheck(basketDto);
     }
-
+    @GetMapping("/getBasketToUserLength/{userId}")
+    public int getBasketToUserLength(@PathVariable Long userId) {
+        return basketService.getBasketToUserLength(userId);
+    }
 
 }
 

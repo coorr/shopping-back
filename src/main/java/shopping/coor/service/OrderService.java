@@ -14,7 +14,7 @@ public interface OrderService {
     ResponseEntity<MessageResponse> saveOrderDeliveryItem(Long userId, DeliveryRequestDto deliveryRequestDto);
     ResponseEntity<MessageResponse> quantityCheckOrder(Long userId);
     List<BasketResponseDto> soldOutItemRemove(Long userId);
-    List<OrderResponseDto> getOrderUserById(Long userId, String startDate, String endDate);
+    List<OrderResponseDto> getOrderUserById(Long userId, String startDate, String endDate, String status);
     List<OrderResponseDto> cancelOrderItem(Long orderId, String startDate, String endDate);
 
 }

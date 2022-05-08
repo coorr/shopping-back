@@ -112,6 +112,14 @@ public class BasketServiceImpl implements BasketService {
         return null;
     }
 
+    @Transactional
+    @Override
+    public int getBasketToUserLength(Long userId) {
+        User userById = userRepository.getById(userId);
+        basketRepository.deleteBasketByUserId(userById);
+        List<Basket> basketList = basketRepository.findAllByUserId(userById);
+        return basketList.size();
+    }
 
 
     @Override

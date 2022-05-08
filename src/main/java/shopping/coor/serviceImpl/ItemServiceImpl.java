@@ -94,8 +94,6 @@ public class ItemServiceImpl implements ItemService {
     public ResponseEntity<?> insertItemAll(MultipartFile[] multipartFiles, String itemData) throws Exception {
         Item itemDto = new ObjectMapper().readValue(itemData, Item.class);
         Item itemId = itemRepository.save(itemDto);
-        String UPLOAD_PATH = "src/main/resources/static/";
-        String absolutePath = new File("").getAbsolutePath() + "\\";
 
         if (multipartFiles == null) {
             return null;
@@ -109,8 +107,6 @@ public class ItemServiceImpl implements ItemService {
             objectMetadata.setContentLength(file.getSize());
             objectMetadata.setContentType(file.getContentType());
 
-//            File fileSave = new File(absolutePath + UPLOAD_PATH, fileName);
-//            file.transferTo(fileSave);
             try (InputStream inputStream = file.getInputStream()) {
                 amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
@@ -144,7 +140,7 @@ public class ItemServiceImpl implements ItemService {
 
         List<Image> images = imageRepository.getItemToImage(itemId);
         Image[] imageDto = new ObjectMapper().readValue(imagePath, Image[].class);
-        Set<Long> imageIds = images.stream().map(id -> id.getId()).collect(Collectors.toSet());  // 1 , 2 , 3
+        Set<Long> imageIds = images.stream().map(id -> id.getId()).collect(Collectors.toSet());
 
         for (Image imageList : imageDto) {
             Image image = new Image();
@@ -163,21 +159,14 @@ public class ItemServiceImpl implements ItemService {
         if (multipartFiles == null) {
             return null;
         }
-
-        String UPLOAD_PATH = "src/main/resources/static/";
-        String absolutePath = new File("").getAbsolutePath() + "\\";
-
         for (int i = 0; i < multipartFiles.length; i++) {
             MultipartFile file = multipartFiles[i];
-            System.out.println("file = " + file);
 
             String fileName = createFileName(file.getOriginalFilename());
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentLength(file.getSize());
             objectMetadata.setContentType(file.getContentType());
 
-//            File fileSave = new File(absolutePath + UPLOAD_PATH, fileName);
-//            file.transferTo(fileSave);
             try (InputStream inputStream = file.getInputStream()) {
                 amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
                         .withCannedAcl(CannedAccessControlList.PublicRead));

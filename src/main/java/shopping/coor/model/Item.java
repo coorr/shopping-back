@@ -96,7 +96,6 @@ public class Item {
             }
             this.quantityL = restStock;
         }
-
     }
 
     public static Item createItem(Item items, Image... images) {
@@ -119,7 +118,6 @@ public class Item {
         this.title=title;
         this.discountPrice = discountPrice;
         this.quantityS = quantityS;
-
     }
 
 }

@@ -55,15 +55,14 @@ class OrderServiceTest {
     @Test
     public void 상품_주문_생성() throws Exception {
         // given
-        User user = user();
-        when(userRepository.getById(1L)).thenReturn(user);
+        when(userRepository.getById(1L)).thenReturn(user());
         when(basketRepository.findAllByUserId(any(User.class))).thenReturn(basketList());
 
         // when
-        ResponseEntity<MessageResponse> responseEntity = orderService.saveOrderDeliveryItem(user.getId(), deliveryRequestDto());
+        ResponseEntity<MessageResponse> responseEntity = orderService.saveOrderDeliveryItem(user().getId(), deliveryRequestDto());
 
-        assertEquals(responseEntity, null);
         // then
+        assertEquals(responseEntity, null);
     }
 
     @Test
@@ -131,11 +130,12 @@ class OrderServiceTest {
     public void 상품_내역_조회() throws Exception {
         // given
         Long userId = 1L;
+        String status = "";
         User user = user();
         when(userRepository.getById(any())).thenReturn(user);
         when(orderRepository.getOrderUserById(any(), any(),  any())).thenReturn(orders());
         // when
-        List<OrderResponseDto> orderResponseDtoList = orderService.getOrderUserById(userId, start, end);
+        List<OrderResponseDto> orderResponseDtoList = orderService.getOrderUserById(userId, start, end, status);
         // then
         assertEquals(orders().get(0).getOrderItems().get(0).getOrderSize(), orderResponseDtoList.get(0).getOrderItems().get(0).getSize(), "사이즈 비교");
         assertEquals(orders().get(0).getOrderItems().get(0).getOrderCount(), orderResponseDtoList.get(0).getOrderItems().get(0).getCount(), "상품 수량 비교");

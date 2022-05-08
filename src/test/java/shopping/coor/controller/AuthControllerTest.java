@@ -51,7 +51,7 @@ class AuthControllerTest {
         SignupRequest signupRequest = signupRequest();
         ResponseEntity<MessageResponse> responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageResponse());
 
-        when(userService.registerUser(any(SignupRequest.class))).thenReturn(responseEntity);
+        when(userService.registerUser(any())).thenReturn(responseEntity);
 
         // when
         ResultActions resultActions = mockMvc.perform(

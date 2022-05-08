@@ -1,5 +1,6 @@
 package shopping.coor.serviceImpl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,6 @@ public class OrderServiceImpl implements OrderService {
     public ResponseEntity<MessageResponse> saveOrderDeliveryItem(Long userId, DeliveryRequestDto deliveryRequestDto) {
 
         User userById = userRepository.getById(userId);
-
         List<Basket> basketList = basketRepository.findAllByUserId(userById);
 
         Delivery delivery = Delivery.createDelivery(deliveryRequestDto.getName(), deliveryRequestDto.getEmail(),
@@ -46,11 +46,9 @@ public class OrderServiceImpl implements OrderService {
         for (Basket basket : basketList) {
             orderItem.add(OrderItem.createOrderItem((basket.getItem()), basket.getItemTotal(), basket.getItemCount(), basket.getSize()));
         }
-
         Order order = Order.createOrder(userById, delivery, orderItem);
 
         orderRepository.save(order);
-        basketRepository.deleteBasketByUserId(userById);
         return null;
     }
 
@@ -99,10 +97,30 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderResponseDto> getOrderUserById(Long userId, String startDate, String endDate) {
+    public List<OrderResponseDto> getOrderUserById(Long userId, String startDate, String endDate, String status) {
         User userById = userRepository.getById(userId);
         LocalDateTime startTime = stringToLocalDateTime(startDate);
         LocalDateTime endTime = stringToLocalDateTime(endDate);
+        if (status.equals("ORDER")) {
+            List<Order> orderList = orderRepository.getOrderStatusUserById(userById, startTime, endTime, OrderStatus.ORDER);
+            List<OrderResponseDto> result = orderList.stream().map(o -> new OrderResponseDto(o)).collect(Collectors.toList());
+            return result;
+        }
+        if (status.equals("CANCEL")) {
+            List<Order> orderList = orderRepository.getOrderStatusUserById(userById, startTime, endTime, OrderStatus.CANCEL);
+            List<OrderResponseDto> result = orderList.stream().map(o -> new OrderResponseDto(o)).collect(Collectors.toList());
+            return result;
+        }
+        if (status.equals("READY")) {
+            List<Order> orderList = orderRepository.getOrderDeliverStatusUserById(userById, startTime, endTime, DeliveryStatus.READY);
+            List<OrderResponseDto> result = orderList.stream().map(o -> new OrderResponseDto(o)).collect(Collectors.toList());
+            return result;
+        }
+        if (status.equals("COMP")) {
+            List<Order> orderList = orderRepository.getOrderDeliverStatusUserById(userById, startTime, endTime, DeliveryStatus.COMP);
+            List<OrderResponseDto> result = orderList.stream().map(o -> new OrderResponseDto(o)).collect(Collectors.toList());
+            return result;
+        }
         List<Order> orderList = orderRepository.getOrderUserById(userById, startTime, endTime);
         List<OrderResponseDto> result = orderList.stream().map(o -> new OrderResponseDto(o)).collect(Collectors.toList());
         return result;

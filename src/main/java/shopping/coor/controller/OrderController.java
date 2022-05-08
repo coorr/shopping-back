@@ -38,8 +38,8 @@ public class OrderController {
 
     @GetMapping("/getOrderUserById/{userId}")
     public List<OrderResponseDto> getOrderUserById(@PathVariable Long userId, @RequestParam String startDate,
-                                                   @RequestParam String endDate) {
-        return orderService.getOrderUserById(userId, startDate, endDate);
+                                                   @RequestParam String endDate, @RequestParam(required = false) String status) {
+        return orderService.getOrderUserById(userId, startDate, endDate, status);
     }
 
     @PostMapping("/cancelOrderItem/{orderId}")

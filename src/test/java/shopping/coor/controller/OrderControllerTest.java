@@ -107,7 +107,7 @@ class OrderControllerTest {
         // given
         Long userId = 1L;
         List<OrderResponseDto> orderResponseDto = orderResponseDto();
-        when(orderService.getOrderUserById(any(), any(), any())).thenReturn(orderResponseDto);
+        when(orderService.getOrderUserById(any(), any(), any(), any())).thenReturn(orderResponseDto);
         // when
         ResultActions result = mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/order/getOrderUserById/{userId}", userId )

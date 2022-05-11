@@ -30,21 +30,6 @@ public class ItemController {
         return itemService.getItemOne(id);
     }
 
-    @PostMapping("/removeItem/{id}")
-    public ResponseEntity<?> removeItem(@PathVariable Long id) {
-        return itemService.removeItem(id);
-    }
-
-    @PostMapping("/insertItemAll")
-    public ResponseEntity<?> insertItemAll(MultipartFile[] multipartFiles, String itemData) throws Exception {
-         return itemService.insertItemAll(multipartFiles, itemData);
-    }
-
-    @PostMapping("/revisedItem")
-    public ResponseEntity<?> revisedItem(MultipartFile[] multipartFiles, String itemData, String imagePath) throws Exception {
-        return itemService.revisedItem(multipartFiles, itemData, imagePath);
-    }
-
     @GetMapping("/getImage")
     public List<Image> getImage() {
         return itemService.getImage();

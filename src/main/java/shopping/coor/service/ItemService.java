@@ -10,7 +10,7 @@ import java.util.List;
 public interface ItemService {
     List<ItemRequestDto> getItemAll(Long lastId, int size);
     ResponseEntity<?> getItemOne(Long id);
-    ResponseEntity<?> removeItem(Long id);
+    void removeItem(Long id);
     ResponseEntity<?> insertItemAll(MultipartFile[] multipartFiles, String itemData) throws Exception;
     ResponseEntity<?> revisedItem(MultipartFile[] multipartFiles, String itemData, String imagePath) throws Exception;
 

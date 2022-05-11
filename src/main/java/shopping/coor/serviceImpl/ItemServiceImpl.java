@@ -77,10 +77,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     @Override
-    public ResponseEntity<?> removeItem(Long id) {
+    public void removeItem(Long id) {
         Item item = itemRepository.getItemEntity(id);
         itemRepository.delete(item);
-        return null;
     }
 
     private List<ItemRequestDto> getItemChangeDto(List<Item> item) {

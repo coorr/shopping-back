@@ -106,14 +106,14 @@ public class ItemServiceImpl implements ItemService {
             objectMetadata.setContentLength(file.getSize());
             objectMetadata.setContentType(file.getContentType());
 
-            try (InputStream inputStream = file.getInputStream()) {
-                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
-            } catch (IOException e) {
-                return ResponseEntity
-                        .badRequest()
-                        .body(new MessageResponse("파일 업로드에 실패했습니다."));
-            }
+//            try (InputStream inputStream = file.getInputStream()) {
+//                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+//                        .withCannedAcl(CannedAccessControlList.PublicRead));
+//            } catch (IOException e) {
+//                return ResponseEntity
+//                        .badRequest()
+//                        .body(new MessageResponse("파일 업로드에 실패했습니다."));
+//            }
 
             imageRepository.saveImage(fileName, itemId);
         }
@@ -166,14 +166,14 @@ public class ItemServiceImpl implements ItemService {
             objectMetadata.setContentLength(file.getSize());
             objectMetadata.setContentType(file.getContentType());
 
-            try (InputStream inputStream = file.getInputStream()) {
-                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
-            } catch (IOException e) {
-                return ResponseEntity
-                        .badRequest()
-                        .body(new MessageResponse("파일 업로드에 실패했습니다."));
-            }
+//            try (InputStream inputStream = file.getInputStream()) {
+//                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+//                        .withCannedAcl(CannedAccessControlList.PublicRead));
+//            } catch (IOException e) {
+//                return ResponseEntity
+//                        .badRequest()
+//                        .body(new MessageResponse("파일 업로드에 실패했습니다."));
+//            }
 
             imageRepository.saveImage(fileName, itemDto);
         }

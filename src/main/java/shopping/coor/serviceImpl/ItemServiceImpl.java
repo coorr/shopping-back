@@ -45,17 +45,29 @@ public class ItemServiceImpl implements ItemService {
     private final AmazonS3 amazonS3;
 
     @Override
-    public List<ItemRequestDto> getItemAll(Long lastId, int size) {
+    public List<ItemRequestDto> getItemAll(Long lastId, int size, String category) {
+        System.out.println("category = " + category);
         PageRequest pageRequest = PageRequest.of(0, size);
 
-        if (lastId == 0) {
+        if (lastId == 0 && category.equals("null")) {
             List<Item> item = itemRepository.getItemFirst(lastId, pageRequest);
             List<ItemRequestDto> result = getItemChangeDto(item);
             return result;
         }
+        if(category.equals("null")) {
+            List<Item> item = itemRepository.getItemAll(lastId, pageRequest);
+            List<ItemRequestDto> result = getItemChangeDto(item);
+            return result;
+        }
+        if(lastId == 0) {
+            List<Item> itemCategory = itemRepository.getItemFirstCategory(lastId, category, pageRequest);
+            List<ItemRequestDto> result = getItemChangeDto(itemCategory);
+            return result;
+        }
+        List<Item> itemCategory = itemRepository.getItemCategory(lastId, category, pageRequest);
+        List<ItemRequestDto> result = getItemChangeDto(itemCategory);
 
-        List<Item> item = itemRepository.getItemAll(lastId, pageRequest);
-        List<ItemRequestDto> result = getItemChangeDto(item);
+
         return result;
     }
 

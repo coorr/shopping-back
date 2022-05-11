@@ -21,8 +21,8 @@ public class ItemController {
 
 
     @GetMapping("/getItem")
-    public List<ItemRequestDto> getItemAll(@RequestParam(required = false) Long lastId, @RequestParam(required = false) int size ) {
-        return itemService.getItemAll(lastId,size);
+    public List<ItemRequestDto> getItemAll(@RequestParam Long lastId, @RequestParam int size, @RequestParam(required = false) String category ) {
+        return itemService.getItemAll(lastId,size,category);
     }
 
     @GetMapping("/getItemOne/{id}")

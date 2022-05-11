@@ -84,6 +84,7 @@ public class Order {
         }
 
         this.setStatus(OrderStatus.CANCEL);
+        delivery.setStatus(DeliveryStatus.CANCEL);
         for (OrderItem orderItem : orderItems) {
             orderItem.cancel(orderItem.getOrderSize());
         }

@@ -14,6 +14,9 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Query("select distinct i from Item i  where i.id < ?1  order by i.id desc ")
     List<Item> getItemAll(Long lastId, PageRequest pageRequest);
 
+    @Query("select distinct i from Item i  where i.id < ?1 and i.category = ?2 order by i.id desc ")
+    List<Item> getItemCategory(Long lastId, String category, PageRequest pageRequest);
+
     @Query("select i from Item i where i.id = ?1")
     List<Item> getItemOne(Long id);
 
@@ -25,6 +28,9 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("select distinct i from Item i where i.id > ?1  order by i.id desc ")
     List<Item> getItemFirst(Long lastId, PageRequest pageRequest);
+
+    @Query("select distinct i from Item i where i.id > ?1 and i.category = ?2 order by i.id desc ")
+    List<Item> getItemFirstCategory(Long lastId, String category, PageRequest pageRequest);
 
     @Query(value = "SELECT quantitys  FROM item WHERE item_id = ?1", nativeQuery = true)
     int findQuantitySizeSCount(Long item_id);

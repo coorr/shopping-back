@@ -8,7 +8,7 @@ import shopping.coor.repository.item.dto.ItemRequestDto;
 import java.util.List;
 
 public interface ItemService {
-    List<ItemRequestDto> getItemAll(Long lastId, int size);
+    List<ItemRequestDto> getItemAll(Long lastId, int size, String category);
     ResponseEntity<?> getItemOne(Long id);
     void removeItem(Long id);
     ResponseEntity<?> insertItemAll(MultipartFile[] multipartFiles, String itemData) throws Exception;

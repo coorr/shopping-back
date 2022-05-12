@@ -48,6 +48,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 		} catch (Exception e) {
+			log.info("현재 jwt 에러 났음");
 			log.error("Error logging in: {}", e.getMessage());
 		}
 		filterChain.doFilter(request, response);

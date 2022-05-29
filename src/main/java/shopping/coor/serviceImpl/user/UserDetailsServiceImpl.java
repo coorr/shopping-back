@@ -20,8 +20,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		log.info("아이디 확인중");
-		User user = userRepository.findByUsername(username)
-				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+		User user = userRepository.findByUsernameJoinRoles(username);
+//				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
 		return UserDetailsImpl.build(user);
 

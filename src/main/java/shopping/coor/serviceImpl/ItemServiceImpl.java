@@ -1,5 +1,6 @@
 package shopping.coor.serviceImpl;
 
+import com.amazonaws.annotation.ThreadSafe;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,24 +27,28 @@ import shopping.coor.repository.image.ImageRepository;
 import shopping.coor.repository.item.ItemRepository;
 import shopping.coor.service.ItemService;
 
-import java.io.File;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
+@ThreadSafe
 @Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
+
     @Value("${cloud.aws.s3.bucket}")
     public String bucket;
 
     private final ItemRepository itemRepository;
     private final ImageRepository imageRepository;
     private final AmazonS3 amazonS3;
+    private final Executor executor;
 
     @Override
     public List<ItemRequestDto> getItemAll(Long lastId, int size, String category) {
@@ -54,12 +60,12 @@ public class ItemServiceImpl implements ItemService {
             List<ItemRequestDto> result = getItemChangeDto(item);
             return result;
         }
-        if(category.equals("null")) {
+        if (category.equals("null")) {
             List<Item> item = itemRepository.getItemAll(lastId, pageRequest);
             List<ItemRequestDto> result = getItemChangeDto(item);
             return result;
         }
-        if(lastId == 0) {
+        if (lastId == 0) {
             List<Item> itemCategory = itemRepository.getItemFirstCategory(lastId, category, pageRequest);
             List<ItemRequestDto> result = getItemChangeDto(itemCategory);
             return result;
@@ -73,17 +79,17 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ResponseEntity<?> getItemOne(Long id) {
-            List<Item> item = itemRepository.getItemOne(id);
-            if(item.isEmpty()) {
-                return ResponseEntity
-                        .badRequest()
-                        .body(new MessageResponse("존재하지 않는 게시글입니다."));
-            }
-            List<ItemRequestOneDto> result = item.stream()
-                    .map(i -> new ItemRequestOneDto(i))
-                    .collect(Collectors.toList());
+        List<Item> item = itemRepository.getItemOne(id);
+        if (item.isEmpty()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("존재하지 않는 게시글입니다."));
+        }
+        List<ItemRequestOneDto> result = item.stream()
+                .map(i -> new ItemRequestOneDto(i))
+                .collect(Collectors.toList());
 
-            return ResponseEntity.ok(result);
+        return ResponseEntity.ok(result);
 
     }
 
@@ -100,6 +106,7 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
     }
 
+
     @Override
     @Transactional
     public ResponseEntity<?> insertItemAll(MultipartFile[] multipartFiles, String itemData) throws Exception {
@@ -109,26 +116,26 @@ public class ItemServiceImpl implements ItemService {
         if (multipartFiles == null) {
             return null;
         }
-
         for (int i = 0; i < multipartFiles.length; i++) {
             MultipartFile file = multipartFiles[i];
-
             String fileName = createFileName(file.getOriginalFilename());
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(file.getSize());
-            objectMetadata.setContentType(file.getContentType());
+            Runnable runnable = () -> {
+                ObjectMetadata objectMetadata = new ObjectMetadata();
+                objectMetadata.setContentLength(file.getSize());
+                objectMetadata.setContentType(file.getContentType());
 
-//            try (InputStream inputStream = file.getInputStream()) {
-//                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-//                        .withCannedAcl(CannedAccessControlList.PublicRead));
-//            } catch (IOException e) {
-//                return ResponseEntity
-//                        .badRequest()
-//                        .body(new MessageResponse("파일 업로드에 실패했습니다."));
-//            }
+                try (InputStream inputStream = file.getInputStream()) {
+                    amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                            .withCannedAcl(CannedAccessControlList.PublicRead));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
+            };
+            executor.execute(runnable);
             imageRepository.saveImage(fileName, itemId);
         }
+
         return null;
     }
 
@@ -162,7 +169,7 @@ public class ItemServiceImpl implements ItemService {
 
             imageIds.remove(imageList.getId());
         }
-        if(imageIds.size() != 0) {
+        if (imageIds.size() != 0) {
             imageRepository.deleteImage(imageIds);
         }
 
@@ -192,7 +199,6 @@ public class ItemServiceImpl implements ItemService {
 
         return null;
     }
-
 
 
     public void deleteFile(String fileName) {

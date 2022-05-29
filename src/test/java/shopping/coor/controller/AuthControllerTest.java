@@ -1,19 +1,23 @@
 package shopping.coor.controller;
 
 import com.google.gson.Gson;
+import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.*;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import shopping.coor.model.User;
+import shopping.coor.repository.user.UserRepository;
 import shopping.coor.repository.user.dto.LoginRequest;
 import shopping.coor.repository.user.dto.SignupRequest;
 import shopping.coor.repository.user.dto.MessageResponse;
@@ -21,13 +25,19 @@ import shopping.coor.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class AuthControllerTest {
@@ -37,6 +47,9 @@ class AuthControllerTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private UserRepository userRepository;
 
     private MockMvc mockMvc;
 
@@ -99,6 +112,8 @@ class AuthControllerTest {
         // then
         MvcResult mvcResult = resultActions.andExpect(status().isOk()).andReturn();
     }
+
+
 
     private LoginRequest loginRequest() {
         return LoginRequest.builder()

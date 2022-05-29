@@ -40,7 +40,6 @@ public class BasketServiceImpl implements BasketService {
             Item itemById = itemRepository.getById(requestDto.getItemId());
 
             String errorMessage = String.format("상품의 수량이 재고수량 보다 많습니다. \n\n제품명 : %s", itemById.getTitle());
-
             if (requestDto.getSize().equals("S")) {
                 int quantitySizeSCount = itemRepository.findQuantitySizeSCount(requestDto.getItemId());
                 if (arrayOnlyBasketId.contains(requestDto.getKeyIndex())) {

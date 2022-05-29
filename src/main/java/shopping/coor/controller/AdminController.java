@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import shopping.coor.service.BasketService;
 import shopping.coor.service.ItemService;
-import shopping.coor.service.OrderService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -15,8 +13,6 @@ import shopping.coor.service.OrderService;
 public class AdminController {
 
     private final ItemService itemService;
-    private final BasketService basketService;
-    private final OrderService orderService;
 
 
     @PostMapping("/insertItemAll")

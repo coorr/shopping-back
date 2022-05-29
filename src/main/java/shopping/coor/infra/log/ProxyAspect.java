@@ -17,19 +17,19 @@ public class ProxyAspect {
 
     private final LogTrace trace;
 
-    @Pointcut("execution(* shopping.coor..*(..))")
-    private void coor() {}
-
-    @Pointcut("execution(* shopping.coor..*controller..*(..))")
-    private void controller() {}
-
-    @Pointcut("execution(* shopping.coor..*repository..*(..))")
-    private void repository() {}
-
-    @Pointcut("execution(* shopping.coor..*serviceImpl..*(..))")
-    private void serviceImpl() {}
-
-    @Around("controller() || repository() || serviceImpl()")
+//    @Pointcut("execution(* shopping.coor..*(..))")
+//    private void coor() {}
+//
+//    @Pointcut("execution(* shopping.coor..*controller..*(..))")
+//    private void controller() {}
+//
+//    @Pointcut("execution(* shopping.coor..*repository..*(..))")
+//    private void repository() {}
+//
+//    @Pointcut("execution(* shopping.coor..*serviceImpl..*(..))")
+//    private void serviceImpl() {}
+//
+//    @Around("controller() || repository() || serviceImpl()")
     public Object execute(ProceedingJoinPoint joinPoint) throws Throwable {
         TraceStatus status = null;
         try {

@@ -63,6 +63,7 @@ class UserRepositoryTest {
         assertEquals(all.size(), 1);
     }
 
+
     private List<User> userList() {
         List<User> userList = new ArrayList<>();
         Long i = null;

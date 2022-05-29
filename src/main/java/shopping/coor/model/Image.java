@@ -13,7 +13,7 @@ import static javax.persistence.FetchType.*;
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor()
+@NoArgsConstructor
 //@AllArgsConstructor
 public class Image {
 

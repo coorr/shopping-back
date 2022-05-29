@@ -1,6 +1,7 @@
 package shopping.coor.serviceImpl.user;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import shopping.coor.jwt.JwtUtils;
 import shopping.coor.model.ERole;
@@ -28,6 +30,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 // SecurityContextHolder -> Authentication -> principal
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -115,10 +118,10 @@ public class UserServiceImpl implements UserService  {
         user.setRoles(roles);
         userRepository.save(user);
 
-//        return ResponseEntity.ok(new MessageResponse("회원가입 완료되었습니다."));
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new MessageResponse("회원가입 완료되었습니다."));
     }
+
 
 
 }

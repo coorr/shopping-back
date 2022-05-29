@@ -18,7 +18,6 @@ import lombok.*;
 @Table(	name = "users",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
-                @UniqueConstraint(columnNames = "email")
         })
 @Getter
 @NoArgsConstructor
@@ -45,7 +44,7 @@ public class User {
     @JsonIgnore
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)  // 부모 실행 , 자식은 객체로
+    @ManyToMany
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))

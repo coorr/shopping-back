@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import shopping.coor.model.Basket;
 import shopping.coor.model.Item;
 import shopping.coor.model.User;
@@ -16,6 +15,7 @@ import shopping.coor.repository.item.ItemRepository;
 import shopping.coor.repository.user.UserRepository;
 import shopping.coor.service.BasketService;
 
+import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

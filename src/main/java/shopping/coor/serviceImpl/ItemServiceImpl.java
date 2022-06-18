@@ -52,7 +52,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemRequestDto> getItemAll(Long lastId, int size, String category) {
-        System.out.println("category = " + category);
         PageRequest pageRequest = PageRequest.of(0, size);
 
         if (lastId == 0 && category.equals("null")) {

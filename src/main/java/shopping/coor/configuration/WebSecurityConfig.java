@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import shopping.coor.jwt.AuthEntryPointJwt;
 import shopping.coor.jwt.AuthTokenFilter;
+import shopping.coor.jwt.JwtExceptionFilter;
+import shopping.coor.jwt.JwtUtils;
 import shopping.coor.serviceImpl.user.UserDetailsServiceImpl;
 
 
@@ -26,6 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsServiceImpl userDetailsService;
 	private final AuthTokenFilter authenticationJwtTokenFilter;
 	private final AuthEntryPointJwt unauthorizedHandler;
+	private final JwtExceptionFilter jwtExceptionFilter;
 
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -58,6 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(jwtExceptionFilter, AuthTokenFilter.class);
 	}
 
 

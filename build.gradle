@@ -21,9 +21,12 @@ repositories {
 jar {
 	enabled = false
 }
-//test {
-//	exclude '**/*'
-//}
+test {
+	useJUnitPlatform()
+	//	exclude '**/*'
+
+}
+
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
@@ -51,6 +54,4 @@ dependencies {
 	testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
+

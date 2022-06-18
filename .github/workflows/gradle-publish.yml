@@ -38,7 +38,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           
       - name: Upload to S3 
-        run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./$shop-back.zip s3://${{ secrets.AWS_S3_BUCKET }}/CI/$shop-back.zip
+        run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./shop-back.zip s3://${{ secrets.AWS_S3_BUCKET }}/shop-back.zip
 
   
           

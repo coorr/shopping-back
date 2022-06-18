@@ -1,0 +1,49 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+
+      - name: Grant execute permission for gradlew
+        run: chmod 777 gradlew
+        shell: bash
+        
+      - name: Make zip file 
+        run: zip -r ./shop-back.zip .
+        shell: bash
+      
+      - name: Configure AWS credentials 
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          
+      - name: Upload to S3 
+        run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./$shop-back.zip s3://${{ secrets.AWS_S3_BUCKET }}/CI/$shop-back.zip
+
+  
+          
+          
+          
+          
+          
+          
+          

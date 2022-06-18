@@ -25,6 +25,10 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod 777 gradlew
         shell: bash
+
+      - name: Clean build test with Gradle
+        run: ./gradlew clean build test
+        shell: bash
         
       - name: Make zip file 
         run: zip -r ./shop-back.zip .

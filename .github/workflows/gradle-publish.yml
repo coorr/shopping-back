@@ -40,6 +40,8 @@ jobs:
       - name: Upload to S3 
         run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./shop-back.zip s3://${{ secrets.AWS_S3_BUCKET }}/shop-back.zip
 
+      - name: Code Deploy
+        run: aws deploy create-deployment --application-name ${{ secrets.AWS_CODEDEPLOY_NAME }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ secrets.AWS_CODEDEPLOY_GROUP }} --s3-location bucket=${{ secrets.AWS_S3_BUCKET }},bundleType=zip,key=shop-back.zip
   
           
           

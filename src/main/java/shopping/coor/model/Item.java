@@ -1,6 +1,5 @@
 package shopping.coor.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import shopping.coor.common.exception.NotEnoughStockException;
 
@@ -54,6 +53,7 @@ public class Item {
     @Column(length = 1000)
     private String info;
 
+    @Builder.Default
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 

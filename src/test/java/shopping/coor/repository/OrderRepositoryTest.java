@@ -10,6 +10,7 @@ import shopping.coor.repository.delivery.dto.DeliveryRequestDto;
 import shopping.coor.repository.item.ItemRepository;
 import shopping.coor.repository.order.OrderRepository;
 import shopping.coor.repository.order.dto.OrderItemResponseDto;
+import shopping.coor.repository.orderItem.OrderItemRepository;
 import shopping.coor.repository.user.UserRepository;
 
 import java.time.LocalDateTime;
@@ -31,6 +32,9 @@ class OrderRepositoryTest {
     @Autowired
     ItemRepository itemRepository;
 
+    @Autowired
+    OrderItemRepository orderItemRepository;
+
     String start = "20220504000000";
     String end = "20220204000000";
 
@@ -40,15 +44,14 @@ class OrderRepositoryTest {
         // given
         LocalDateTime startDate = stringToLocalDateTime(start);
         LocalDateTime endDate = stringToLocalDateTime(end);
-        userRepository.save(orders().get(0).getUser());
-        itemRepository.save(orders().get(0).getOrderItems().get(0).getItem());
+        userRepository.save(user());
+        itemRepository.save(item());
         Order orderList = orderRepository.save(orders().get(0));
         // when
-        List<Order> result = orderRepository.getOrderUserById(orders().get(0).getUser(), LocalDateTime.now(), endDate);
+        List<Order> result = orderRepository.getOrderUserById(user(), LocalDateTime.now(), endDate);
 
         // then
         assertEquals(result.get(0).getId(), orderList.getId());
-        assertEquals(result.get(0).getOrderItems().get(0).getItem().getTitle(), orderList.getOrderItems().get(0).getItem().getTitle());
     }
 
     private LocalDateTime stringToLocalDateTime(String start) {
@@ -77,20 +80,18 @@ class OrderRepositoryTest {
 
     private List<OrderItem> orderItems() {
         List<OrderItem> orderItems = Arrays.asList(
-                OrderItem.builder().id(5L).item(item()).orderCount(1).orderSize("S").orderPrice(18000).build(),
-                OrderItem.builder().id(6L).item(item()).orderCount(1).orderSize("M").orderPrice(18000).build()
+                OrderItem.builder().id(1L).orderCount(1).orderSize("S").orderPrice(18000).build(),
+                OrderItem.builder().id(2L).orderCount(1).orderSize("M").orderPrice(18000).build()
         );
         return orderItems;
     }
 
     private User user() {
-        List<Order> orders = new ArrayList<>();
         return User.builder()
                 .id(1L)
                 .username("kim1")
                 .email("W@naver.com")
                 .password("123123")
-                .orders(orders)
                 .build();
     }
     private Item item() {
@@ -107,6 +108,7 @@ class OrderRepositoryTest {
     }
     private Delivery delivery() {
         return Delivery.builder()
+                .id(1L)
                 .dName("kim")
                 .dEmail("kim@naver.com")
                 .roadNumber(66788)

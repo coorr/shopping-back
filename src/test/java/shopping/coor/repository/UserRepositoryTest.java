@@ -60,7 +60,7 @@ class UserRepositoryTest {
         List<User> all = userRepository.findAll();
 
         // then
-        assertEquals(all.size(), 1);
+        assertEquals(all.size(), 2);
     }
 
 
@@ -68,7 +68,7 @@ class UserRepositoryTest {
         List<User> userList = new ArrayList<>();
         Long i = null;
         for (i = 0L; i < 2; i++) {
-            userList.add(new User(i,"test", "test@naver.com", "123123"));
+            userList.add(new User("test"+i, "test@naver.com"+i, "123123"));
         }
         return userList;
     }

@@ -44,12 +44,14 @@ public class User {
     @JsonIgnore
     private String password;
 
+    @Builder.Default
     @ManyToMany
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @Builder.Default
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
@@ -62,7 +64,7 @@ public class User {
     }
 
     public User(Long id, String username, String email, String password) {
-        this.id=id;
+
         this.username = username;
         this.email = email;
         this.password = password;

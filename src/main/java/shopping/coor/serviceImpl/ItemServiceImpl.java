@@ -54,6 +54,7 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemRequestDto> getItemAll(Long lastId, int size, String category) {
         System.out.println("로그 남기기");
         System.out.println("로그 남기기");
+        System.out.println("로그 남기기");
         PageRequest pageRequest = PageRequest.of(0, size);
 
         if (lastId == 0 && category.equals("null")) {

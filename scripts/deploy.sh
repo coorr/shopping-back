@@ -2,14 +2,13 @@
 
 REPOSITORY=/home/ec2-user/app/step2
 PROJECT_NAME=shopping-back
-JAR_FILE = coor-0.0.1-SNAPSHOT
 
 echo "> Build 파일 복사"
 
 cp $REPOSITORY/zip/build/libs/*.jar $REPOSITORY/
 
 echo "> 현재 구동중인 애플리케이션 pid 확인"
-CURRENT_PID=$(pgrep -f {JAR_FILE}*.jar)
+CURRENT_PID=$(pgrep -f .jar)
 
 echo "> 현재 구동중인 애플리케이션 pid : $CURRENT_PID"
 

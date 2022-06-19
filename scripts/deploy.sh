@@ -10,11 +10,11 @@ cp $REPOSITORY/$PROJECT_NAME/build/libs/*.jar $REPOSITORY/
 echo "> 현재 구동중인 애플리케이션 pid 확인"
 CURRENT_PID=$(pgrep -f .jar)
 
-echo "> 현재 구동중인 애플리케이션 pid : $CURRENT_PID"
+echo "> 현재 구동중인 애플리케이션 pid : $CURRENT_PID" >> $REPOSITORY/deploy.log
 
 if [ -z $CURRENT_PID ]
 then
-  echo "> 현재 구동중인 애플리케이션이 없으므로 종료하지 않습니다."
+  echo "> 현재 구동중인 애플리케이션이 없으므로 종료하지 않습니다." >> $REPOSITORY/deploy.log
 else
   echo "> kill -15 $CURRENT_PID"
   kill -15 $CURRENT_PID
@@ -29,9 +29,9 @@ echo "> $JAR_NAME 에 실행권한 추가"
 
 chmod +x $JAR_NAME
 
-echo "> $JAR_NAME 실행"
+echo "> $JAR_NAME 실행" >> $REPOSITORY/deploy.log
 
 nohup java -jar \
   -Dspring.config.location=/home/ec2-user/app/application.yml \
-  $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
+  $JAR_NAME > $REPOSITORY/nohup.out 2>&1 & >> $REPOSITORY/deploy.log
 

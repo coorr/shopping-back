@@ -10,7 +10,6 @@ public class ThreadLocalLogTrace implements LogTrace {
     private static final String COMPLETE_PREFIX = "<--";
     private static final String EX_PREFIX = "<X-";
 
-//    private TraceId traceIdHolder; // traceId 동기화
     private ThreadLocal<TraceId> traceIdHolder = new ThreadLocal<>();
 
     @Override

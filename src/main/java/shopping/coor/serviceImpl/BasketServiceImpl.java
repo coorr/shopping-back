@@ -33,7 +33,6 @@ public class BasketServiceImpl implements BasketService {
     @Transactional
     @Override
     public ResponseEntity<MessageResponse> basketAddUser(Long userId, List<BasketRequestDto> basketRequestDto) throws Exception {
-        System.out.println("테스트");
         User userById = userRepository.getById(userId);
         ArrayList<Long> arrayOnlyBasketId = basketRepository.findArrayOnlyById(userById);
 

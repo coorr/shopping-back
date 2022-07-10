@@ -3,6 +3,7 @@ package shopping.coor.auth.application.command;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import shopping.coor.auth.application.command.model.CreateUserModel;
 import shopping.coor.auth.application.exception.UserAlreadyExistsException;
 import shopping.coor.auth.domain.Role.ERole;
@@ -23,6 +24,7 @@ public class CreateUserCommand implements Command<CreateUserModel> {
     private final PasswordEncoder encoder;
 
     @Override
+    @Transactional
     public void execute(CreateUserModel model) {
         if (userRepository.existsByUsername(model.getUsername())) {
             throw new UserAlreadyExistsException("이미 존재하는 아이디입니다.");

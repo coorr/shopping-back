@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import shopping.coor.auth.domain.User.User;
 import shopping.coor.common.exception.NotEnoughStockException;
 import shopping.coor.model.*;
 import shopping.coor.repository.basket.BasketRepository;
@@ -15,9 +16,8 @@ import shopping.coor.repository.item.ItemRepository;
 import shopping.coor.repository.order.OrderRepository;
 import shopping.coor.repository.order.dto.OrderItemResponseDto;
 import shopping.coor.repository.order.dto.OrderResponseDto;
-import shopping.coor.repository.user.UserRepository;
-import shopping.coor.repository.user.dto.MessageResponse;
-import shopping.coor.serviceImpl.BasketServiceImpl;
+import shopping.coor.auth.domain.User.UserRepository;
+import shopping.coor.auth.presentation.http.request.MessageResponse;
 import shopping.coor.serviceImpl.OrderServiceImpl;
 
 import java.time.LocalDateTime;
@@ -28,7 +28,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)

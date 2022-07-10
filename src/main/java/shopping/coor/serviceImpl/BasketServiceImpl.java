@@ -6,13 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import shopping.coor.model.Basket;
 import shopping.coor.model.Item;
-import shopping.coor.model.User;
+import shopping.coor.auth.domain.User.User;
 import shopping.coor.repository.basket.dto.BasketRequestDto;
 import shopping.coor.repository.basket.dto.BasketResponseDto;
-import shopping.coor.repository.user.dto.MessageResponse;
+import shopping.coor.auth.presentation.http.request.MessageResponse;
 import shopping.coor.repository.basket.BasketRepository;
 import shopping.coor.repository.item.ItemRepository;
-import shopping.coor.repository.user.UserRepository;
+import shopping.coor.auth.domain.User.UserRepository;
 import shopping.coor.service.BasketService;
 
 import org.springframework.transaction.annotation.Transactional;

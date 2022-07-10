@@ -1,14 +1,12 @@
 package shopping.coor.repository.basket;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import shopping.coor.model.Basket;
 import shopping.coor.model.Item;
-import shopping.coor.model.Order;
-import shopping.coor.model.User;
+import shopping.coor.auth.domain.User.User;
 
 import java.util.ArrayList;
 import java.util.List;

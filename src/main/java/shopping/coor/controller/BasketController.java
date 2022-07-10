@@ -1,11 +1,12 @@
 package shopping.coor.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shopping.coor.repository.basket.dto.BasketRequestDto;
 import shopping.coor.repository.basket.dto.BasketResponseDto;
-import shopping.coor.repository.user.dto.MessageResponse;
+import shopping.coor.auth.presentation.http.request.MessageResponse;
 import shopping.coor.service.BasketService;
 
 import java.util.List;
@@ -22,8 +23,12 @@ public class BasketController {
     public ResponseEntity<MessageResponse> basketAddUser(@PathVariable Long userId, @RequestBody List<BasketRequestDto> basketRequestDto) throws Exception {
         return basketService.basketAddUser(userId, basketRequestDto);
     }
+    @Cacheable(key = "#userid", value = "basket")
     @GetMapping("/getBasketByUserId/{userid}")
     public List<BasketResponseDto> getBasketByUserId(@PathVariable Long userid) {
+//        var vop = redisTemplate.opsForList();
+//        List<BasketResponseDto> basketByUserId = basketService.getBasketByUserId(userid);
+//        vop.leftPushAll("1", String.valueOf(basketByUserId));
         return basketService.getBasketByUserId(userid);
     }
     @PostMapping("/removeBasketById/{basketId}/{userId}")

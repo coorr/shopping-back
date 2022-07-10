@@ -1,12 +1,10 @@
 package shopping.coor.service;
 
 import org.springframework.http.ResponseEntity;
-import shopping.coor.model.Delivery;
-import shopping.coor.model.Order;
 import shopping.coor.repository.basket.dto.BasketResponseDto;
 import shopping.coor.repository.delivery.dto.DeliveryRequestDto;
 import shopping.coor.repository.order.dto.OrderResponseDto;
-import shopping.coor.repository.user.dto.MessageResponse;
+import shopping.coor.auth.presentation.http.request.MessageResponse;
 
 import java.util.List;
 

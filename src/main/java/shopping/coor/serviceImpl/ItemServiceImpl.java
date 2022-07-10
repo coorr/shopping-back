@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +21,7 @@ import shopping.coor.model.Image;
 import shopping.coor.model.Item;
 import shopping.coor.repository.item.dto.ItemRequestDto;
 import shopping.coor.repository.item.dto.ItemRequestOneDto;
-import shopping.coor.repository.user.dto.MessageResponse;
+import shopping.coor.auth.presentation.http.request.MessageResponse;
 import shopping.coor.repository.image.ImageRepository;
 import shopping.coor.repository.item.ItemRepository;
 import shopping.coor.service.ItemService;
@@ -32,7 +31,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @ThreadSafe

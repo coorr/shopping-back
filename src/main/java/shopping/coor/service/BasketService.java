@@ -3,7 +3,7 @@ package shopping.coor.service;
 import org.springframework.http.ResponseEntity;
 import shopping.coor.repository.basket.dto.BasketRequestDto;
 import shopping.coor.repository.basket.dto.BasketResponseDto;
-import shopping.coor.repository.user.dto.MessageResponse;
+import shopping.coor.auth.presentation.http.request.MessageResponse;
 
 import java.util.List;
 

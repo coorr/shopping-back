@@ -1,7 +1,6 @@
 package shopping.coor.controller;
 
 import com.google.gson.Gson;
-import io.sentry.protocol.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import shopping.coor.repository.basket.dto.BasketRequestDto;
 import shopping.coor.repository.basket.dto.BasketResponseDto;
-import shopping.coor.repository.user.dto.MessageResponse;
+import shopping.coor.auth.presentation.http.request.MessageResponse;
 import shopping.coor.service.BasketService;
 
 import java.util.Arrays;

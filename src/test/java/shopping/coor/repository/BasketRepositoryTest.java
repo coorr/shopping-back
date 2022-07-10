@@ -7,10 +7,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import shopping.coor.model.Basket;
 import shopping.coor.model.Item;
 import shopping.coor.model.Order;
-import shopping.coor.model.User;
+import shopping.coor.auth.domain.User.User;
 import shopping.coor.repository.basket.BasketRepository;
 import shopping.coor.repository.item.ItemRepository;
-import shopping.coor.repository.user.UserRepository;
+import shopping.coor.auth.domain.User.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;

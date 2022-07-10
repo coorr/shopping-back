@@ -2,20 +2,16 @@ package shopping.coor.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import shopping.coor.auth.domain.User.User;
 import shopping.coor.model.*;
-import shopping.coor.repository.basket.dto.BasketResponseDto;
-import shopping.coor.repository.delivery.dto.DeliveryRequestDto;
 import shopping.coor.repository.item.ItemRepository;
 import shopping.coor.repository.order.OrderRepository;
-import shopping.coor.repository.order.dto.OrderItemResponseDto;
 import shopping.coor.repository.orderItem.OrderItemRepository;
-import shopping.coor.repository.user.UserRepository;
+import shopping.coor.auth.domain.User.UserRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

@@ -1,19 +1,19 @@
 package shopping.coor.serviceImpl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shopping.coor.auth.domain.User.User;
 import shopping.coor.model.*;
 import shopping.coor.repository.basket.dto.BasketResponseDto;
 import shopping.coor.repository.delivery.dto.DeliveryRequestDto;
 import shopping.coor.repository.item.ItemRepository;
 import shopping.coor.repository.order.dto.OrderResponseDto;
-import shopping.coor.repository.user.dto.MessageResponse;
+import shopping.coor.auth.presentation.http.request.MessageResponse;
 import shopping.coor.repository.basket.BasketRepository;
 import shopping.coor.repository.order.OrderRepository;
-import shopping.coor.repository.user.UserRepository;
+import shopping.coor.auth.domain.User.UserRepository;
 import shopping.coor.service.OrderService;
 
 import java.time.LocalDateTime;

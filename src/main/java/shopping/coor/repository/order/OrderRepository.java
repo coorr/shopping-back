@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import shopping.coor.model.DeliveryStatus;
 import shopping.coor.model.Order;
 import shopping.coor.model.OrderStatus;
-import shopping.coor.model.User;
+import shopping.coor.auth.domain.User.User;
 
 import java.time.LocalDateTime;
 import java.util.List;

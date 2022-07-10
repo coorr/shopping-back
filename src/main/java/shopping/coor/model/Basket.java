@@ -2,11 +2,10 @@ package shopping.coor.model;
 
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import shopping.coor.auth.domain.User.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 

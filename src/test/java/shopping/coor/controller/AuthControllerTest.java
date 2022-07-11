@@ -17,7 +17,6 @@
 //import shopping.coor.auth.application.service.UserTokenService;
 //import shopping.coor.auth.domain.User.User;
 //import shopping.coor.auth.domain.User.UserRepository;
-//import shopping.coor.auth.presentation.http.AuthController;
 //import shopping.coor.auth.presentation.http.request.CreateTokenRequest;
 //import shopping.coor.auth.presentation.http.request.MessageResponse;
 //import shopping.coor.auth.presentation.http.request.SignupRequest;
@@ -79,19 +78,19 @@
 //    @Test
 //    public void 로그인_시도() throws Exception {
 //        // given
-////        LoginRequest loginRequest = loginRequest();
-////        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(loginRequest());
-////
-////        when(service.createToken(any(LoginRequest.class))).thenReturn(responseEntity);
-////
-////        // when
-////        ResultActions resultActions = mockMvc.perform(
-////                MockMvcRequestBuilders.post("/api/user/signin")
-////                        .contentType(APPLICATION_JSON)
-////                        .content(new Gson().toJson(loginRequest)));
-////
-////        // then
-////        resultActions.andExpect(status().isOk()).andReturn();
+//        LoginRequest loginRequest = loginRequest();
+//        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(loginRequest());
+//
+//        when(service.createToken(any(LoginRequest.class))).thenReturn(responseEntity);
+//
+//        // when
+//        ResultActions resultActions = mockMvc.perform(
+//                MockMvcRequestBuilders.post("/api/user/signin")
+//                        .contentType(APPLICATION_JSON)
+//                        .content(new Gson().toJson(loginRequest)));
+//
+//        // then
+//        resultActions.andExpect(status().isOk()).andReturn();
 //
 //
 //    }

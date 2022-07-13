@@ -1,7 +1,6 @@
 package shopping.coor.auth.presentation.http;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -24,8 +23,7 @@ class SignInCommandControllerTest extends TestBaseConfig {
         }
 
         @Test
-        @DisplayName("로그인 시도 성공")
-        void should_be_login_success() throws Exception {
+        void 로그인_시도_성공() throws Exception {
             mockMvc
                     .perform(post("/api/user/signin")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -35,8 +33,7 @@ class SignInCommandControllerTest extends TestBaseConfig {
         }
 
         @Test
-        @DisplayName("로그인 시도 실패")
-        void should_be_login_failure() throws Exception {
+        void 로그인_시도_실패() throws Exception {
 
             request = request.builder().username("test_X").password("123123").build();
 

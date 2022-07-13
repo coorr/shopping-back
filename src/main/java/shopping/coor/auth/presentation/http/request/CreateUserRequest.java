@@ -1,7 +1,9 @@
 package shopping.coor.auth.presentation.http.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -9,7 +11,9 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Getter
-@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreateUserRequest {
     @NotBlank(message = "아이디를 입력해주세요.")
     @Size(min = 3, max = 20)

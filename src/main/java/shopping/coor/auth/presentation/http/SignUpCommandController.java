@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import shopping.coor.auth.application.command.CreateUserCommand;
 import shopping.coor.auth.application.command.model.CreateUserModel;
 import shopping.coor.auth.presentation.http.request.CreateUserRequest;
+import shopping.coor.auth.presentation.http.validator.CreateUserRequestValidator;
 import shopping.coor.kernel.application.command.CommandExecutor;
 
 import javax.validation.Valid;
@@ -24,12 +25,15 @@ import javax.validation.Valid;
 public class SignUpCommandController {
 
     private final CreateUserCommand createUserCommand;
+    private final CreateUserRequestValidator validator;
 
 
     @PostMapping("/signup")
     @PreAuthorize("isAnonymous()")
     public ResponseEntity<Object> createUser(@Valid @RequestBody CreateUserRequest request, BindingResult errors) throws BindException {
 
+        this.checkHasError(errors);
+        validator.validateTarget(request, errors);
         this.checkHasError(errors);
 
         var command = new CommandExecutor<>(

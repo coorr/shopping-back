@@ -1,4 +1,4 @@
-package shopping.coor.auth.application.service.jwt;
+package shopping.coor.auth.application.jwt;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

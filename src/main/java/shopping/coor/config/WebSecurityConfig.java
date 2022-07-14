@@ -13,8 +13,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import shopping.coor.auth.application.service.jwt.AuthEntryPointJwt;
-import shopping.coor.auth.application.service.jwt.AuthTokenFilter;
+import shopping.coor.auth.application.jwt.AuthEntryPointJwt;
+import shopping.coor.auth.application.jwt.AuthTokenFilter;
 import shopping.coor.auth.application.exception.JwtExceptionFilter;
 import shopping.coor.auth.application.service.UserDetailsServiceImpl;
 

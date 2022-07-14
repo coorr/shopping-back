@@ -2,6 +2,7 @@ package shopping.coor.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import shopping.coor.item.domain.Item;
 
 import javax.persistence.*;
 

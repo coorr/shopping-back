@@ -2,10 +2,10 @@ package shopping.coor.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import shopping.coor.item.domain.Item;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import static javax.persistence.FetchType.*;
 

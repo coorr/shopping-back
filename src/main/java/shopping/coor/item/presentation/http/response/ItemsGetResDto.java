@@ -1,8 +1,8 @@
-package shopping.coor.repository.item.dto;
+package shopping.coor.item.presentation.http.response;
 
 import lombok.Getter;
 import lombok.Setter;
-import shopping.coor.model.Item;
+import shopping.coor.item.domain.Item;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,21 +10,21 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public class ItemRequestDto {
+public class ItemsGetResDto {
 
     private Long itemId;
     private String title;
     private int price;
     private int discount_price;
-    private List<ItemImageDto> images;
+    private List<ItemImageGetResDto> images;
 
-    public ItemRequestDto(Item item) {
+    public ItemsGetResDto(Item item) {
         itemId = item.getId();
         title = item.getTitle();
         price = item.getPrice();
         discount_price = item.getDiscountPrice();
         images = item.getImages().stream()
-                .map(image -> new ItemImageDto(image))
+                .map(image -> new ItemImageGetResDto(image))
                 .collect(Collectors.toList());
     }
 

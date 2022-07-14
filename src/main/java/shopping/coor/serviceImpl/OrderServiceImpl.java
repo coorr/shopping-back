@@ -8,7 +8,7 @@ import shopping.coor.auth.domain.User.User;
 import shopping.coor.model.*;
 import shopping.coor.repository.basket.dto.BasketResponseDto;
 import shopping.coor.repository.delivery.dto.DeliveryRequestDto;
-import shopping.coor.repository.item.ItemRepository;
+import shopping.coor.item.domain.ItemRepository;
 import shopping.coor.repository.order.dto.OrderResponseDto;
 import shopping.coor.auth.presentation.http.request.MessageResponse;
 import shopping.coor.repository.basket.BasketRepository;

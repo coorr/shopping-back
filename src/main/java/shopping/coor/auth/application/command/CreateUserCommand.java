@@ -44,21 +44,6 @@ public class CreateUserCommand implements Command<CreateUserModel> {
                     .orElseThrow(() -> new RuntimeException("권한 오류입니다."));
 
             roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("권한 오류입니다."));
-                        roles.add(adminRole);
-
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("권한 오류입니다."));
-                        roles.add(userRole);
-                }
-            });
         }
         user.setRoles(roles);
         userRepository.save(user);

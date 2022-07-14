@@ -1,15 +1,13 @@
-package shopping.coor.auth.application.service.jwt;
-
-import java.util.Date;
+package shopping.coor.auth.application.jwt;
 
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-
-
 import shopping.coor.auth.application.service.UserDetailsImpl;
+
+import java.util.Date;
 
 @Component
 @Slf4j

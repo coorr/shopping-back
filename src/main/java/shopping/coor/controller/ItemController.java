@@ -1,13 +1,10 @@
 package shopping.coor.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import shopping.coor.item.presentation.http.response.ItemsGetResDto;
 import shopping.coor.model.Image;
-import shopping.coor.repository.item.dto.ItemRequestDto;
 import shopping.coor.service.ItemService;
-
 
 import java.util.List;
 
@@ -21,14 +18,10 @@ public class ItemController {
 
 
     @GetMapping("/getItem")
-    public List<ItemRequestDto> getItemAll(@RequestParam Long lastId, @RequestParam int size, @RequestParam(required = false) String category ) {
+    public List<ItemsGetResDto> getItemAll(@RequestParam Long lastId, @RequestParam int size, @RequestParam(required = false) String category ) {
         return itemService.getItemAll(lastId,size,category);
     }
 
-    @GetMapping("/getItemOne/{id}")
-    public ResponseEntity<?> getItemOne(@PathVariable Long id) {
-        return itemService.getItemOne(id);
-    }
 
     @GetMapping("/getImage")
     public List<Image> getImage() {

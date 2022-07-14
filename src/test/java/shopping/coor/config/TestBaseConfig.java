@@ -9,12 +9,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 @ActiveProfiles(value = "test")
 @Disabled
 @AutoConfigureMockMvc(printOnlyOnFailure = false)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith({SpringExtension.class})
+@Transactional
 public abstract class TestBaseConfig {
     @Autowired
     protected MockMvc mockMvc;

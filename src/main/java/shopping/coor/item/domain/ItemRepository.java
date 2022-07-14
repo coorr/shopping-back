@@ -1,15 +1,17 @@
-package shopping.coor.repository.item;
+package shopping.coor.item.domain;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import shopping.coor.model.Item;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
+
+    Optional<Item> findById(Long aLong);
 
     @Query("select distinct i from Item i  where i.id < ?1  order by i.id desc ")
     List<Item> getItemAll(Long lastId, PageRequest pageRequest);

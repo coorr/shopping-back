@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 import shopping.coor.auth.presentation.http.request.CreateUserRequest;
 import shopping.coor.config.TestBaseConfig;
 
@@ -21,30 +22,37 @@ class SignUpCommandControllerTest extends TestBaseConfig {
         @BeforeEach
         void setUp() {
             request = request.builder()
-                    .username("test123")
+                    .username("test12322")
                     .password("123123")
-                    .email("test@gmail.com")
+                    .email("tes2t2@gmail.com")
                     .build();
         }
 
         @Test
         void 회원가입_시도_성공() throws Exception {
-            mockMvc
-                    .perform(post("/api/user/signup")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)))
-                    .andExpect(status().isCreated());
+            requestSignup(request).andExpect(status().isCreated());
+        }
+
+        @Test
+        void 회원가입_아이디_NULL_오류() throws Exception {
+            request = request.builder().username(null).password("123123").email("test9@gmail.com").build();
+
+            requestSignup(request).andExpect(status().isBadRequest());
         }
 
         @Test
         void 회원가입_아이디_빈칸_오류() throws Exception {
+            request = request.builder().username("").password("123123").email("test9@gmail.com").build();
 
-            request = request.builder().username(null).password("123123").email("test@gmail.com").build();
+            requestSignup(request).andExpect(status().isBadRequest());
+        }
 
-            mockMvc
-                    .perform(post("/api/user/signup")
+        private ResultActions requestSignup(CreateUserRequest request) throws Exception {
+            return mockMvc.perform(
+                    post("/api/user/signup")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)));
+                            .content(objectMapper.writeValueAsString(request))
+            );
         }
 
     }

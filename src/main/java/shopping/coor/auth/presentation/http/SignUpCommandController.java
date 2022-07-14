@@ -32,7 +32,6 @@ public class SignUpCommandController {
     @PreAuthorize("isAnonymous()")
     public ResponseEntity<Object> createUser(@Valid @RequestBody CreateUserRequest request, BindingResult errors) throws BindException {
 
-        this.checkHasError(errors);
         validator.validateTarget(request, errors);
         this.checkHasError(errors);
 

@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import shopping.coor.model.Basket;
-import shopping.coor.model.Item;
+import shopping.coor.item.domain.Item;
 import shopping.coor.auth.domain.User.User;
 
 import java.util.ArrayList;

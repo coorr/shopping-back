@@ -1,13 +1,18 @@
 package shopping.coor.auth.domain.Role;
 
-import javax.persistence.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "roles")
-@Getter @Setter
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +23,4 @@ public class Role {
 	@Column(length = 20)
     public ERole name;
 
-	public Role() {
-
-	}
 }

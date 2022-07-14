@@ -5,13 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import shopping.coor.model.Basket;
-import shopping.coor.model.Item;
+import shopping.coor.item.domain.Item;
 import shopping.coor.auth.domain.User.User;
 import shopping.coor.repository.basket.dto.BasketRequestDto;
 import shopping.coor.repository.basket.dto.BasketResponseDto;
 import shopping.coor.auth.presentation.http.request.MessageResponse;
 import shopping.coor.repository.basket.BasketRepository;
-import shopping.coor.repository.item.ItemRepository;
+import shopping.coor.item.domain.ItemRepository;
 import shopping.coor.auth.domain.User.UserRepository;
 import shopping.coor.service.BasketService;
 

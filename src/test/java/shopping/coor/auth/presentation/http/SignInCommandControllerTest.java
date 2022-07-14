@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 import shopping.coor.auth.presentation.http.request.CreateTokenRequest;
 import shopping.coor.config.TestBaseConfig;
 
@@ -24,12 +25,7 @@ class SignInCommandControllerTest extends TestBaseConfig {
 
         @Test
         void 로그인_시도_성공() throws Exception {
-            mockMvc
-                    .perform(post("/api/user/signin")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request))
-                    )
-                    .andExpect(status().isOk());
+            requestSignIn(request).andExpect(status().isOk());
         }
 
         @Test
@@ -37,12 +33,15 @@ class SignInCommandControllerTest extends TestBaseConfig {
 
             request = request.builder().username("test_X").password("123123").build();
 
-            mockMvc
+            requestSignIn(request).andExpect(status().isBadRequest());
+        }
+
+        private ResultActions requestSignIn(CreateTokenRequest request) throws Exception {
+            return mockMvc
                     .perform(post("/api/user/signin")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request))
-                    )
-                    .andExpect(status().isBadRequest());
+                    );
         }
     }
 

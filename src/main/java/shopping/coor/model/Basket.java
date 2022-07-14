@@ -3,6 +3,7 @@ package shopping.coor.model;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import shopping.coor.auth.domain.User.User;
+import shopping.coor.item.domain.Item;
 
 import javax.persistence.*;
 import java.time.LocalDate;

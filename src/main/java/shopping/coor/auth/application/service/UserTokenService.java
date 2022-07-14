@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shopping.coor.auth.application.exception.UserNotFoundException;
 import shopping.coor.auth.application.service.body.CreateTokenBody;
-import shopping.coor.auth.application.service.jwt.JwtUtils;
+import shopping.coor.auth.application.jwt.JwtUtils;
 import shopping.coor.auth.application.service.payload.CreateTokenPayload;
 
 import java.util.List;

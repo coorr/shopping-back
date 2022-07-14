@@ -2,6 +2,7 @@ package shopping.coor.auth.presentation.http.validator;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import shopping.coor.auth.presentation.http.request.CreateUserRequest;
 import shopping.coor.kernel.presentation.request.AbstractValidator;
@@ -12,9 +13,8 @@ public class CreateUserRequestValidator extends AbstractValidator<CreateUserRequ
 
     @Override
     public void validateTarget(CreateUserRequest request, Errors errors) {
-        System.out.println(request.getUsername());
-        if (request.getUsername().isEmpty()) {
-            errors.rejectValue("username", "username not empty","이름 데이터가 없습니다.");
+        if (!StringUtils.hasText(request.getUsername())) {
+            errors.rejectValue("username", "데이터가 없습니다.");
         }
     }
 }

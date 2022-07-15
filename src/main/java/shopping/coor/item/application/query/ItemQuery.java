@@ -6,7 +6,7 @@ import shopping.coor.item.presentation.http.request.ItemGetListReqDto;
 
 @Service
 @RequiredArgsConstructor
-public class ItemQuery {
+public class ItemQuery  {
     private final ItemSupport support;
 
     public void getItems(ItemGetListReqDto request) {

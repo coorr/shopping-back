@@ -1,9 +1,8 @@
 package shopping.coor.kernel.presentation.request;
 
+import com.sun.istack.NotNull;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-
-import javax.validation.constraints.NotNull;
 
 public abstract class AbstractValidator<T> implements Validator {
 

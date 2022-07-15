@@ -25,8 +25,8 @@ public class AdminController {
         return itemService.revisedItem(multipartFiles, itemData, imagePath);
     }
 
-    @PostMapping("/removeItem/{id}")
-    public void removeItem(@PathVariable Long id) {
-         itemService.removeItem(id);
-    }
+//    @PostMapping("/removeItem/{id}")
+//    public void removeItem(@PathVariable Long id) {
+//         itemService.removeItem(id);
+//    }
 }

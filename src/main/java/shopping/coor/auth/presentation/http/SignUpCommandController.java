@@ -37,11 +37,7 @@ public class SignUpCommandController {
 
         var command = new CommandExecutor<>(
                 createUserCommand,
-                CreateUserModel.builder()
-                        .username(request.getUsername())
-                        .password(request.getPassword())
-                        .email(request.getEmail())
-                        .build());
+                new CreateUserModel(request));
 
         command.invoke();
 

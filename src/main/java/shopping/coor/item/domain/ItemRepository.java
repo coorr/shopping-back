@@ -1,17 +1,23 @@
 package shopping.coor.item.domain;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
+    List<Item> findByIdGreaterThanOrderByIdDesc(Long itemLastId, Pageable pageable);
+    List<Item> findByIdLessThanOrderByIdDesc(Long itemLastId,  Pageable pageable);
 
-    Optional<Item> findById(Long aLong);
+    List<Item> findByIdLessThanAndCategoryOrderByIdDesc(Long itemLastId, String category, Pageable pageable);
+    List<Item> findByIdGreaterThanAndCategoryOrderByIdDesc(Long itemLastId, String category, Pageable pageable);
+
+
+
 
     @Query("select distinct i from Item i  where i.id < ?1  order by i.id desc ")
     List<Item> getItemAll(Long lastId, PageRequest pageRequest);

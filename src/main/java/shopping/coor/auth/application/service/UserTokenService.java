@@ -45,6 +45,7 @@ public class UserTokenService {
                 .id(userDetails.getId())
                 .username(userDetails.getUsername())
                 .email(userDetails.getEmail())
+                .roles(roles)
                 .build();
 
     }

@@ -2,6 +2,7 @@ package shopping.coor.item.domain;
 
 import lombok.*;
 import shopping.coor.common.exception.NotEnoughStockException;
+import shopping.coor.kernel.domain.BaseEntityAggregateRoot;
 import shopping.coor.model.Image;
 
 import javax.persistence.*;
@@ -17,7 +18,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Item {
+public class Item extends BaseEntityAggregateRoot<Item> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

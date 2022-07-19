@@ -1,4 +1,4 @@
-package shopping.coor.common.exception;
+package shopping.coor.item.application.exception;
 
 public class NotEnoughStockException extends RuntimeException {
 

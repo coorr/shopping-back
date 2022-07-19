@@ -15,8 +15,8 @@ public class AsyncConfig {
     private static int QUEUE_CAPACITY = 10;
     private static String THREAD_NAME_PREFIX = "async-task";
 
-    @Bean
-    public Executor asyncTaskExecutor() {
+    @Bean(name = "threadPoolTaskExecutor")
+    public Executor threadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(CORE_POOL_SIZE);
         executor.setMaxPoolSize(MAX_POOL_SIZE);

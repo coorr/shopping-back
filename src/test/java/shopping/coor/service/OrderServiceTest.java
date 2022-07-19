@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import shopping.coor.auth.domain.User.User;
-import shopping.coor.common.exception.NotEnoughStockException;
+import shopping.coor.item.application.exception.NotEnoughStockException;
 import shopping.coor.item.domain.Item;
 import shopping.coor.model.*;
 import shopping.coor.repository.basket.BasketRepository;

@@ -13,10 +13,6 @@ public class ItemQueryController {
 
     private final ItemQuery query;
 
-//    @GetMapping("/items")
-//    public ResponseEntity<List<ItemsGetResDto>> getItems(ItemsGetReqDto itemsGetReqDto) {
-////        query.
-////        return ResponseEntity.ok().body(getItemCommand.getItemsCommand)
-//    }
+
 
 }

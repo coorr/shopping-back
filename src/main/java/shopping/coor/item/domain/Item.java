@@ -1,7 +1,7 @@
 package shopping.coor.item.domain;
 
 import lombok.*;
-import shopping.coor.common.exception.NotEnoughStockException;
+import shopping.coor.item.application.exception.NotEnoughStockException;
 import shopping.coor.kernel.domain.BaseEntityAggregateRoot;
 import shopping.coor.model.Image;
 
@@ -100,7 +100,7 @@ public class Item extends BaseEntityAggregateRoot<Item> {
         }
     }
 
-    public static Item createItem(Item items, Image... images) {
+    public static Item toItem(Item items, Image... images) {
         Item item = new Item();
         item.setTitle(items.getTitle());
         item.setPrice(items.getPrice());

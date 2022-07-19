@@ -28,8 +28,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ValidationIllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorsResponse handleValidationIllegalArgumentException(ValidationIllegalArgumentException e, Locale locale, HttpServletRequest request) {
-        if (e.getMessage() != null)
-            log.error(e.getMessage(), e);
+        log.error(e.getMessage(), e);
         return ErrorsResponse.create(e.getErrors(), messageSource, locale, request.getAttribute("X-REDIRECTION-URL").toString());
     }
 

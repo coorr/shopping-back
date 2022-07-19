@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -49,42 +48,18 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemsGetResDto> getItemAll(Long lastId, int size, String category) {
-        PageRequest pageRequest = PageRequest.of(0, size);
-
-        if (lastId == 0 && category.equals("null")) {
-            List<Item> item = itemRepository.getItemFirst(lastId, pageRequest);
-            List<ItemsGetResDto> result = getItemChangeDto(item);
-            return result;
-        }
-        if (category.equals("null")) {
-            List<Item> item = itemRepository.getItemAll(lastId, pageRequest);
-            List<ItemsGetResDto> result = getItemChangeDto(item);
-            return result;
-        }
-        if (lastId == 0) {
-            List<Item> itemCategory = itemRepository.getItemFirstCategory(lastId, category, pageRequest);
-            List<ItemsGetResDto> result = getItemChangeDto(itemCategory);
-            return result;
-        }
-        List<Item> itemCategory = itemRepository.getItemCategory(lastId, category, pageRequest);
-        List<ItemsGetResDto> result = getItemChangeDto(itemCategory);
-
-
-        return result;
+        return null;
     }
 
     @Override
     public ResponseEntity<?> getItemOne(Long id) {
-
         return null;
-
     }
 
     @Transactional
     @Override
     public void removeItem(Long id) {
-        Item item = itemRepository.getItemEntity(id);
-        itemRepository.delete(item);
+        return;
     }
 
     private List<ItemsGetResDto> getItemChangeDto(List<Item> item) {
@@ -206,6 +181,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Image> getImage() {
-        return imageRepository.findAll();
+        return null;
     }
 }

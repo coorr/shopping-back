@@ -52,12 +52,13 @@ dependencies {
 	implementation 'io.sentry:sentry-spring-boot-starter:5.7.3'
 	implementation 'com.google.code.gson:gson:2.8.6'
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-	implementation 'org.springframework.boot:spring-boot-devtools'
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+//	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
 	testImplementation 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -79,11 +80,14 @@ querydsl {
 sourceSets {
 	main.java.srcDir querydslDir
 }
-configurations {
-	querydsl.extendsFrom compileClasspath
-}
-compileQuerydsl {
+compileQuerydsl{
 	options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
 }
 
 

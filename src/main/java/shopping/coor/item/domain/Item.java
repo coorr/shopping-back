@@ -2,6 +2,7 @@ package shopping.coor.item.domain;
 
 import lombok.*;
 import shopping.coor.item.application.exception.NotEnoughStockException;
+import shopping.coor.item.presentation.http.request.ItemUpdateReqDto;
 import shopping.coor.kernel.domain.BaseEntityAggregateRoot;
 import shopping.coor.model.Image;
 
@@ -100,21 +101,6 @@ public class Item extends BaseEntityAggregateRoot<Item> {
         }
     }
 
-    public static Item toItem(Item items, Image... images) {
-        Item item = new Item();
-        item.setTitle(items.getTitle());
-        item.setPrice(items.getPrice());
-        item.setDiscountPrice(items.getDiscountPrice());
-        item.setCategory(items.getCategory());
-        item.setSize(items.getSize());
-        item.setMaterial(items.getMaterial());
-        item.setInfo(items.getInfo());
-        for (Image image : images) {
-            item.addImage(image);
-        }
-        return item;
-    }
-
     public Item(Long id, String title, int  discountPrice, int quantityS) {
         this.id = id;
         this.title=title;
@@ -122,4 +108,36 @@ public class Item extends BaseEntityAggregateRoot<Item> {
         this.quantityS = quantityS;
     }
 
+    public Item update(ItemUpdateReqDto reqDto) {
+        this.title = reqDto.getTitle();
+        this.price = reqDto.getPrice();
+        this.discountPrice = reqDto.getDiscountPrice();
+        this.quantityS = reqDto.getQuantityS();
+        this.quantityM = reqDto.getQuantityM();
+        this.quantityL = reqDto.getQuantityL();
+        this.category = reqDto.getCategory();
+        this.size = reqDto.getSize();
+        this.material = reqDto.getMaterial();
+        this.info = reqDto.getInfo();
+        return this;
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,14 +1,16 @@
 package shopping.coor.kernel.application.command;
 
-import lombok.AllArgsConstructor;
-
-@AllArgsConstructor
 public class CommandExecutor<T extends CommandModel> {
     private final Command<T> command;
 
-    private final T model;
+    private final T t;
+
+    public CommandExecutor(Command<T> command, T t) {
+        this.command = command;
+        this.t = t;
+    }
 
     public void invoke() {
-        this.command.execute(this.model);
+        command.execute(t);
     }
 }

@@ -7,11 +7,12 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ItemPostCreateReqDto {
+public class ItemPatchUpdateReqDto {
 
     @NotBlank(message = "옷 정보를 입력해주세요.")
     private String title;
@@ -42,4 +43,7 @@ public class ItemPostCreateReqDto {
 
     @NotBlank(message = "입력해주세요")
     private String info;
+
+    private List<ImageUpdateReqDto> imagePath;
+
 }

@@ -35,7 +35,7 @@ public class ItemGetResDto {
         this.quantityL = item.getQuantityL();
         this.category = item.getCategory();
         this.size = item.getSize();
-        this.material = item.getCategory();
+        this.material = item.getMaterial();
         this.info = item.getInfo();
         this.images = item.getImages().stream()
                 .map(i -> new ItemImageGetResDto(i))

@@ -14,7 +14,7 @@ import static javax.persistence.FetchType.*;
 @Setter
 @Entity
 @NoArgsConstructor
-//@AllArgsConstructor
+@AllArgsConstructor
 public class Image {
 
     @Id
@@ -29,6 +29,11 @@ public class Image {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
+
+    public Image(Long imageId, String location) {
+        this.id = imageId;
+        this.location = location;
+    }
 
     public static Image createImage(String location, Item itemId) {
         Image image = new Image();

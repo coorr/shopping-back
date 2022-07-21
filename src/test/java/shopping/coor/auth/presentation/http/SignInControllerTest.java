@@ -11,7 +11,7 @@ import shopping.coor.config.TestBaseConfig;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class SignInCommandControllerTest extends TestBaseConfig {
+class SignInControllerTest extends TestBaseConfig {
 
     @Nested
     class SignInCommandTaskTest{

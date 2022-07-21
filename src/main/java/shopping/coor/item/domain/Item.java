@@ -3,6 +3,7 @@ package shopping.coor.item.domain;
 import lombok.*;
 import shopping.coor.item.application.exception.NotEnoughStockException;
 import shopping.coor.item.presentation.http.request.ItemUpdateReqDto;
+import shopping.coor.item.presentation.http.response.ItemUpdateResDto;
 import shopping.coor.kernel.domain.BaseEntityAggregateRoot;
 import shopping.coor.model.Image;
 
@@ -17,8 +18,9 @@ import java.util.List;
 @Setter
 @Entity
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@ToString
 public class Item extends BaseEntityAggregateRoot<Item> {
 
     @Id
@@ -108,6 +110,22 @@ public class Item extends BaseEntityAggregateRoot<Item> {
         this.quantityS = quantityS;
     }
 
+    public Item(ItemUpdateResDto resDto) {
+        this.title = resDto.getTitle();
+        this.price = resDto.getPrice();
+        this.discountPrice = resDto.getDiscountPrice();
+        this.quantityS = resDto.getQuantityS();
+        this.quantityM = resDto.getQuantityM();
+        this.quantityL = resDto.getQuantityL();
+        this.category = resDto.getCategory();
+        this.size = resDto.getSize();
+        this.material = resDto.getMaterial();
+        this.info = resDto.getInfo();
+//        this.images = resDto.getImages().stream()
+//                .map(i -> new Image(i.getImageId(), i.getLocation() ))
+//                .collect(Collectors.toList());
+    }
+
     public Item update(ItemUpdateReqDto reqDto) {
         this.title = reqDto.getTitle();
         this.price = reqDto.getPrice();
@@ -119,8 +137,12 @@ public class Item extends BaseEntityAggregateRoot<Item> {
         this.size = reqDto.getSize();
         this.material = reqDto.getMaterial();
         this.info = reqDto.getInfo();
+
         return this;
     }
+
+
+
 
 
 }

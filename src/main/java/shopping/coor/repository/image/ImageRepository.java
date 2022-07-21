@@ -14,6 +14,8 @@ import java.util.Set;
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
 
+    long deleteByIdIn(List<Long> imageId);
+
     @Modifying(clearAutomatically=true)
     @Query(value = "INSERT INTO image(location,item_id) VALUES (?1, ?2)" , nativeQuery = true)
     void saveImage(String location, Item id);

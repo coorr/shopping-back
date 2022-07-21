@@ -18,7 +18,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/api/user", produces = {MediaType.APPLICATION_JSON_VALUE})
 @RequiredArgsConstructor
-public class SignInCommandController {
+public class SignInController {
 
     private final UserTokenService service;
 

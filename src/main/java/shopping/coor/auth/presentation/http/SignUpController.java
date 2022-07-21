@@ -21,7 +21,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/api/user", produces = {MediaType.APPLICATION_JSON_VALUE})
 @RequiredArgsConstructor
-public class SignUpCommandController {
+public class SignUpController {
 
     private final CreateUserCommand createUserCommand;
     private final CreateUserRequestValidator validator;

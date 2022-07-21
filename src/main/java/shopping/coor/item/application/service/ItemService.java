@@ -1,7 +1,6 @@
-package shopping.coor.item.application.command;
+package shopping.coor.item.application.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,11 +14,13 @@ import org.springframework.web.server.ResponseStatusException;
 import shopping.coor.item.application.exception.ItemNotFoundException;
 import shopping.coor.item.domain.Item;
 import shopping.coor.item.domain.ItemRepository;
+import shopping.coor.item.presentation.http.request.ImageUpdateReqDto;
 import shopping.coor.item.presentation.http.request.ItemCreateReqDto;
 import shopping.coor.item.presentation.http.request.ItemUpdateReqDto;
 import shopping.coor.item.presentation.http.response.ItemGetResDto;
 import shopping.coor.item.presentation.http.response.ItemsGetResDto;
 import shopping.coor.model.Image;
+import shopping.coor.repository.image.ImageRepository;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,13 +34,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Slf4j
-public class GetItemCommand {
+public class ItemService {
 
     @Value("${cloud.aws.s3.bucket:@null}")
     public String bucket;
     private static final int FIRST_SIZE = 0;
 
-    private final ItemRepository repository;
+    private final ItemRepository itemRepository;
+    private final ImageRepository imageRepository;
     private final AmazonS3 amazonS3;
     private final Executor executor;
 
@@ -54,25 +56,25 @@ public class GetItemCommand {
         PageRequest pageRequest = PageRequest.of(0, size);
 
         if (itemLastId == FIRST_SIZE && category.equals("null")) {
-            List<Item> items = repository.findByIdGreaterThanOrderByIdDesc(itemLastId, pageRequest);
+            List<Item> items = itemRepository.findByIdGreaterThanOrderByIdDesc(itemLastId, pageRequest);
             return getItemChangeDto(items);
         }
         if (category.equals("null")) {
-            List<Item> items = repository.findByIdLessThanOrderByIdDesc(itemLastId, pageRequest);
+            List<Item> items = itemRepository.findByIdLessThanOrderByIdDesc(itemLastId, pageRequest);
             return getItemChangeDto(items);
         }
         if (itemLastId == 0) {
-            List<Item> items = repository.findByIdGreaterThanAndCategoryOrderByIdDesc(itemLastId, category, pageRequest);
+            List<Item> items = itemRepository.findByIdGreaterThanAndCategoryOrderByIdDesc(itemLastId, category, pageRequest);
             return getItemChangeDto(items);
         }
-        List<Item> items = repository.findByIdLessThanAndCategoryOrderByIdDesc(itemLastId, category, pageRequest);
+        List<Item> items = itemRepository.findByIdLessThanAndCategoryOrderByIdDesc(itemLastId, category, pageRequest);
         return getItemChangeDto(items);
     }
 
     @Transactional
     public void deleteItem( Long itemId) {
         Item item = getItemById(itemId);
-        repository.delete(item);
+        itemRepository.delete(item);
     }
 
 
@@ -82,7 +84,7 @@ public class GetItemCommand {
         List<Image> images = new ArrayList<>();
 
         if (multipartFiles == null)  {
-            Item result = repository.save(item);
+            Item result = itemRepository.save(item);
             return result.getId();
         }
 
@@ -91,19 +93,21 @@ public class GetItemCommand {
             images.add(Image.createImage(fileName, item));
         }
         item.setImages(images);
-        Item result = repository.save(item);
+        Item result = itemRepository.save(item);
         return result.getId();
     }
 
     @Transactional
     public Boolean updateItem(Long itemId, MultipartFile[] multipartFiles, ItemUpdateReqDto itemUpdateReqDto) {
-        Item item = getItemById(itemId);
-        List<Image> images = getImages(itemUpdateReqDto, item);
+        Item item = itemRepository.getItemList(itemId);
+
+        List<Image> images = new ArrayList<>();
+        List<Long> imageId = existImageByIdDelete(itemUpdateReqDto, item);
+
+        item.update(itemUpdateReqDto);
+        imageRepository.deleteAllByIdInBatch(imageId);
 
         if (multipartFiles == null) {
-            item.setImages(images);
-            item.update(itemUpdateReqDto);
-            repository.saveAndFlush(item);
             return Boolean.TRUE;
         }
 
@@ -111,10 +115,21 @@ public class GetItemCommand {
             String fileName = getFileName(file);
             images.add(Image.createImage(fileName, item));
         }
+
         item.setImages(images);
         item.update(itemUpdateReqDto);
-        repository.saveAndFlush(item);
+
         return Boolean.TRUE;
+    }
+
+    private List<Long> existImageByIdDelete(ItemUpdateReqDto itemUpdateReqDto, Item item) {
+        List<Long> imageId = item.getImages().stream()
+                .map(id -> id.getId())
+                .collect(Collectors.toList());
+        for (ImageUpdateReqDto imageUpdateReqDto : itemUpdateReqDto.getImagePath()) {
+            imageId.remove(imageUpdateReqDto.getId());
+        }
+        return imageId;
     }
 
     private String getFileName(MultipartFile file) {
@@ -126,6 +141,7 @@ public class GetItemCommand {
             objectMetadata.setContentType(file.getContentType());
 
             try (InputStream inputStream = file.getInputStream()) {
+//                    S3 임시 주석
 //                    amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
 //                            .withCannedAcl(CannedAccessControlList.PublicRead));
             } catch (IOException e) {
@@ -136,17 +152,8 @@ public class GetItemCommand {
         return fileName;
     }
 
-    private List<Image> getImages(ItemUpdateReqDto itemUpdateReqDto, Item item) {
-        List<Image> images = new ArrayList<>();
-
-        itemUpdateReqDto.getImagePath().stream()
-                .map(image -> images.add(Image.createImage(image.getLocation(), item)))
-                .collect(Collectors.toList());
-        return images;
-    }
-
     private Item getItemById(Long itemId) {
-        return repository.findById(itemId).orElseThrow(
+        return itemRepository.findById(itemId).orElseThrow(
                 () -> new ItemNotFoundException("상품을 찾을 수 없습니다."));
     }
 
@@ -155,10 +162,6 @@ public class GetItemCommand {
         return items.stream()
                 .map(i -> new ItemsGetResDto(i))
                 .collect(Collectors.toList());
-    }
-
-    public void deleteFile(String fileName) {
-        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 
     private String createFileName(String fileName) {

@@ -8,25 +8,24 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
-import shopping.coor.model.Basket;
-import shopping.coor.item.domain.Item;
-import shopping.coor.model.Order;
 import shopping.coor.auth.domain.User.User;
-import shopping.coor.repository.basket.dto.BasketRequestDto;
-import shopping.coor.repository.basket.dto.BasketResponseDto;
-import shopping.coor.repository.basket.BasketRepository;
-import shopping.coor.item.domain.ItemRepository;
 import shopping.coor.auth.domain.User.UserRepository;
 import shopping.coor.auth.presentation.http.request.MessageResponse;
+import shopping.coor.basket.domain.Basket;
+import shopping.coor.basket.domain.BasketRepository;
+import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
+import shopping.coor.basket.presentation.http.response.BasketGetResDto;
+import shopping.coor.item.domain.Item;
+import shopping.coor.item.domain.ItemRepository;
+import shopping.coor.model.Order;
 import shopping.coor.serviceImpl.BasketServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,7 +69,7 @@ class BasketServiceTest {
         when(basketRepository.findAllByUserId(user)).thenReturn(basketList());
 
         // when
-        List<BasketResponseDto> basketByUserId = basketService.getBasketByUserId(userId);
+        List<BasketGetResDto> basketByUserId = basketService.getBasketByUserId(userId);
 
         // then
         assertEquals(2, basketByUserId.size());
@@ -156,19 +155,19 @@ class BasketServiceTest {
         return basketList;
     }
 
-    private List<BasketRequestDto> basketRequestDtoOVer() {
-        List<BasketRequestDto> basketRequestDtoList = Arrays.asList(
-                BasketRequestDto.builder().itemId(1L).itemTotal(30000).itemCount(2).size("S").discount(28000).price(15000).title("시어서커(다크 네이비)").build(),
-                BasketRequestDto.builder().itemId(1L).itemTotal(1500000).itemCount(50).size("M").discount(80000).price(30000).title("시어서커(다크 네이비)").build()
+    private List<BasketPostReqDto> basketRequestDtoOVer() {
+        List<BasketPostReqDto> basketPostReqDtoList = Arrays.asList(
+                BasketPostReqDto.builder().itemId(1L).itemTotal(30000).itemCount(2).size("S").discount(28000).price(15000).title("시어서커(다크 네이비)").build(),
+                BasketPostReqDto.builder().itemId(1L).itemTotal(1500000).itemCount(50).size("M").discount(80000).price(30000).title("시어서커(다크 네이비)").build()
         );
-        return basketRequestDtoList;
+        return basketPostReqDtoList;
     }
 
-    private List<BasketRequestDto> basketRequestDto() {
-        List<BasketRequestDto> basketRequestDtoList = Arrays.asList(
-                BasketRequestDto.builder().itemId(1L).itemTotal(30000).itemCount(2).size("S").discount(28000).price(15000).title("시어서커(다크 네이비)").build()
+    private List<BasketPostReqDto> basketRequestDto() {
+        List<BasketPostReqDto> basketPostReqDtoList = Arrays.asList(
+                BasketPostReqDto.builder().itemId(1L).itemTotal(30000).itemCount(2).size("S").discount(28000).price(15000).title("시어서커(다크 네이비)").build()
         );
-        return basketRequestDtoList;
+        return basketPostReqDtoList;
     }
 
 }

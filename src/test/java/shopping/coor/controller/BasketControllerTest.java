@@ -13,8 +13,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import shopping.coor.repository.basket.dto.BasketRequestDto;
-import shopping.coor.repository.basket.dto.BasketResponseDto;
+import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
+import shopping.coor.basket.presentation.http.response.BasketGetResDto;
 import shopping.coor.auth.presentation.http.request.MessageResponse;
 import shopping.coor.service.BasketService;
 
@@ -95,19 +95,19 @@ class BasketControllerTest {
     }
 
 
-    private List<BasketRequestDto> basketRequestDto() {
-        List<BasketRequestDto> basketRequestDtoList = Arrays.asList(
-                BasketRequestDto.builder().itemId(1L).itemTotal(60000).itemCount(2).size("S").title("시어서커 크롭 자켓 (다크네이비)").build(),
-                BasketRequestDto.builder().itemId(1L).itemTotal(30000).itemCount(1).size("M").title("시어서커 크롭 자켓 (다크네이비)").build()
+    private List<BasketPostReqDto> basketRequestDto() {
+        List<BasketPostReqDto> basketPostReqDtoList = Arrays.asList(
+                BasketPostReqDto.builder().itemId(1L).itemTotal(60000).itemCount(2).size("S").title("시어서커 크롭 자켓 (다크네이비)").build(),
+                BasketPostReqDto.builder().itemId(1L).itemTotal(30000).itemCount(1).size("M").title("시어서커 크롭 자켓 (다크네이비)").build()
         );
-        return basketRequestDtoList;
+        return basketPostReqDtoList;
     }
-    private List<BasketResponseDto> basketResponseDto() {
-        List<BasketResponseDto> basketResponseDtoList = Arrays.asList(
-                BasketResponseDto.builder().itemId(1L).itemTotal(60000).itemCount(2).size("S").title("시어서커 크롭 자켓 (다크네이비)").build(),
-                BasketResponseDto.builder().itemId(1L).itemTotal(30000).itemCount(1).size("M").title("시어서커 크롭 자켓 (다크네이비)").build()
+    private List<BasketGetResDto> basketResponseDto() {
+        List<BasketGetResDto> basketGetResDtoList = Arrays.asList(
+                BasketGetResDto.builder().itemId(1L).itemTotal(60000).itemCount(2).size("S").title("시어서커 크롭 자켓 (다크네이비)").build(),
+                BasketGetResDto.builder().itemId(1L).itemTotal(30000).itemCount(1).size("M").title("시어서커 크롭 자켓 (다크네이비)").build()
         );
-        return basketResponseDtoList;
+        return basketGetResDtoList;
     }
     private MessageResponse messageResponse() {
         return MessageResponse.builder()

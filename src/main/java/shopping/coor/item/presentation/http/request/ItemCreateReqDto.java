@@ -1,14 +1,12 @@
 package shopping.coor.item.presentation.http.request;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import shopping.coor.item.domain.Item;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class ItemCreateReqDto {
     private String title;
 

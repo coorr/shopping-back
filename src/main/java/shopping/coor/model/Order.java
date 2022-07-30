@@ -39,7 +39,7 @@ public class Order {
     private Delivery delivery;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status; //주문상태 [ORDER, CANCEL]
+    private OrderStatus status;
 
     @DateTimeFormat(pattern = "yyyy-mm-dd'T'HH:mm:ss")
     private LocalDateTime orderDate;

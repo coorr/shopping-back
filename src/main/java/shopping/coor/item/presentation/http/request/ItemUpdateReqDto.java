@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
+@Builder
 public class ItemUpdateReqDto {
     private String title;
     private int price;

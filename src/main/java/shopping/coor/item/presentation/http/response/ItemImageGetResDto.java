@@ -2,7 +2,7 @@ package shopping.coor.item.presentation.http.response;
 
 import lombok.Getter;
 import lombok.Setter;
-import shopping.coor.model.Image;
+import shopping.coor.item.domain.Image;
 
 @Getter
 @Setter

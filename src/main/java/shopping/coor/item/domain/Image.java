@@ -1,8 +1,7 @@
-package shopping.coor.model;
+package shopping.coor.item.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import shopping.coor.item.domain.Item;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -14,7 +13,8 @@ import static javax.persistence.FetchType.*;
 @Setter
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class Image {
 
     @Id

@@ -14,7 +14,10 @@ public class CreateUserRequestValidator extends AbstractValidator<CreateUserRequ
     @Override
     public void validateTarget(CreateUserRequest request, Errors errors) {
         if (!StringUtils.hasText(request.getUsername())) {
-            errors.rejectValue("username", "데이터가 없습니다.");
+            errors.rejectValue("username", "아이디를 입력해주세요.");
+        }
+        if (!StringUtils.hasText(request.getPassword())) {
+            errors.rejectValue("password", "비밀번호를 입력해주세요.");
         }
     }
 }

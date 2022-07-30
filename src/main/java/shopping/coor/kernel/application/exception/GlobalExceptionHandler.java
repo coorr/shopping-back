@@ -1,35 +1,49 @@
 package shopping.coor.kernel.application.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import shopping.coor.auth.application.exception.UserAlreadyExistsException;
 import shopping.coor.kernel.application.error.response.ErrorsResponse;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Locale;
 
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
 
-    private MessageSource messageSource;
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ErrorsResponse handleValidationUserAlreadyExistsException(UserAlreadyExistsException e, Locale locale, HttpServletRequest request) {
+    @ExceptionHandler(ApplicationLogicException.class)
+    public ResponseEntity<ErrorsResponse> handleValidationUserAlreadyExistsException(ApplicationLogicException e) {
         if (e.getMessage() != null)
             log.error(e.getMessage(), e);
-        return ErrorsResponse.create(messageSource.getMessage(e.getMessageCode(), null, locale));
+
+        ErrorsResponse response = ErrorsResponse.create().message(e.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(ValidationIllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorsResponse handleValidationIllegalArgumentException(ValidationIllegalArgumentException e, Locale locale, HttpServletRequest request) {
-        log.error(e.getMessage(), e);
-        return ErrorsResponse.create(e.getErrors(), messageSource, locale, request.getAttribute("X-REDIRECTION-URL").toString());
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorsResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        if (e.getMessage() != null)
+            log.error(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+
+        ErrorsResponse response = ErrorsResponse.create()
+                .message(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<ErrorsResponse> handleBindException(BindException e) {
+        if (e.getMessage() != null)
+            log.error(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+
+        ErrorsResponse response = ErrorsResponse.create()
+                .message(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
 

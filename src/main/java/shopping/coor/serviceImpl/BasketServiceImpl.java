@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import shopping.coor.model.Basket;
+import shopping.coor.basket.domain.Basket;
 import shopping.coor.item.domain.Item;
 import shopping.coor.auth.domain.User.User;
-import shopping.coor.repository.basket.dto.BasketRequestDto;
-import shopping.coor.repository.basket.dto.BasketResponseDto;
+import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
+import shopping.coor.basket.presentation.http.response.BasketGetResDto;
 import shopping.coor.auth.presentation.http.request.MessageResponse;
-import shopping.coor.repository.basket.BasketRepository;
+import shopping.coor.basket.domain.BasketRepository;
 import shopping.coor.item.domain.ItemRepository;
 import shopping.coor.auth.domain.User.UserRepository;
 import shopping.coor.service.BasketService;
@@ -32,12 +32,12 @@ public class BasketServiceImpl implements BasketService {
 
     @Transactional
     @Override
-    public ResponseEntity<MessageResponse> basketAddUser(Long userId, List<BasketRequestDto> basketRequestDto) throws Exception {
+    public ResponseEntity<MessageResponse> basketAddUser(Long userId, List<BasketPostReqDto> basketPostReqDto) throws Exception {
         System.out.println("테스트");
         User userById = userRepository.getById(userId);
         ArrayList<Long> arrayOnlyBasketId = basketRepository.findArrayOnlyById(userById);
 
-        for (BasketRequestDto requestDto : basketRequestDto) {
+        for (BasketPostReqDto requestDto : basketPostReqDto) {
             Item itemById = itemRepository.getById(requestDto.getItemId());
 
             String errorMessage = String.format("상품의 수량이 재고수량 보다 많습니다. \n\n제품명 : %s", itemById.getTitle());
@@ -87,8 +87,8 @@ public class BasketServiceImpl implements BasketService {
     }
 
     @Override
-    public ResponseEntity<MessageResponse> duplicateSizeQuantityCheck(List<BasketRequestDto> basketRequestDto) {
-        for (BasketRequestDto requestDto : basketRequestDto) {
+    public ResponseEntity<MessageResponse> duplicateSizeQuantityCheck(List<BasketPostReqDto> basketPostReqDto) {
+        for (BasketPostReqDto requestDto : basketPostReqDto) {
             Item itemById = itemRepository.getById(requestDto.getItemId());
             String errorMessage = String.format("상품의 수량이 재고수량 보다 많습니다. \n\n제품명 : %s", itemById.getTitle());
 
@@ -123,7 +123,7 @@ public class BasketServiceImpl implements BasketService {
 
 
     @Override
-    public List<BasketResponseDto> getBasketByUserId(Long userid) {
+    public List<BasketGetResDto> getBasketByUserId(Long userid) {
         User userById = userRepository.getById(userid);
         List<Basket> basketList = basketRepository.findAllByUserId(userById);
         return basketResponseDtos(basketList);
@@ -187,10 +187,10 @@ public class BasketServiceImpl implements BasketService {
 
     @Transactional
     @Override
-    public ResponseEntity<?> insertNotUserBasket(Long userId, List<BasketRequestDto> basketDto) {
+    public ResponseEntity<?> insertNotUserBasket(Long userId, List<BasketPostReqDto> basketDto) {
         User userById = userRepository.getById(userId);
         Basket basket = new Basket();
-        for (BasketRequestDto requestDto : basketDto) {
+        for (BasketPostReqDto requestDto : basketDto) {
             Item itemById = itemRepository.getById(requestDto.getItemId());
             Basket duplicateBasket = basketRepository.findItemByIdUserByIdSize(itemById, requestDto.getSize(), userById);
             if(duplicateBasket != null) {
@@ -212,7 +212,7 @@ public class BasketServiceImpl implements BasketService {
 
 
 
-    protected List<BasketResponseDto> basketResponseDtos(List<Basket> basketList) {
-        return basketList.stream().map(b -> new BasketResponseDto(b)).collect(Collectors.toList());
+    protected List<BasketGetResDto> basketResponseDtos(List<Basket> basketList) {
+        return basketList.stream().map(b -> new BasketGetResDto(b)).collect(Collectors.toList());
     }
 }

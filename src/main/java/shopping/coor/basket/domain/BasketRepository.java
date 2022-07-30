@@ -1,19 +1,20 @@
-package shopping.coor.repository.basket;
+package shopping.coor.basket.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import shopping.coor.model.Basket;
-import shopping.coor.item.domain.Item;
 import shopping.coor.auth.domain.User.User;
+import shopping.coor.item.domain.Item;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Repository
-public interface BasketRepository extends JpaRepository<Basket, Long> {
+public interface BasketRepository extends JpaRepository<Basket, Long>, BasketCustomRepository {
+
+    Basket findByUser(User user);
 
     void deleteById(Long id);
 

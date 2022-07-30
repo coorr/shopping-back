@@ -13,9 +13,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import shopping.coor.auth.application.exception.JwtExceptionFilter;
 import shopping.coor.auth.application.jwt.AuthEntryPointJwt;
 import shopping.coor.auth.application.jwt.AuthTokenFilter;
-import shopping.coor.auth.application.exception.JwtExceptionFilter;
 import shopping.coor.auth.application.service.UserDetailsServiceImpl;
 
 
@@ -48,17 +48,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable()
-			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-			.authorizeRequests()
-			.antMatchers("/api/user/**").permitAll()
-			.antMatchers("/api/item/**").permitAll()
-			.antMatchers("/api/items/**").permitAll()
-			.antMatchers("/api/basket/**").permitAll()
-			.antMatchers("/api/order/**").permitAll()
-			.antMatchers("/api/admin/**").hasAnyAuthority("ROLE_ADMIN")
-			.antMatchers("/static/**").permitAll()
-			.anyRequest().authenticated();
+				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+				.authorizeRequests()
+				.antMatchers("/api/user/**").permitAll()
+				.antMatchers("/api/item/**").permitAll()
+				.antMatchers("/api/items/**").permitAll()
+				.antMatchers("/api/basket/**").permitAll()
+				.antMatchers("/api/order/**").permitAll()
+				.antMatchers("/static/**").permitAll()
+				.anyRequest().authenticated();
+
 
 		http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 		http.addFilterBefore(jwtExceptionFilter, AuthTokenFilter.class);

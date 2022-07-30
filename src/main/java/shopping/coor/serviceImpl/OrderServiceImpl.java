@@ -5,13 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shopping.coor.auth.domain.User.User;
+import shopping.coor.basket.domain.Basket;
 import shopping.coor.model.*;
-import shopping.coor.repository.basket.dto.BasketResponseDto;
+import shopping.coor.basket.presentation.http.response.BasketGetResDto;
 import shopping.coor.repository.delivery.dto.DeliveryRequestDto;
 import shopping.coor.item.domain.ItemRepository;
 import shopping.coor.repository.order.dto.OrderResponseDto;
 import shopping.coor.auth.presentation.http.request.MessageResponse;
-import shopping.coor.repository.basket.BasketRepository;
+import shopping.coor.basket.domain.BasketRepository;
 import shopping.coor.repository.order.OrderRepository;
 import shopping.coor.auth.domain.User.UserRepository;
 import shopping.coor.service.OrderService;
@@ -35,7 +36,6 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public ResponseEntity<MessageResponse> saveOrderDeliveryItem(Long userId, DeliveryRequestDto deliveryRequestDto) {
-
         User userById = userRepository.getById(userId);
         List<Basket> basketList = basketRepository.findAllByUserId(userById);
 
@@ -67,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public List<BasketResponseDto> soldOutItemRemove(Long userId) {
+    public List<BasketGetResDto> soldOutItemRemove(Long userId) {
         User userById = userRepository.getById(userId);
         List<Basket> basketListQuantity = basketRepository.findAllByUserId(userById);
         for (Basket basket : basketListQuantity) {
@@ -90,8 +90,8 @@ public class OrderServiceImpl implements OrderService {
         }
 
         List<Basket> basketList = basketRepository.findAllByUserId(userById);
-        List<BasketResponseDto> result = basketList.stream()
-                                            .map(b -> new BasketResponseDto(b))
+        List<BasketGetResDto> result = basketList.stream()
+                                            .map(b -> new BasketGetResDto(b))
                                             .collect(Collectors.toList());
         return result;
     }

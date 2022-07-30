@@ -3,7 +3,6 @@ package shopping.coor.item.application.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -19,11 +18,12 @@ import shopping.coor.item.presentation.http.request.ItemCreateReqDto;
 import shopping.coor.item.presentation.http.request.ItemUpdateReqDto;
 import shopping.coor.item.presentation.http.response.ItemGetResDto;
 import shopping.coor.item.presentation.http.response.ItemsGetResDto;
-import shopping.coor.model.Image;
+import shopping.coor.item.domain.Image;
 import shopping.coor.repository.image.ImageRepository;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
 public class ItemService {
 
     @Value("${cloud.aws.s3.bucket:@null}")
@@ -42,39 +41,39 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final ImageRepository imageRepository;
+
     private final AmazonS3 amazonS3;
     private final Executor executor;
 
-    public ItemGetResDto getItem( final Long itemId) {
+    public ItemGetResDto getItem(final Long itemId) {
         Item item = getItemById(itemId);
 
         return new ItemGetResDto(item);
     }
 
-
-    public List<ItemsGetResDto> getItems( Long itemLastId, int size, String category) {
+    public List<ItemsGetResDto> getItems(Long itemLastId, int size, String category) {
         PageRequest pageRequest = PageRequest.of(0, size);
 
         if (itemLastId == FIRST_SIZE && category.equals("null")) {
-            List<Item> items = itemRepository.findByIdGreaterThanOrderByIdDesc(itemLastId, pageRequest);
+            List<Item> items = getItemsFirstSelectByIdPage(itemLastId, pageRequest);
             return getItemChangeDto(items);
         }
         if (category.equals("null")) {
-            List<Item> items = itemRepository.findByIdLessThanOrderByIdDesc(itemLastId, pageRequest);
+            List<Item> items = getItemsSecondSelectByIdPage(itemLastId, pageRequest);
             return getItemChangeDto(items);
         }
-        if (itemLastId == 0) {
-            List<Item> items = itemRepository.findByIdGreaterThanAndCategoryOrderByIdDesc(itemLastId, category, pageRequest);
+        if (itemLastId == FIRST_SIZE) {
+            List<Item> items = getItemsAndCategoryFirstSelectByIdPage(itemLastId, category, pageRequest);
             return getItemChangeDto(items);
         }
-        List<Item> items = itemRepository.findByIdLessThanAndCategoryOrderByIdDesc(itemLastId, category, pageRequest);
+        List<Item> items = getItemsCategorySecondSelectByIdPage(itemLastId, category, pageRequest);
         return getItemChangeDto(items);
     }
-
     @Transactional
     public void deleteItem( Long itemId) {
         Item item = getItemById(itemId);
-        itemRepository.delete(item);
+
+        item.delete(LocalDateTime.now());
     }
 
 
@@ -92,7 +91,7 @@ public class ItemService {
             String fileName = getFileName(file);
             images.add(Image.createImage(fileName, item));
         }
-        item.setImages(images);
+        item.addImage(images);
         Item result = itemRepository.save(item);
         return result.getId();
     }
@@ -100,24 +99,24 @@ public class ItemService {
     @Transactional
     public Boolean updateItem(Long itemId, MultipartFile[] multipartFiles, ItemUpdateReqDto itemUpdateReqDto) {
         Item item = itemRepository.getItemList(itemId);
-
         List<Image> images = new ArrayList<>();
         List<Long> imageId = existImageByIdDelete(itemUpdateReqDto, item);
 
         item.update(itemUpdateReqDto);
+        System.out.println("imageId = " + imageId);
         imageRepository.deleteAllByIdInBatch(imageId);
 
-        if (multipartFiles == null) {
+        if (multipartFiles != null) {
+            for (MultipartFile file : multipartFiles) {
+                String fileName = getFileName(file);
+                images.add(Image.createImage(fileName, item));
+            }
+
+            item.addImage(images);
+            item.update(itemUpdateReqDto);
+
             return Boolean.TRUE;
         }
-
-        for (MultipartFile file : multipartFiles) {
-            String fileName = getFileName(file);
-            images.add(Image.createImage(fileName, item));
-        }
-
-        item.setImages(images);
-        item.update(itemUpdateReqDto);
 
         return Boolean.TRUE;
     }
@@ -126,6 +125,7 @@ public class ItemService {
         List<Long> imageId = item.getImages().stream()
                 .map(id -> id.getId())
                 .collect(Collectors.toList());
+
         for (ImageUpdateReqDto imageUpdateReqDto : itemUpdateReqDto.getImagePath()) {
             imageId.remove(imageUpdateReqDto.getId());
         }
@@ -152,9 +152,9 @@ public class ItemService {
         return fileName;
     }
 
-    private Item getItemById(Long itemId) {
-        return itemRepository.findById(itemId).orElseThrow(
-                () -> new ItemNotFoundException("상품을 찾을 수 없습니다."));
+    public Item getItemById(Long itemId) {
+        return itemRepository.findById(itemId)
+                .orElseThrow(() -> new ItemNotFoundException());
     }
 
 
@@ -176,6 +176,18 @@ public class ItemService {
         }
     }
 
+    private List<Item> getItemsFirstSelectByIdPage(Long itemLastId, PageRequest pageRequest) {
+        return itemRepository.findByIdGreaterThanOrderByIdDesc(itemLastId, pageRequest);
+    }
 
+    private List<Item> getItemsSecondSelectByIdPage(Long itemLastId, PageRequest pageRequest) {
+        return itemRepository.findByIdLessThanOrderByIdDesc(itemLastId, pageRequest);
+    }
 
+    private List<Item> getItemsAndCategoryFirstSelectByIdPage(Long itemLastId, String category, PageRequest pageRequest) {
+        return itemRepository.findByIdGreaterThanAndCategoryOrderByIdDesc(itemLastId, category, pageRequest);
+    }
+    private List<Item> getItemsCategorySecondSelectByIdPage(Long itemLastId, String category, PageRequest pageRequest) {
+        return itemRepository.findByIdLessThanAndCategoryOrderByIdDesc(itemLastId, category, pageRequest);
+    }
 }

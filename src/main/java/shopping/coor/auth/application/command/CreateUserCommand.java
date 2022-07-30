@@ -2,7 +2,7 @@ package shopping.coor.auth.application.command;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shopping.coor.auth.application.command.model.CreateUserModel;
 import shopping.coor.auth.application.exception.UserAlreadyExistsException;
@@ -16,7 +16,7 @@ import shopping.coor.kernel.application.command.Command;
 import java.util.HashSet;
 import java.util.Set;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class CreateUserCommand implements Command<CreateUserModel> {
     private final UserRepository userRepository;

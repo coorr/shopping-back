@@ -1,8 +1,9 @@
-package shopping.coor.model;
+package shopping.coor.basket.domain;
 
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import shopping.coor.auth.domain.User.User;
+import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
 import shopping.coor.item.domain.Item;
 
 import javax.persistence.*;
@@ -58,18 +59,14 @@ public class Basket {
         basket.setItemCount(itemCount);
         basket.setItemTotal(itemTotal);
         basket.setSize(size);
-
         return basket;
     }
 
+    public Basket updateBasket(BasketPostReqDto dto) {
+        this.itemTotal = this.itemTotal + dto.getItemTotal();
+        this.itemCount = this.itemCount + dto.getItemCount();
+        return this;
+    }
 
 
-
-
-//    public static Cart createCart(User user) {
-//        Cart cart = new Cart();
-//        cart.setCount(0);
-//        cart.setUser(user);
-//        return cart;
-//    }
 }

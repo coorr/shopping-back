@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import shopping.coor.model.Image;
+import shopping.coor.item.domain.Image;
 import shopping.coor.item.domain.Item;
 
 import java.util.List;

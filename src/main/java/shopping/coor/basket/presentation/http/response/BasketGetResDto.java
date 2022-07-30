@@ -1,8 +1,8 @@
-package shopping.coor.repository.basket.dto;
+package shopping.coor.basket.presentation.http.response;
 
 import lombok.*;
-import shopping.coor.model.Basket;
-import shopping.coor.model.Image;
+import shopping.coor.basket.domain.Basket;
+import shopping.coor.item.domain.Image;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BasketResponseDto {
+public class BasketGetResDto {
     private Long keyIndex;
 
     private Long itemId;
@@ -31,7 +31,7 @@ public class BasketResponseDto {
 
     private String title;
 
-    public BasketResponseDto(Basket basket) {
+    public BasketGetResDto(Basket basket) {
         this.keyIndex = basket.getId();
         this.itemId = basket.getItem().getId();
         this.itemTotal = basket.getItemTotal();

@@ -20,6 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
 		User user = userRepository.findByUsernameJoinRoles(username);
+//				.orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
 
 		return UserDetailsImpl.build(user);
 	}

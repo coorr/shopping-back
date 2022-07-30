@@ -7,11 +7,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import shopping.coor.auth.domain.User.User;
+import shopping.coor.basket.domain.Basket;
 import shopping.coor.item.application.exception.NotEnoughStockException;
 import shopping.coor.item.domain.Item;
 import shopping.coor.model.*;
-import shopping.coor.repository.basket.BasketRepository;
-import shopping.coor.repository.basket.dto.BasketResponseDto;
+import shopping.coor.basket.domain.BasketRepository;
+import shopping.coor.basket.presentation.http.response.BasketGetResDto;
 import shopping.coor.repository.delivery.dto.DeliveryRequestDto;
 import shopping.coor.item.domain.ItemRepository;
 import shopping.coor.repository.order.OrderRepository;
@@ -205,14 +206,14 @@ class OrderServiceTest {
         return orderItemResponseDtoList;
     }
 
-    private List<BasketResponseDto> basketResponseDto() {
-        List<BasketResponseDto> basketResponseDtoList = Arrays.asList(
-                BasketResponseDto.builder().itemId(10L).itemTotal(30000).itemCount(5).size("L").discount(28000).build(),
-                BasketResponseDto.builder().itemId(10L).itemTotal(530000).itemCount(4).size("S").discount(52000).build(),
-                BasketResponseDto.builder().itemId(9L).itemTotal(430000).itemCount(3).size("L").discount(58000).build(),
-                BasketResponseDto.builder().itemId(9L).itemTotal(230000).itemCount(2).size("M").discount(35000).build()
+    private List<BasketGetResDto> basketResponseDto() {
+        List<BasketGetResDto> basketGetResDtoList = Arrays.asList(
+                BasketGetResDto.builder().itemId(10L).itemTotal(30000).itemCount(5).size("L").discount(28000).build(),
+                BasketGetResDto.builder().itemId(10L).itemTotal(530000).itemCount(4).size("S").discount(52000).build(),
+                BasketGetResDto.builder().itemId(9L).itemTotal(430000).itemCount(3).size("L").discount(58000).build(),
+                BasketGetResDto.builder().itemId(9L).itemTotal(230000).itemCount(2).size("M").discount(35000).build()
         );
-        return basketResponseDtoList;
+        return basketGetResDtoList;
     }
 
     private User user() {

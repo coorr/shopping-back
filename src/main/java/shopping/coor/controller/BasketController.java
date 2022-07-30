@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shopping.coor.auth.presentation.http.request.MessageResponse;
-import shopping.coor.repository.basket.dto.BasketRequestDto;
-import shopping.coor.repository.basket.dto.BasketResponseDto;
+import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
+import shopping.coor.basket.presentation.http.response.BasketGetResDto;
 import shopping.coor.service.BasketService;
 
 import java.util.List;
@@ -19,11 +19,11 @@ public class BasketController {
     private final BasketService basketService;
 
     @PostMapping("/basketAddUser/{userId}")
-    public ResponseEntity<MessageResponse> basketAddUser(@PathVariable Long userId, @RequestBody List<BasketRequestDto> basketRequestDto) throws Exception {
-        return basketService.basketAddUser(userId, basketRequestDto);
+    public ResponseEntity<MessageResponse> basketAddUser(@PathVariable Long userId, @RequestBody List<BasketPostReqDto> basketPostReqDto) throws Exception {
+        return basketService.basketAddUser(userId, basketPostReqDto);
     }
     @GetMapping("/getBasketByUserId/{userid}")
-    public List<BasketResponseDto> getBasketByUserId(@PathVariable Long userid) {
+    public List<BasketGetResDto> getBasketByUserId(@PathVariable Long userid) {
         return basketService.getBasketByUserId(userid);
     }
     @PostMapping("/removeBasketById/{basketId}/{userId}")
@@ -44,11 +44,11 @@ public class BasketController {
     }
 
     @PostMapping("/insertNotUserBasket/{userId}")
-    public ResponseEntity<?> insertNotUserBasket(@PathVariable Long userId, @RequestBody List<BasketRequestDto> basketDto) {
+    public ResponseEntity<?> insertNotUserBasket(@PathVariable Long userId, @RequestBody List<BasketPostReqDto> basketDto) {
         return basketService.insertNotUserBasket(userId, basketDto);
     }
     @PostMapping("/duplicateSizeQuantityCheck")
-    public ResponseEntity<?> duplicateSizeQuantityCheck(@RequestBody List<BasketRequestDto> basketDto) {
+    public ResponseEntity<?> duplicateSizeQuantityCheck(@RequestBody List<BasketPostReqDto> basketDto) {
         return basketService.duplicateSizeQuantityCheck(basketDto);
     }
     @GetMapping("/getBasketToUserLength/{userId}")

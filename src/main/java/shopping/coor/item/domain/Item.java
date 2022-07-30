@@ -1,26 +1,30 @@
 package shopping.coor.item.domain;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
 import shopping.coor.item.application.exception.NotEnoughStockException;
 import shopping.coor.item.presentation.http.request.ItemUpdateReqDto;
-import shopping.coor.item.presentation.http.response.ItemUpdateResDto;
 import shopping.coor.kernel.domain.BaseEntityAggregateRoot;
-import shopping.coor.model.Image;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Getter
-@Setter
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@ToString
+@DynamicUpdate
+@Where(clause = "deleted = false")
 public class Item extends BaseEntityAggregateRoot<Item> {
 
     @Id
@@ -58,13 +62,22 @@ public class Item extends BaseEntityAggregateRoot<Item> {
     @Column(length = 1000)
     private String info;
 
+    @CreatedBy
+    @Column(updatable = false)
+    private Long createdBy;
+
+    @LastModifiedBy
+    private Long updateBy;
+
     @Builder.Default
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
-    public void addImage(Image image) {
-        images.add(image);
-        image.setItem(this);
+    public void addImage(List<Image> imageList) {
+        for (Image result : imageList) {
+            images.add(result);
+            result.setItem(this);
+        }
     }
 
     public void addStock(int quantity, String orderSize) {
@@ -83,21 +96,21 @@ public class Item extends BaseEntityAggregateRoot<Item> {
         if (size.equals("S")) {
             int restStock = this.quantityS - quantity;
             if (restStock < 0) {
-                throw new NotEnoughStockException("need more stock");
+                throw new NotEnoughStockException();
             }
             this.quantityS = restStock;
         }
         if (size.equals("M")) {
             int restStock = this.quantityM - quantity;
             if (restStock < 0) {
-                throw new NotEnoughStockException("need more stock");
+                throw new NotEnoughStockException();
             }
             this.quantityM = restStock;
         }
         if (size.equals("L")) {
             int restStock = this.quantityL - quantity;
             if (restStock < 0) {
-                throw new NotEnoughStockException("need more stock");
+                throw new NotEnoughStockException();
             }
             this.quantityL = restStock;
         }
@@ -108,22 +121,6 @@ public class Item extends BaseEntityAggregateRoot<Item> {
         this.title=title;
         this.discountPrice = discountPrice;
         this.quantityS = quantityS;
-    }
-
-    public Item(ItemUpdateResDto resDto) {
-        this.title = resDto.getTitle();
-        this.price = resDto.getPrice();
-        this.discountPrice = resDto.getDiscountPrice();
-        this.quantityS = resDto.getQuantityS();
-        this.quantityM = resDto.getQuantityM();
-        this.quantityL = resDto.getQuantityL();
-        this.category = resDto.getCategory();
-        this.size = resDto.getSize();
-        this.material = resDto.getMaterial();
-        this.info = resDto.getInfo();
-//        this.images = resDto.getImages().stream()
-//                .map(i -> new Image(i.getImageId(), i.getLocation() ))
-//                .collect(Collectors.toList());
     }
 
     public Item update(ItemUpdateReqDto reqDto) {
@@ -141,10 +138,37 @@ public class Item extends BaseEntityAggregateRoot<Item> {
         return this;
     }
 
+    public Item delete(LocalDateTime deleteBy) {
+        this.setDeleted(true);
+        this.deletedAt = deleteBy;
+
+        return this;
+    }
 
 
-
-
+    public Item postCheck(BasketPostReqDto basketDto) {
+        if (basketDto.getSize().equals("S")) {
+            int restStock = this.quantityS - basketDto.getItemCount();
+            if (restStock < 0) {
+                throw new NotEnoughStockException(basketDto.getTitle());
+            }
+        }
+        if (basketDto.getSize().equals("M")) {
+            int restStock = this.quantityM - basketDto.getItemCount();
+            if (restStock < 0) {
+                throw new NotEnoughStockException(basketDto.getTitle());
+            }
+            this.quantityM = restStock;
+        }
+        if (basketDto.getSize().equals("L")) {
+            int restStock = this.quantityL - basketDto.getItemCount();
+            if (restStock < 0) {
+                throw new NotEnoughStockException(basketDto.getTitle());
+            }
+            this.quantityL = restStock;
+        }
+        return this;
+    }
 }
 
 

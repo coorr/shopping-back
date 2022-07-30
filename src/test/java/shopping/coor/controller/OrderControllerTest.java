@@ -13,22 +13,23 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import shopping.coor.repository.basket.dto.BasketResponseDto;
+import shopping.coor.auth.presentation.http.request.MessageResponse;
+import shopping.coor.basket.presentation.http.response.BasketGetResDto;
+import shopping.coor.basket.presentation.http.response.BasketResponseDto;
 import shopping.coor.repository.delivery.dto.DeliveryRequestDto;
 import shopping.coor.repository.order.dto.OrderItemResponseDto;
 import shopping.coor.repository.order.dto.OrderResponseDto;
-import shopping.coor.auth.presentation.http.request.MessageResponse;
 import shopping.coor.service.OrderService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.MediaType.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -88,7 +89,7 @@ class OrderControllerTest {
     public void 상품_품절_삭제_요청() throws Exception {
         // given
         Long userId = 1L;
-        List<BasketResponseDto> basketResponseDto = basketResponseDto();
+        List<BasketGetResDto> basketGetResDto = basketResponseDto();
         when(orderService.soldOutItemRemove(any())).thenReturn(basketResponseDto());
         // when
         ResultActions result = mockMvc.perform(
@@ -96,7 +97,7 @@ class OrderControllerTest {
         );
         // then
         result.andExpect(status().isOk()).andReturn();
-        assertEquals(basketResponseDto.size(), 4);
+        assertEquals(basketGetResDto.size(), 4);
     }
 
     @Test
@@ -174,12 +175,12 @@ class OrderControllerTest {
                 .build();
     }
 
-    private List<BasketResponseDto> basketResponseDto() {
-        List<BasketResponseDto> basket = Arrays.asList(
-                BasketResponseDto.builder().itemId(10L).itemTotal(30000).itemCount(5).size("L").discount(28000).build(),
-                BasketResponseDto.builder().itemId(10L).itemTotal(530000).itemCount(4).size("S").discount(52000).build(),
-                BasketResponseDto.builder().itemId(9L).itemTotal(430000).itemCount(3).size("L").discount(58000).build(),
-                BasketResponseDto.builder().itemId(9L).itemTotal(230000).itemCount(2).size("M").discount(35000).build()
+    private List<BasketGetResDto> basketResponseDto() {
+        List<BasketGetResDto> basket = Arrays.asList(
+                BasketGetResDto.builder().itemId(10L).itemTotal(30000).itemCount(5).size("L").discount(28000).build(),
+                BasketGetResDto.builder().itemId(10L).itemTotal(530000).itemCount(4).size("S").discount(52000).build(),
+                BasketGetResDto.builder().itemId(9L).itemTotal(430000).itemCount(3).size("L").discount(58000).build(),
+                BasketGetResDto.builder().itemId(9L).itemTotal(230000).itemCount(2).size("M").discount(35000).build()
         );
         return basket;
     }

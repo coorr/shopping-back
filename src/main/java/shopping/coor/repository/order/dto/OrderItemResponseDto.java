@@ -1,7 +1,7 @@
 package shopping.coor.repository.order.dto;
 
 import lombok.*;
-import shopping.coor.model.Image;
+import shopping.coor.item.domain.Image;
 import shopping.coor.model.OrderItem;
 
 import java.util.List;

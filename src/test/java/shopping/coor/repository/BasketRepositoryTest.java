@@ -4,11 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import shopping.coor.model.Basket;
+import shopping.coor.basket.domain.Basket;
 import shopping.coor.item.domain.Item;
 import shopping.coor.model.Order;
 import shopping.coor.auth.domain.User.User;
-import shopping.coor.repository.basket.BasketRepository;
+import shopping.coor.basket.domain.BasketRepository;
 import shopping.coor.item.domain.ItemRepository;
 import shopping.coor.auth.domain.User.UserRepository;
 

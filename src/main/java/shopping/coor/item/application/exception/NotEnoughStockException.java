@@ -1,20 +1,15 @@
 package shopping.coor.item.application.exception;
 
-public class NotEnoughStockException extends RuntimeException {
+import shopping.coor.kernel.application.exception.ApplicationLogicException;
+
+public class NotEnoughStockException extends ApplicationLogicException {
 
     public NotEnoughStockException() {
-        super();
+        super("재고가 없습니다.");
     }
 
-    public NotEnoughStockException(String message) {
-        super(message);
+    public NotEnoughStockException(String title) {
+        super("상품의 수량이 재고수량 보다 많습니다. \n\n제품명 : " + title);
     }
 
-    public NotEnoughStockException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public NotEnoughStockException(Throwable cause) {
-        super(cause);
-    }
 }

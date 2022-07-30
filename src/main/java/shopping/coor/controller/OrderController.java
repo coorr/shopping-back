@@ -3,7 +3,7 @@ package shopping.coor.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import shopping.coor.repository.basket.dto.BasketResponseDto;
+import shopping.coor.basket.presentation.http.response.BasketGetResDto;
 import shopping.coor.repository.delivery.dto.DeliveryRequestDto;
 import shopping.coor.repository.order.dto.OrderResponseDto;
 import shopping.coor.auth.presentation.http.request.MessageResponse;
@@ -30,7 +30,7 @@ public class OrderController {
     }
 
     @PostMapping("/soldOutItemRemove/{userId}")
-    public List<BasketResponseDto> soldOutItemRemove(@PathVariable Long userId) {
+    public List<BasketGetResDto> soldOutItemRemove(@PathVariable Long userId) {
         return orderService.soldOutItemRemove(userId);
     }
 

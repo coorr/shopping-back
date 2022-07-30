@@ -1,9 +1,8 @@
 package shopping.coor.kernel.domain;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.domain.AbstractAggregateRoot;
@@ -17,9 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @MappedSuperclass
-@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@Where(clause = "deleted_at is null")
 public class BaseEntityAggregateRoot<T extends BaseEntityAggregateRoot<T>> extends AbstractAggregateRoot<T> {
     @CreatedDate
     @Column(columnDefinition = "TIMESTAMP", updatable = false)
@@ -31,4 +28,9 @@ public class BaseEntityAggregateRoot<T extends BaseEntityAggregateRoot<T>> exten
 
     @Column(name = "deleted_at", columnDefinition = "TIMESTAMP")
     protected LocalDateTime deletedAt;
+
+    @Builder.Default
+    private boolean deleted = false;
+
+
 }

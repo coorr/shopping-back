@@ -39,14 +39,14 @@ public class BasketServices {
 
         for (BasketPostReqDto basketDto : basketPostReqDto) {
             Item item = itemService.getItemById(basketDto.getItemId());
-            item.postCheck(basketDto);
+            item.stockCheck(basketDto, basket);
         }
         return null;
     }
 
     public void checkBasket(List<BasketPostReqDto> basketPostReqDto) {
         Item item = itemService.getItemById(basketPostReqDto.get(0).getItemId());
-        item.postCheck(basketPostReqDto.get(0));
+        item.stockCheck(basketPostReqDto.get(0));
     }
 
     @Transactional
@@ -56,6 +56,7 @@ public class BasketServices {
 
         for (BasketPostReqDto dto : basketPostReqDto) {
             Basket basket = basketRepository.findBasketAndItemByIdAndSizeAndUserById(dto.getItemId(), dto.getSize(), userId);
+            // 기존 장바구니에 있으면 수량 변경
             if (basket != null) {
                 basket.updateBasket(dto);
                 continue;

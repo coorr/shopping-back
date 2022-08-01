@@ -44,6 +44,7 @@ public class BasketControllertmp {
         return ResponseEntity.ok().body(basketService.putBaskets(user.getId(),basketPostReqDto));
     }
 
+    // 아이템 상세페이지에서 수량체크
     @PostMapping("/basket/duplicate")
     public ResponseEntity<Void> checkBasket(@RequestBody @Valid List<BasketPostReqDto> basketPostReqDto) {
         basketService.checkBasket(basketPostReqDto);

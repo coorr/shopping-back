@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
+import shopping.coor.basket.domain.Basket;
 import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
 import shopping.coor.item.application.exception.NotEnoughStockException;
 import shopping.coor.item.presentation.http.request.ItemUpdateReqDto;
@@ -80,6 +81,35 @@ public class Item extends BaseEntityAggregateRoot<Item> {
         }
     }
 
+    public Item(Long id, String title, int  discountPrice, int quantityS) {
+        this.id = id;
+        this.title=title;
+        this.discountPrice = discountPrice;
+        this.quantityS = quantityS;
+    }
+
+    public Item update(ItemUpdateReqDto reqDto) {
+        this.title = reqDto.getTitle();
+        this.price = reqDto.getPrice();
+        this.discountPrice = reqDto.getDiscountPrice();
+        this.quantityS = reqDto.getQuantityS();
+        this.quantityM = reqDto.getQuantityM();
+        this.quantityL = reqDto.getQuantityL();
+        this.category = reqDto.getCategory();
+        this.size = reqDto.getSize();
+        this.material = reqDto.getMaterial();
+        this.info = reqDto.getInfo();
+
+        return this;
+    }
+
+    public Item delete(LocalDateTime deleteBy) {
+        this.setDeleted(true);
+        this.deletedAt = deleteBy;
+
+        return this;
+    }
+
     public void addStock(int quantity, String orderSize) {
         if (orderSize.equals("S")) {
             this.quantityS += quantity;
@@ -116,37 +146,7 @@ public class Item extends BaseEntityAggregateRoot<Item> {
         }
     }
 
-    public Item(Long id, String title, int  discountPrice, int quantityS) {
-        this.id = id;
-        this.title=title;
-        this.discountPrice = discountPrice;
-        this.quantityS = quantityS;
-    }
-
-    public Item update(ItemUpdateReqDto reqDto) {
-        this.title = reqDto.getTitle();
-        this.price = reqDto.getPrice();
-        this.discountPrice = reqDto.getDiscountPrice();
-        this.quantityS = reqDto.getQuantityS();
-        this.quantityM = reqDto.getQuantityM();
-        this.quantityL = reqDto.getQuantityL();
-        this.category = reqDto.getCategory();
-        this.size = reqDto.getSize();
-        this.material = reqDto.getMaterial();
-        this.info = reqDto.getInfo();
-
-        return this;
-    }
-
-    public Item delete(LocalDateTime deleteBy) {
-        this.setDeleted(true);
-        this.deletedAt = deleteBy;
-
-        return this;
-    }
-
-
-    public Item postCheck(BasketPostReqDto basketDto) {
+    public void stockCheck(BasketPostReqDto basketDto) {
         if (basketDto.getSize().equals("S")) {
             int restStock = this.quantityS - basketDto.getItemCount();
             if (restStock < 0) {
@@ -167,7 +167,39 @@ public class Item extends BaseEntityAggregateRoot<Item> {
             }
             this.quantityL = restStock;
         }
-        return this;
+    }
+
+    // 테스트 해보기
+    public void stockCheck(BasketPostReqDto basketDto, Basket basket) {
+        switch (basket.getSize()) {
+            case "S":
+                int restStockS = getRestStock(this.quantityS, basketDto, basket);
+                this.quantityS = restStockS;
+                break;
+            case "M":
+                int restStockM = getRestStock(this.quantityM, basketDto, basket);
+                this.quantityM = restStockM;
+                break;
+            case "L":
+                int restStockL = getRestStock(this.quantityL, basketDto, basket);
+                this.quantityL = restStockL;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private int getRestStock(int quantity, BasketPostReqDto basketDto, Basket basket) {
+        int restStock = quantity - basketDto.getItemCount();
+        if (basket.getItem().getId().equals(this.id)) {
+            restStock = restStock - basket.getItemCount();
+            if (restStock + basket.getItemCount() < 0) {
+                throw new NotEnoughStockException(basketDto.getTitle());
+            }
+        } else if(restStock < 0) {
+            throw new NotEnoughStockException(basketDto.getTitle());
+        }
+        return restStock;
     }
 }
 

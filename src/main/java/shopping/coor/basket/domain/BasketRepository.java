@@ -14,8 +14,6 @@ import java.util.List;
 @Repository
 public interface BasketRepository extends JpaRepository<Basket, Long>, BasketCustomRepository {
 
-    Basket findByUser(User user);
-
     void deleteById(Long id);
 
     @Query("select b from Basket b join fetch b.user join fetch b.item where b.user = ?1")

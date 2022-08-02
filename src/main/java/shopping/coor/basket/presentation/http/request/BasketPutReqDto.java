@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BasketPostReqDto {
+public class BasketPutReqDto {
     @NotNull
     private Long keyIndex;
 
@@ -41,7 +41,7 @@ public class BasketPostReqDto {
     @NotNull
     private String title;
 
-    public Basket toBasket(BasketPostReqDto dto, User user, Item item) {
+    public Basket toBasket(BasketPutReqDto dto, User user, Item item) {
         return new Basket(dto, user, item);
     }
 }

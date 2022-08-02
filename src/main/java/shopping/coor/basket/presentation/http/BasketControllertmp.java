@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import shopping.coor.auth.application.service.UserDetailsImpl;
 import shopping.coor.basket.application.service.BasketServices;
 import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
+import shopping.coor.basket.presentation.http.request.BasketPutReqDto;
 import shopping.coor.basket.presentation.http.response.BasketGetResDto;
 import shopping.coor.basket.presentation.http.validator.BasketPostReqDtoValidator;
 
@@ -40,8 +41,8 @@ public class BasketControllertmp {
     // 비회원 장바구니 추가 및 변경
     @PutMapping("/baskets")
     public ResponseEntity<List<BasketGetResDto>> putBaskets(@AuthenticationPrincipal UserDetailsImpl user,
-                                                            @RequestBody @Valid  List<BasketPostReqDto> basketPostReqDto) {
-        return ResponseEntity.ok().body(basketService.putBaskets(user.getId(),basketPostReqDto));
+                                                            @RequestBody @Valid  List<BasketPutReqDto> basketPutReqDto) {
+        return ResponseEntity.ok().body(basketService.putBaskets(user.getId(), basketPutReqDto));
     }
 
     // 아이템 상세페이지에서 수량체크

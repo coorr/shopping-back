@@ -9,6 +9,10 @@ public interface BasketCustomRepository {
 
     Basket findBasketAndItemByIdAndSizeAndUserById(Long itemId, String size, Long userId);
 
+    List<Long> findByUser(User user);
+
+
+
 
 
 

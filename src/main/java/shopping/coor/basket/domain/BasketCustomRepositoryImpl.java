@@ -35,5 +35,14 @@ public class BasketCustomRepositoryImpl implements BasketCustomRepository {
                 .fetchOne();
     }
 
+    @Override
+    public List<Long> findByUser(User user) {
+        return query.select(basket.id)
+                .from(basket)
+                .where(basket.user.id.eq(user.getId()))
+                .fetch();
+
+    }
+
 
 }

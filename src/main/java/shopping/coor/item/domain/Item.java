@@ -152,6 +152,7 @@ public class Item extends BaseEntityAggregateRoot<Item> {
             if (restStock < 0) {
                 throw new NotEnoughStockException(basketDto.getTitle());
             }
+            this.quantityS = restStock;
         }
         if (basketDto.getSize().equals("M")) {
             int restStock = this.quantityM - basketDto.getItemCount();
@@ -169,7 +170,6 @@ public class Item extends BaseEntityAggregateRoot<Item> {
         }
     }
 
-    // 테스트 해보기
     public void stockCheck(BasketPostReqDto basketDto, Basket basket) {
         switch (basket.getSize()) {
             case "S":
@@ -189,16 +189,13 @@ public class Item extends BaseEntityAggregateRoot<Item> {
         }
     }
 
-    private int getRestStock(int quantity, BasketPostReqDto basketDto, Basket basket) {
-        int restStock = quantity - basketDto.getItemCount();
-        if (basket.getItem().getId().equals(this.id)) {
-            restStock = restStock - basket.getItemCount();
-            if (restStock + basket.getItemCount() < 0) {
-                throw new NotEnoughStockException(basketDto.getTitle());
-            }
-        } else if(restStock < 0) {
+    private int getRestStock(int quantityCount, BasketPostReqDto basketDto, Basket basket) {
+        int restStock = quantityCount - basketDto.getItemCount() + basket.getItemCount();
+
+        if (restStock < 0) {
             throw new NotEnoughStockException(basketDto.getTitle());
         }
+
         return restStock;
     }
 }

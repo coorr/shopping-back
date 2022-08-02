@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import shopping.coor.auth.domain.User.User;
 import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
+import shopping.coor.basket.presentation.http.request.BasketPutReqDto;
 import shopping.coor.item.domain.Item;
 
 import javax.persistence.*;
@@ -38,10 +39,28 @@ public class Basket {
 
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate createDate;
-
     @PrePersist
     public void createDate(){
         this.createDate = LocalDate.now();
+    }
+
+
+    public Basket(BasketPutReqDto dto, User user, Item item) {
+        this.id = Long.parseLong(dto.getKeyIndex() + "" + user.getId());
+        this.item = item;
+        this.user = user;
+        this.itemCount = dto.getItemCount();
+        this.itemTotal = dto.getItemTotal();
+        this.size = dto.getSize();
+    }
+
+    public Basket(BasketPostReqDto dto, User user, Item item) {
+        this.id = dto.getKeyIndex();
+        this.user = user;
+        this.item = item;
+        this.itemCount = dto.getItemCount();
+        this.itemTotal = dto.getItemTotal();
+        this.size = dto.getSize();
     }
 
     public Basket(User users, Item item, int itemTotal, int itemCount) {
@@ -62,11 +81,8 @@ public class Basket {
         return basket;
     }
 
-    public Basket updateBasket(BasketPostReqDto dto) {
-        this.itemTotal = this.itemTotal + dto.getItemTotal();
-        this.itemCount = this.itemCount + dto.getItemCount();
-        return this;
+    public void updateBasket(int itemTotal, int itemCount) {
+        this.itemTotal = this.itemTotal + itemTotal;
+        this.itemCount = this.itemCount + itemCount;
     }
-
-
 }

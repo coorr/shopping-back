@@ -4,6 +4,7 @@ import lombok.*;
 import shopping.coor.basket.domain.Basket;
 import shopping.coor.item.domain.Image;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 
@@ -14,22 +15,15 @@ import java.util.List;
 @Builder
 public class BasketGetResDto {
     private Long keyIndex;
-
     private Long itemId;
-
     private int itemTotal;
-
     private int itemCount;
-
     private String size;
-
     private int discount;
+    private int price;
+    private String title;
 
     private List<Image> image;
-
-    private int price;
-
-    private String title;
 
     public BasketGetResDto(Basket basket) {
         this.keyIndex = basket.getId();

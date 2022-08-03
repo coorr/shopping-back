@@ -27,7 +27,6 @@ public class BasketServices {
     private final UserService userService;
     private final ItemService itemService;
 
-
     public List<BasketGetResDto> getBaskets(Long userId) {
         User user = userService.getUserById(userId);
         List<Basket> basketList = basketRepository.findBasketAndItemAndUserById(user);
@@ -57,7 +56,7 @@ public class BasketServices {
         }
         basketRepository.saveAll(basketList);
 
-        return null;
+        return userId;
     }
 
     public void checkBasket(List<BasketPostReqDto> basketPostReqDto) {
@@ -87,6 +86,12 @@ public class BasketServices {
         return basketDtoResponseChange(result);
     }
 
+    @Transactional
+    public List<BasketGetResDto> removeBasket(Long basketId, Long userId) {
+
+        return null;
+    }
+
     private List<BasketGetResDto> basketDtoResponseChange(List<Basket> basketList) {
         return basketList.stream().map(b -> new BasketGetResDto(b)).collect(Collectors.toList());
     }
@@ -94,4 +99,6 @@ public class BasketServices {
     private Basket getBasketById(Long basketId) {
         return basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException());
     }
+
+
 }

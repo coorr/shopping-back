@@ -53,6 +53,12 @@ public class BasketControllertmp {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/basket/{basketId}")
+    public ResponseEntity<List<BasketGetResDto>> removeBasket(@PathVariable Long basketId,
+                                                              @AuthenticationPrincipal UserDetailsImpl user) {
+        return ResponseEntity.ok().body(basketService.removeBasket(basketId, user.getId()));
+    }
+
 
 
 }

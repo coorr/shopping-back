@@ -210,8 +210,6 @@ public class BasketServiceImpl implements BasketService {
         return ResponseEntity.ok(basketResponseDtos(basketList));
     }
 
-
-
     protected List<BasketGetResDto> basketResponseDtos(List<Basket> basketList) {
         return basketList.stream().map(b -> new BasketGetResDto(b)).collect(Collectors.toList());
     }

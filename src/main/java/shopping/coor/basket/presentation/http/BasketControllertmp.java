@@ -13,6 +13,7 @@ import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
 import shopping.coor.basket.presentation.http.request.BasketPutReqDto;
 import shopping.coor.basket.presentation.http.response.BasketGetResDto;
 import shopping.coor.basket.presentation.http.validator.BasketPostReqDtoValidator;
+import shopping.coor.kernel.presentation.response.SimpleBooleanResponse;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -53,11 +54,14 @@ public class BasketControllertmp {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/basket/{basketId}")
-    public ResponseEntity<List<BasketGetResDto>> removeBasket(@PathVariable Long basketId,
+    @DeleteMapping("/basket/{basketId}")
+    public ResponseEntity<SimpleBooleanResponse> removeBasket(@PathVariable Long basketId,
                                                               @AuthenticationPrincipal UserDetailsImpl user) {
         return ResponseEntity.ok().body(basketService.removeBasket(basketId, user.getId()));
     }
+
+//    @PatchMapping("/basket/{basketId}")
+//    public ResponseEntity<SimpleBooleanResponse> down
 
 
 

@@ -1,14 +1,14 @@
 package shopping.coor.basket.domain;
 
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.hibernate.annotations.Where;
 import shopping.coor.auth.domain.User.User;
 import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
 import shopping.coor.basket.presentation.http.request.BasketPutReqDto;
 import shopping.coor.item.domain.Item;
+import shopping.coor.kernel.domain.BaseEntityAggregateRoot;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -18,7 +18,8 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Basket {
+@Where(clause = "deleted = false")
+public class Basket extends BaseEntityAggregateRoot<Basket> {
     @Id
     @Column(name = "basket_id")
     private Long id;
@@ -37,12 +38,6 @@ public class Basket {
 
     private String size;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate createDate;
-    @PrePersist
-    public void createDate(){
-        this.createDate = LocalDate.now();
-    }
 
 
     public Basket(BasketPutReqDto dto, User user, Item item) {
@@ -55,7 +50,7 @@ public class Basket {
     }
 
     public Basket(BasketPostReqDto dto, User user, Item item) {
-        this.id = dto.getKeyIndex();
+        this.id = Long.parseLong(dto.getKeyIndex() + "" + user.getId());
         this.user = user;
         this.item = item;
         this.itemCount = dto.getItemCount();
@@ -84,5 +79,13 @@ public class Basket {
     public void updateBasket(int itemTotal, int itemCount) {
         this.itemTotal = this.itemTotal + itemTotal;
         this.itemCount = this.itemCount + itemCount;
+    }
+
+    public void delete() {
+        this.deleted = true;
+    }
+
+    public void updateSize() {
+        this.item.updateQuantity(this.size, this.itemCount);
     }
 }

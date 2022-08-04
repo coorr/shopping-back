@@ -30,7 +30,7 @@ public class BaseEntityAggregateRoot<T extends BaseEntityAggregateRoot<T>> exten
     protected LocalDateTime deletedAt;
 
     @Builder.Default
-    private boolean deleted = false;
+    public boolean deleted = false;
 
 
 }

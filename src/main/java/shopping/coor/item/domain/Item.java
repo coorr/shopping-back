@@ -198,6 +198,22 @@ public class Item extends BaseEntityAggregateRoot<Item> {
 
         return restStock;
     }
+
+    public void updateQuantity(String basketSize, int itemCount) {
+        switch (basketSize) {
+            case "S":
+                this.quantityS = quantityS + itemCount;
+                break;
+            case "M":
+                this.quantityM = quantityM + itemCount;
+                break;
+            case "L":
+                this.quantityL = quantityL + itemCount;
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 

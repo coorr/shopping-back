@@ -13,6 +13,7 @@ import shopping.coor.basket.presentation.http.request.BasketPutReqDto;
 import shopping.coor.basket.presentation.http.response.BasketGetResDto;
 import shopping.coor.item.application.service.ItemService;
 import shopping.coor.item.domain.Item;
+import shopping.coor.kernel.presentation.response.SimpleBooleanResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,9 +88,11 @@ public class BasketServices {
     }
 
     @Transactional
-    public List<BasketGetResDto> removeBasket(Long basketId, Long userId) {
-
-        return null;
+    public SimpleBooleanResponse removeBasket(Long basketId, Long userId) {
+        Basket basket = getBasketById(basketId);
+        basket.updateSize();
+        basketRepository.deleteById(basketId);
+        return new SimpleBooleanResponse(true);
     }
 
     private List<BasketGetResDto> basketDtoResponseChange(List<Basket> basketList) {

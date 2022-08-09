@@ -11,15 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import shopping.coor.item.application.exception.ItemNotFoundException;
-import shopping.coor.item.domain.Item;
+import shopping.coor.item.domain.image.Image;
 import shopping.coor.item.domain.ItemRepository;
 import shopping.coor.item.presentation.http.request.ImageUpdateReqDto;
 import shopping.coor.item.presentation.http.request.ItemCreateReqDto;
 import shopping.coor.item.presentation.http.request.ItemUpdateReqDto;
 import shopping.coor.item.presentation.http.response.ItemGetResDto;
 import shopping.coor.item.presentation.http.response.ItemsGetResDto;
-import shopping.coor.item.domain.Image;
-import shopping.coor.repository.image.ImageRepository;
+import shopping.coor.item.domain.Item;
+import shopping.coor.item.domain.image.ImageRepository;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -2,9 +2,8 @@ package shopping.coor.basket.presentation.http.response;
 
 import lombok.*;
 import shopping.coor.basket.domain.Basket;
-import shopping.coor.item.domain.Image;
+import shopping.coor.item.domain.image.Image;
 
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 

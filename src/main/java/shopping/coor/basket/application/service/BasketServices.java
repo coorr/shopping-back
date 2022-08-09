@@ -8,12 +8,14 @@ import shopping.coor.auth.domain.User.User;
 import shopping.coor.basket.application.exception.BasketNotFoundException;
 import shopping.coor.basket.domain.Basket;
 import shopping.coor.basket.domain.BasketRepository;
+import shopping.coor.basket.domain.enums.BasketOrder;
+import shopping.coor.basket.presentation.http.request.BasketItemPostGetDto;
 import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
 import shopping.coor.basket.presentation.http.request.BasketPutReqDto;
 import shopping.coor.basket.presentation.http.response.BasketGetResDto;
+import shopping.coor.common.presentation.response.SimpleBooleanResponse;
 import shopping.coor.item.application.service.ItemService;
 import shopping.coor.item.domain.Item;
-import shopping.coor.kernel.presentation.response.SimpleBooleanResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,13 +48,10 @@ public class BasketServices {
 
             if (basketIds.contains(dto.getKeyIndex())) {
                 Basket basketDuplicate = getBasketById(dto.getKeyIndex());
-                item.stockCheck(dto);
-
                 basketDuplicate.updateBasket(dto.getItemTotal(), dto.getItemCount());
                 continue;
             }
 
-            item.stockCheck(dto);
             basketList.add(dto.toBasket(dto, user, item));
         }
         basketRepository.saveAll(basketList);
@@ -61,8 +60,16 @@ public class BasketServices {
     }
 
     public void checkBasket(List<BasketPostReqDto> basketPostReqDto) {
-        Item item = itemService.getItemById(basketPostReqDto.get(0).getItemId());
-        item.stockCheck(basketPostReqDto.get(0));
+        for (BasketPostReqDto dto : basketPostReqDto) {
+            Item item = itemService.getItemById(dto.getItemId());
+            item.stockCheck(dto.getItemCount(), dto.getSize());
+        }
+    }
+
+    public SimpleBooleanResponse checkItem(Long itemId, BasketItemPostGetDto dto) {
+        Item item = itemService.getItemById(itemId);
+        item.stockCheck(dto.getItemCount()+1 , dto.getSize());
+        return new SimpleBooleanResponse(true);
     }
 
     @Transactional
@@ -71,10 +78,10 @@ public class BasketServices {
         User user = userService.getUserById(userId);
 
         for (BasketPutReqDto dto : basketPutReqDto) {
-            Basket basket = basketRepository.findBasketAndItemByIdAndSizeAndUserById(dto.getItemId(), dto.getSize(), userId);
+            Basket isBasket = basketRepository.findBasketAndItemByIdAndSizeAndUserById(dto.getItemId(), dto.getSize(), userId);
             // 기존 장바구니에 있으면 수량 변경
-            if (basket != null) {
-                basket.updateBasket(dto.getItemTotal(), dto.getItemCount());
+            if (isBasket != null) {
+                isBasket.update(dto.getItemTotal(), dto.getItemCount());
                 continue;
             }
 
@@ -88,9 +95,7 @@ public class BasketServices {
     }
 
     @Transactional
-    public SimpleBooleanResponse removeBasket(Long basketId, Long userId) {
-        Basket basket = getBasketById(basketId);
-        basket.updateSize();
+    public SimpleBooleanResponse deleteBasket(Long basketId) {
         basketRepository.deleteById(basketId);
         return new SimpleBooleanResponse(true);
     }
@@ -104,4 +109,26 @@ public class BasketServices {
     }
 
 
+    @Transactional
+    public List<BasketGetResDto> updateCount(Long basketId, Long userId, BasketOrder order) {
+        Basket basket = getBasketById(basketId);
+        basket.updateCount(basket.getItem().getDiscountPrice(), order);
+
+        basketRepository.save(basket);
+        User user = userService.getUserById(userId);
+        List<Basket> result = basketRepository.findAllByUser(user);
+        return basketResponseDto(result);
+    }
+
+    protected List<BasketGetResDto> basketResponseDto(List<Basket> basketList) {
+        return basketList.stream().map(b -> new BasketGetResDto(b)).collect(Collectors.toList());
+    }
+
+
+    @Transactional
+    public SimpleBooleanResponse deleteAllBasket(Long userId) {
+        User user = userService.getUserById(userId);
+        basketRepository.deleteAllByUser(user);
+        return new SimpleBooleanResponse(true);
+    }
 }

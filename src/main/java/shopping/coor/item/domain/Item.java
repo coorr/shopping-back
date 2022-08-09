@@ -5,11 +5,10 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
-import shopping.coor.basket.domain.Basket;
-import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
+import shopping.coor.common.domain.BaseEntityAggregateRoot;
 import shopping.coor.item.application.exception.NotEnoughStockException;
+import shopping.coor.item.domain.image.Image;
 import shopping.coor.item.presentation.http.request.ItemUpdateReqDto;
-import shopping.coor.kernel.domain.BaseEntityAggregateRoot;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -110,109 +109,58 @@ public class Item extends BaseEntityAggregateRoot<Item> {
         return this;
     }
 
-    public void addStock(int quantity, String orderSize) {
-        if (orderSize.equals("S")) {
+    public void addStock(int quantity, String size) {
+        if (size.equals("S")) {
             this.quantityS += quantity;
         }
-        if (orderSize.equals("M")) {
+        if (size.equals("M")) {
             this.quantityM += quantity;
         }
-        if (orderSize.equals("L")) {
+        if (size.equals("L")) {
             this.quantityL += quantity;
         }
     }
 
     public void removeStock(int quantity, String size)  {
         if (size.equals("S")) {
-            int restStock = this.quantityS - quantity;
-            if (restStock < 0) {
-                throw new NotEnoughStockException();
-            }
+            int restStock = getRestStock(this.quantityS, quantity, this.title);
             this.quantityS = restStock;
         }
         if (size.equals("M")) {
-            int restStock = this.quantityM - quantity;
-            if (restStock < 0) {
-                throw new NotEnoughStockException();
-            }
+            int restStock = getRestStock(this.quantityM, quantity, this.title);
             this.quantityM = restStock;
         }
         if (size.equals("L")) {
-            int restStock = this.quantityL - quantity;
-            if (restStock < 0) {
-                throw new NotEnoughStockException();
-            }
+            int restStock = getRestStock(this.quantityL, quantity, this.title);
             this.quantityL = restStock;
         }
     }
 
-    public void stockCheck(BasketPostReqDto basketDto) {
-        if (basketDto.getSize().equals("S")) {
-            int restStock = this.quantityS - basketDto.getItemCount();
-            if (restStock < 0) {
-                throw new NotEnoughStockException(basketDto.getTitle());
-            }
-            this.quantityS = restStock;
-        }
-        if (basketDto.getSize().equals("M")) {
-            int restStock = this.quantityM - basketDto.getItemCount();
-            if (restStock < 0) {
-                throw new NotEnoughStockException(basketDto.getTitle());
-            }
-            this.quantityM = restStock;
-        }
-        if (basketDto.getSize().equals("L")) {
-            int restStock = this.quantityL - basketDto.getItemCount();
-            if (restStock < 0) {
-                throw new NotEnoughStockException(basketDto.getTitle());
-            }
-            this.quantityL = restStock;
-        }
-    }
-
-    public void stockCheck(BasketPostReqDto basketDto, Basket basket) {
-        switch (basket.getSize()) {
+    // 아이템 수량 확인만 하는 코드
+    public void stockCheck(int quantity, String size) {
+        switch (size) {
             case "S":
-                int restStockS = getRestStock(this.quantityS, basketDto, basket);
-                this.quantityS = restStockS;
+                getRestStock(this.quantityS, quantity, this.title);
                 break;
             case "M":
-                int restStockM = getRestStock(this.quantityM, basketDto, basket);
-                this.quantityM = restStockM;
+                getRestStock(this.quantityM, quantity, this.title);
                 break;
             case "L":
-                int restStockL = getRestStock(this.quantityL, basketDto, basket);
-                this.quantityL = restStockL;
+                getRestStock(this.quantityL, quantity, this.title);
                 break;
             default:
                 break;
         }
+
+
     }
 
-    private int getRestStock(int quantityCount, BasketPostReqDto basketDto, Basket basket) {
-        int restStock = quantityCount - basketDto.getItemCount() + basket.getItemCount();
-
+    private int getRestStock(int quantityCurrent, int quantityNext, String title) {
+        int restStock = quantityCurrent - quantityNext;
         if (restStock < 0) {
-            throw new NotEnoughStockException(basketDto.getTitle());
+            throw new NotEnoughStockException(title);
         }
-
         return restStock;
-    }
-
-    public void updateQuantity(String basketSize, int itemCount) {
-        switch (basketSize) {
-            case "S":
-                this.quantityS = quantityS + itemCount;
-                break;
-            case "M":
-                this.quantityM = quantityM + itemCount;
-                break;
-            case "L":
-                this.quantityL = quantityL + itemCount;
-                break;
-            default:
-                break;
-        }
     }
 }
 

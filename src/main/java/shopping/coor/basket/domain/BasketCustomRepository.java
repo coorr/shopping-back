@@ -11,9 +11,4 @@ public interface BasketCustomRepository {
 
     List<Long> findByUser(User user);
 
-
-
-
-
-
 }

@@ -3,8 +3,8 @@ package shopping.coor.auth.domain.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import shopping.coor.auth.domain.Role.Role;
-import shopping.coor.kernel.domain.BaseEntityAggregateRoot;
-import shopping.coor.model.Order;
+import shopping.coor.common.domain.BaseEntityAggregateRoot;
+import shopping.coor.order.domain.Order;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;

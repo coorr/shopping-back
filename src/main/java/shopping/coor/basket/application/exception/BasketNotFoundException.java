@@ -1,6 +1,6 @@
 package shopping.coor.basket.application.exception;
 
-import shopping.coor.kernel.application.exception.ApplicationLogicException;
+import shopping.coor.common.application.exception.ApplicationLogicException;
 
 public class BasketNotFoundException extends ApplicationLogicException {
     public BasketNotFoundException() {

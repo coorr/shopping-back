@@ -13,15 +13,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import shopping.coor.auth.presentation.http.request.MessageResponse;
+import shopping.coor.basket.presentation.http.BasketController;
 import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
 import shopping.coor.basket.presentation.http.response.BasketGetResDto;
-import shopping.coor.auth.presentation.http.request.MessageResponse;
 import shopping.coor.service.BasketService;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -53,7 +54,7 @@ class BasketControllerTest {
         when(basketService.basketAddUser(any(), any())).thenReturn(responseEntity);
         // when
         ResultActions result = mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/basket/basketAddUser/{userId}", userId)
+                MockMvcRequestBuilders.post("/api/baskets")
                         .contentType(APPLICATION_JSON)
                         .content(new Gson().toJson(basketRequestDto())));
 
@@ -69,7 +70,7 @@ class BasketControllerTest {
         when(basketService.getBasketByUserId(any())).thenReturn(basketResponseDto());
         // when
         ResultActions result = mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/basket/getBasketByUserId/{userId}", userId)
+                MockMvcRequestBuilders.get("/api/baskets", userId)
                         .contentType(APPLICATION_JSON)
                         .content(new Gson().toJson(basketResponseDto())));
 
@@ -82,13 +83,12 @@ class BasketControllerTest {
     @Test
     public void 장바구니_삭제() throws Exception {
         // given
-        Long userId = 1L;
         Long basketId = 1L;
         ResponseEntity responseEntity=new ResponseEntity(HttpStatus.OK);
         when(basketService.removeBasketById(any(),any())).thenReturn(responseEntity);
         // when
         ResultActions result = mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/basket/removeBasketById/{basketId}/{userId}", basketId, userId));
+                MockMvcRequestBuilders.post("/api/basket/{basketId}", basketId));
 
         // then
         result.andExpect(status().isOk()).andReturn();

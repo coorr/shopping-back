@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import shopping.coor.basket.domain.Basket;
 import shopping.coor.item.domain.Item;
-import shopping.coor.model.Order;
+import shopping.coor.order.domain.Order;
 import shopping.coor.auth.domain.User.User;
 import shopping.coor.basket.domain.BasketRepository;
 import shopping.coor.item.domain.ItemRepository;

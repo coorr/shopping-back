@@ -5,10 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import shopping.coor.auth.domain.User.User;
 import shopping.coor.item.domain.Item;
-import shopping.coor.model.*;
 import shopping.coor.item.domain.ItemRepository;
-import shopping.coor.repository.order.OrderRepository;
-import shopping.coor.repository.orderItem.OrderItemRepository;
+import shopping.coor.order.domain.*;
+import shopping.coor.order.domain.OrderRepository;
+import shopping.coor.order.domain.delivery.Delivery;
+import shopping.coor.order.domain.delivery.DeliveryStatus;
+import shopping.coor.order.domain.orderItem.OrderItem;
+import shopping.coor.order.domain.orderItem.OrderItemRepository;
 import shopping.coor.auth.domain.User.UserRepository;
 
 import java.time.LocalDateTime;

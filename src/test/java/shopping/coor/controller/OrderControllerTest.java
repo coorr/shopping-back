@@ -15,11 +15,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import shopping.coor.auth.presentation.http.request.MessageResponse;
 import shopping.coor.basket.presentation.http.response.BasketGetResDto;
-import shopping.coor.basket.presentation.http.response.BasketResponseDto;
-import shopping.coor.repository.delivery.dto.DeliveryRequestDto;
-import shopping.coor.repository.order.dto.OrderItemResponseDto;
-import shopping.coor.repository.order.dto.OrderResponseDto;
-import shopping.coor.service.OrderService;
+import shopping.coor.order.presentation.http.request.DeliveryRequestDto;
+import shopping.coor.order.presentation.http.response.OrderItemResponseDto;
+import shopping.coor.order.presentation.http.response.OrderResponseDto;
+import shopping.coor.order.application.service.OrderService;
+import shopping.coor.order.presentation.OrderController;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

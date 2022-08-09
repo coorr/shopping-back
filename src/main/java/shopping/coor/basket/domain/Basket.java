@@ -3,10 +3,12 @@ package shopping.coor.basket.domain;
 import lombok.*;
 import org.hibernate.annotations.Where;
 import shopping.coor.auth.domain.User.User;
+import shopping.coor.basket.domain.enums.BasketOrder;
 import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
 import shopping.coor.basket.presentation.http.request.BasketPutReqDto;
+import shopping.coor.common.domain.BaseEntityAggregateRoot;
+import shopping.coor.item.application.exception.NotEnoughBasketException;
 import shopping.coor.item.domain.Item;
-import shopping.coor.kernel.domain.BaseEntityAggregateRoot;
 
 import javax.persistence.*;
 
@@ -50,7 +52,7 @@ public class Basket extends BaseEntityAggregateRoot<Basket> {
     }
 
     public Basket(BasketPostReqDto dto, User user, Item item) {
-        this.id = Long.parseLong(dto.getKeyIndex() + "" + user.getId());
+        this.id = dto.getKeyIndex();
         this.user = user;
         this.item = item;
         this.itemCount = dto.getItemCount();
@@ -59,7 +61,7 @@ public class Basket extends BaseEntityAggregateRoot<Basket> {
     }
 
     public Basket(User users, Item item, int itemTotal, int itemCount) {
-        this.user=users;
+        this.user = users;
         this.item = item;
         this.itemTotal = itemTotal;
         this.itemCount = itemCount;
@@ -76,16 +78,37 @@ public class Basket extends BaseEntityAggregateRoot<Basket> {
         return basket;
     }
 
+    // 회원이 장바구니 추가할 경우
     public void updateBasket(int itemTotal, int itemCount) {
+        this.itemTotal = this.itemTotal + itemTotal;
+        this.itemCount = this.itemCount + itemCount;
+        this.item.stockCheck(this.itemCount, this.size);
+    }
+
+    // 비회원이 장바구니 추가할 경우
+    public void update(int itemTotal, int itemCount) {
         this.itemTotal = this.itemTotal + itemTotal;
         this.itemCount = this.itemCount + itemCount;
     }
 
-    public void delete() {
-        this.deleted = true;
+    // 수량 조절
+    public void updateCount(int itemTotal, BasketOrder order) {
+        this.itemCount = this.itemCount + order.getNumber();
+
+        if (order.name() == "UP") {
+            this.itemTotal = this.itemTotal + itemTotal;
+            this.item.stockCheck(this.itemCount, this.size);
+        } else if (order.name() == "DOWN") {
+            this.itemTotal = this.itemTotal - itemTotal;
+        }
+
+        // -1 방지하기 위한 체크
+        stockCheck(this.itemCount);
     }
 
-    public void updateSize() {
-        this.item.updateQuantity(this.size, this.itemCount);
+    private void stockCheck(int basketCount) {
+        if (basketCount <= 0) {
+            throw new NotEnoughBasketException();
+        }
     }
 }

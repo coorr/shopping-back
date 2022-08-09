@@ -14,7 +14,7 @@ import shopping.coor.auth.application.command.CreateUserCommand;
 import shopping.coor.auth.application.command.model.CreateUserModel;
 import shopping.coor.auth.presentation.http.request.CreateUserRequest;
 import shopping.coor.auth.presentation.http.validator.CreateUserRequestValidator;
-import shopping.coor.kernel.application.command.CommandExecutor;
+import shopping.coor.common.application.command.CommandExecutor;
 
 import javax.validation.Valid;
 

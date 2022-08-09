@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shopping.coor.auth.presentation.http.request.CreateUserRequest;
-import shopping.coor.kernel.application.command.CommandModel;
+import shopping.coor.common.application.command.CommandModel;
 
 import java.util.Set;
 

@@ -17,7 +17,7 @@ import shopping.coor.basket.presentation.http.request.BasketPostReqDto;
 import shopping.coor.basket.presentation.http.response.BasketGetResDto;
 import shopping.coor.item.domain.Item;
 import shopping.coor.item.domain.ItemRepository;
-import shopping.coor.model.Order;
+import shopping.coor.order.domain.Order;
 import shopping.coor.serviceImpl.BasketServiceImpl;
 
 import java.util.ArrayList;

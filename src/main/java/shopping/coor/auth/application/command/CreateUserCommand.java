@@ -11,7 +11,7 @@ import shopping.coor.auth.domain.Role.Role;
 import shopping.coor.auth.domain.Role.RoleRepository;
 import shopping.coor.auth.domain.User.User;
 import shopping.coor.auth.domain.User.UserRepository;
-import shopping.coor.kernel.application.command.Command;
+import shopping.coor.common.application.command.Command;
 
 import java.util.HashSet;
 import java.util.Set;

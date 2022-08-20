@@ -11,7 +11,7 @@ import shopping.coor.order.domain.*;
 import shopping.coor.order.domain.delivery.Delivery;
 import shopping.coor.order.domain.delivery.DeliveryStatus;
 import shopping.coor.order.domain.orderItem.OrderItem;
-import shopping.coor.order.presentation.http.request.DeliveryRequestDto;
+import shopping.coor.order.presentation.http.request.DeliveryPostReqDto;
 import shopping.coor.item.domain.ItemRepository;
 import shopping.coor.order.presentation.http.response.OrderResponseDto;
 import shopping.coor.auth.presentation.http.request.MessageResponse;
@@ -37,12 +37,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public ResponseEntity<MessageResponse> saveOrderDeliveryItem(Long userId, DeliveryRequestDto deliveryRequestDto) {
+    public ResponseEntity<MessageResponse> saveOrderDeliveryItem(Long userId, DeliveryPostReqDto deliveryPostReqDto) {
         User userById = userRepository.getById(userId);
         List<Basket> basketList = basketRepository.findAllByUserId(userById);
 
-        Delivery delivery = Delivery.createDelivery(deliveryRequestDto.getName(), deliveryRequestDto.getEmail(),
-                deliveryRequestDto.getRoadNumber(), deliveryRequestDto.getAddress(), deliveryRequestDto.getDetailText(), deliveryRequestDto.getMessage());
+        Delivery delivery = Delivery.createDelivery(deliveryPostReqDto.getName(), deliveryPostReqDto.getEmail(),
+                deliveryPostReqDto.getRoadNumber(), deliveryPostReqDto.getAddress(), deliveryPostReqDto.getDetailText(), deliveryPostReqDto.getMessage());
 
         List<OrderItem> orderItem = new ArrayList<>();
         for (Basket basket : basketList) {

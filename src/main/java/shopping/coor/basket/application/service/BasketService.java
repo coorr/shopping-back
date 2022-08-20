@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class BasketServices {
+public class BasketService {
 
     private final BasketRepository basketRepository;
     private final UserService userService;
@@ -99,16 +99,6 @@ public class BasketServices {
         basketRepository.deleteById(basketId);
         return new SimpleBooleanResponse(true);
     }
-
-    private List<BasketGetResDto> basketDtoResponseChange(List<Basket> basketList) {
-        return basketList.stream().map(b -> new BasketGetResDto(b)).collect(Collectors.toList());
-    }
-
-    private Basket getBasketById(Long basketId) {
-        return basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException());
-    }
-
-
     @Transactional
     public List<BasketGetResDto> updateCount(Long basketId, Long userId, BasketOrder order) {
         Basket basket = getBasketById(basketId);
@@ -117,18 +107,24 @@ public class BasketServices {
         basketRepository.save(basket);
         User user = userService.getUserById(userId);
         List<Basket> result = basketRepository.findAllByUser(user);
-        return basketResponseDto(result);
+        return basketDtoResponseChange(result);
     }
-
-    protected List<BasketGetResDto> basketResponseDto(List<Basket> basketList) {
-        return basketList.stream().map(b -> new BasketGetResDto(b)).collect(Collectors.toList());
-    }
-
-
     @Transactional
     public SimpleBooleanResponse deleteAllBasket(Long userId) {
         User user = userService.getUserById(userId);
         basketRepository.deleteAllByUser(user);
         return new SimpleBooleanResponse(true);
+    }
+
+    private List<BasketGetResDto> basketDtoResponseChange(List<Basket> basketList) {
+        return basketList.stream().map(b -> new BasketGetResDto(b)).collect(Collectors.toList());
+    }
+
+    public Basket getBasketById(Long basketId) {
+        return basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException());
+    }
+
+    public List<Basket> findBasketByUserId(User user) {
+        return basketRepository.findAllByUser(user);
     }
 }

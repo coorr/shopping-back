@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import shopping.coor.auth.presentation.http.request.MessageResponse;
 import shopping.coor.basket.presentation.http.response.BasketGetResDto;
-import shopping.coor.order.presentation.http.request.DeliveryRequestDto;
+import shopping.coor.order.presentation.http.request.DeliveryPostReqDto;
 import shopping.coor.order.presentation.http.response.OrderItemResponseDto;
 import shopping.coor.order.presentation.http.response.OrderResponseDto;
 import shopping.coor.order.application.service.OrderService;
@@ -54,15 +54,15 @@ class OrderControllerTest {
     public void 주문_생성_요청() throws Exception {
         // given
         Long userId = 1L;
-        DeliveryRequestDto deliveryRequestDto = deliveryRequestDto();
+        DeliveryPostReqDto deliveryPostReqDto = deliveryRequestDto();
         ResponseEntity<MessageResponse> responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageResponse());
 
-        when(orderService.saveOrderDeliveryItem(any(), any(DeliveryRequestDto.class))).thenReturn(responseEntity);
+        when(orderService.saveOrderDeliveryItem(any(), any(DeliveryPostReqDto.class))).thenReturn(responseEntity);
         // when
         ResultActions result = mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/order/saveOrderDeliveryItem/{userId}", userId)
                         .contentType(APPLICATION_JSON)
-                        .content(new Gson().toJson(deliveryRequestDto))
+                        .content(new Gson().toJson(deliveryPostReqDto))
         );
         // then
         result.andExpect(status().isOk())
@@ -158,8 +158,8 @@ class OrderControllerTest {
     }
 
 
-    private DeliveryRequestDto deliveryRequestDto() {
-        return DeliveryRequestDto.builder()
+    private DeliveryPostReqDto deliveryRequestDto() {
+        return DeliveryPostReqDto.builder()
                 .name("김진성")
                 .email("wlsdiqkdrk@naver.com")
                 .roadNumber(66778)

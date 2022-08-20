@@ -9,7 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import shopping.coor.auth.application.service.UserDetailsImpl;
-import shopping.coor.basket.application.service.BasketServices;
+import shopping.coor.basket.application.service.BasketService;
 import shopping.coor.basket.domain.enums.BasketOrder;
 import shopping.coor.basket.presentation.http.request.BasketItemPostGetDto;
 import shopping.coor.basket.presentation.http.request.BasketPatchCountReqDto;
@@ -28,7 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BasketController {
 
-    private final BasketServices basketService;
+    private final BasketService basketService;
     private final BasketPatchCountReqDtoValidator basketPatchCountReqDtoValidator;
 
     @GetMapping("/baskets")

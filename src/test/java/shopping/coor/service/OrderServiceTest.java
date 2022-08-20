@@ -16,7 +16,7 @@ import shopping.coor.order.domain.*;
 import shopping.coor.order.domain.delivery.Delivery;
 import shopping.coor.order.domain.delivery.DeliveryStatus;
 import shopping.coor.order.domain.orderItem.OrderItem;
-import shopping.coor.order.presentation.http.request.DeliveryRequestDto;
+import shopping.coor.order.presentation.http.request.DeliveryPostReqDto;
 import shopping.coor.item.domain.ItemRepository;
 import shopping.coor.order.domain.OrderRepository;
 import shopping.coor.order.presentation.http.response.OrderItemResponseDto;
@@ -248,8 +248,8 @@ class OrderServiceTest {
                 .quantityL(3)
                 .build();
     }
-    private DeliveryRequestDto deliveryRequestDto() {
-        return DeliveryRequestDto.builder()
+    private DeliveryPostReqDto deliveryRequestDto() {
+        return DeliveryPostReqDto.builder()
                 .name("김진성")
                 .email("wlsdiqkdrk@naver.com")
                 .roadNumber(66778)

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shopping.coor.basket.presentation.http.response.BasketGetResDto;
-import shopping.coor.order.presentation.http.request.DeliveryPostReqDto;
+import shopping.coor.order.presentation.http.request.OrderDeliveryPostReqDto;
 import shopping.coor.order.presentation.http.response.OrderResponseDto;
 import shopping.coor.auth.presentation.http.request.MessageResponse;
 import shopping.coor.order.application.service.OrderService;
@@ -20,8 +20,8 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/saveOrderDeliveryItem/{userId}")
-    public ResponseEntity<MessageResponse> saveOrderDeliveryItem(@PathVariable Long userId, @RequestBody DeliveryPostReqDto deliveryPostReqDto) {
-        return orderService.saveOrderDeliveryItem(userId, deliveryPostReqDto);
+    public ResponseEntity<MessageResponse> saveOrderDeliveryItem(@PathVariable Long userId, @RequestBody OrderDeliveryPostReqDto orderDeliveryPostReqDto) {
+        return orderService.saveOrderDeliveryItem(userId, orderDeliveryPostReqDto);
     }
 
     @PostMapping("/quantityCheckOrder/{userId}")

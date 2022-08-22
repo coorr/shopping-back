@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import static shopping.coor.item.domain.QItem.item;
-import static shopping.coor.model.QImage.image;
+import static shopping.coor.item.domain.image.QImage.image;
 
 @Repository
 @RequiredArgsConstructor

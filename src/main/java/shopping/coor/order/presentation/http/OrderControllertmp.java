@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import shopping.coor.auth.application.service.UserDetailsImpl;
 import shopping.coor.common.presentation.response.SimpleBooleanResponse;
 import shopping.coor.order.application.service.OrderServiceTmp;
-import shopping.coor.order.presentation.http.request.DeliveryPostReqDto;
+import shopping.coor.order.presentation.http.request.OrderDeliveryCreateReqDto;
+import shopping.coor.order.presentation.http.request.OrderDeliveryPostReqDto;
 
 import javax.validation.Valid;
 
@@ -19,15 +20,15 @@ public class OrderControllertmp {
     private final OrderServiceTmp orderService;
 
     @PostMapping
-    public ResponseEntity<SimpleBooleanResponse> postOrder(@RequestBody @Valid DeliveryPostReqDto dto,
+    public ResponseEntity<SimpleBooleanResponse> postOrder(@RequestBody @Valid OrderDeliveryPostReqDto dto,
                                                            @AuthenticationPrincipal UserDetailsImpl user) {
-        return ResponseEntity.ok().body(orderService.postOrder(user.getId(), dto));
+        return ResponseEntity.ok().body(orderService.postOrder(user.getId(), new OrderDeliveryCreateReqDto(dto)));
     }
 
-//    @PostMapping("/quantityCheckOrder/{userId}")
-//    public ResponseEntity<MessageResponse> quantityCheckOrder(@PathVariable Long userId) {
-//        return orderService.quantityCheckOrder(userId);
-//    }
+    @PostMapping("/check/")
+    public ResponseEntity<String> checkOrder(@PathVariable Long userId) {
+        return ResponseEntity.ok().body(orderService.checkOrder(userId));
+    }
 //
 //    @PostMapping("/soldOutItemRemove/{userId}")
 //    public List<BasketGetResDto> soldOutItemRemove(@PathVariable Long userId) {

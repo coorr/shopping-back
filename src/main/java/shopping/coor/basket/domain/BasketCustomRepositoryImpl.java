@@ -9,7 +9,7 @@ import java.util.List;
 
 import static shopping.coor.auth.domain.User.QUser.user;
 import static shopping.coor.item.domain.QItem.item;
-import static shopping.coor.model.QBasket.basket;
+import static shopping.coor.basket.domain.QBasket.basket;
 
 @Repository
 @RequiredArgsConstructor

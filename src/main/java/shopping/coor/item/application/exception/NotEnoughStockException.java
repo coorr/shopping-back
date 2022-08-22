@@ -5,7 +5,7 @@ import shopping.coor.common.application.exception.ApplicationLogicException;
 public class NotEnoughStockException extends ApplicationLogicException {
 
     public NotEnoughStockException() {
-        super("재고가 없습니다.");
+        super("품절된 상품으로 주문할 수 없습니다.");
     }
 
     public NotEnoughStockException(String title) {

@@ -1,7 +1,6 @@
 package shopping.coor.order.presentation.http.request;
 
 import lombok.*;
-import shopping.coor.order.domain.delivery.Delivery;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -9,10 +8,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Getter @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class DeliveryPostReqDto {
+public class OrderDeliveryPostReqDto {
 
     @NotBlank(message = "이름을 입력해주세요.")
     private String name;
@@ -28,12 +27,4 @@ public class DeliveryPostReqDto {
     private String detailText;
     private String message;
 
-    public DeliveryPostReqDto(Delivery delivery) {
-        this.name = delivery.getDName();
-        this.email = delivery.getDEmail();
-        this.roadNumber = delivery.getRoadNumber();
-        this.address = delivery.getAddress();
-        this.detailText = delivery.getDetailText();
-        this.message = delivery.getMessage();
-    }
 }

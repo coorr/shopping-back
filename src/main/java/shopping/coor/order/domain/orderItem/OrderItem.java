@@ -2,6 +2,7 @@ package shopping.coor.order.domain.orderItem;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import shopping.coor.basket.domain.Basket;
 import shopping.coor.item.domain.Item;
 import shopping.coor.order.domain.Order;
 
@@ -35,14 +36,15 @@ public class OrderItem {
 
     private String orderSize;
 
-    public static OrderItem createOrderItem(Item item, int orderPrice, int count, String size) {
+    public static OrderItem createOrderItem(Basket basket) {
         OrderItem orderItem = new OrderItem();
-        orderItem.setItem(item);
-        orderItem.setOrderPrice(orderPrice);
-        orderItem.setOrderCount(count);
-        orderItem.setOrderSize(size);
+        orderItem.setItem(basket.getItem());
+        orderItem.setOrderPrice(basket.getItemTotal());
+        orderItem.setOrderCount(basket.getItemCount());
+        orderItem.setOrderSize(basket.getSize());
 
-        item.removeStock(count, size);
+        Item item = basket.getItem();
+        item.removeStock(basket.getItemCount(), basket.getSize());
         return orderItem;
     }
 

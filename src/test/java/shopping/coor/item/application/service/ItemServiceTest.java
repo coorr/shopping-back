@@ -20,7 +20,7 @@ import shopping.coor.item.presentation.http.response.ItemsGetResDto;
 import shopping.coor.order.domain.delivery.Delivery;
 import shopping.coor.order.domain.delivery.DeliveryStatus;
 import shopping.coor.order.domain.Order;
-import shopping.coor.order.presentation.http.request.DeliveryPostReqDto;
+import shopping.coor.order.presentation.http.request.OrderDeliveryPostReqDto;
 import shopping.coor.item.domain.image.ImageRepository;
 
 import java.util.ArrayList;
@@ -164,8 +164,8 @@ class ItemServiceTest {
         return basketList;
     }
 
-    private DeliveryPostReqDto deliveryRequestDto() {
-        return DeliveryPostReqDto.builder()
+    private OrderDeliveryPostReqDto deliveryRequestDto() {
+        return OrderDeliveryPostReqDto.builder()
                 .name("김진성")
                 .email("wlsdiqkdrk@naver.com")
                 .roadNumber(66778)

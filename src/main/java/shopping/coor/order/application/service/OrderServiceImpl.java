@@ -11,7 +11,7 @@ import shopping.coor.order.domain.*;
 import shopping.coor.order.domain.delivery.Delivery;
 import shopping.coor.order.domain.delivery.DeliveryStatus;
 import shopping.coor.order.domain.orderItem.OrderItem;
-import shopping.coor.order.presentation.http.request.DeliveryPostReqDto;
+import shopping.coor.order.presentation.http.request.OrderDeliveryPostReqDto;
 import shopping.coor.item.domain.ItemRepository;
 import shopping.coor.order.presentation.http.response.OrderResponseDto;
 import shopping.coor.auth.presentation.http.request.MessageResponse;
@@ -37,16 +37,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public ResponseEntity<MessageResponse> saveOrderDeliveryItem(Long userId, DeliveryPostReqDto deliveryPostReqDto) {
+    public ResponseEntity<MessageResponse> saveOrderDeliveryItem(Long userId, OrderDeliveryPostReqDto orderDeliveryPostReqDto) {
         User userById = userRepository.getById(userId);
         List<Basket> basketList = basketRepository.findAllByUserId(userById);
 
-        Delivery delivery = Delivery.createDelivery(deliveryPostReqDto.getName(), deliveryPostReqDto.getEmail(),
-                deliveryPostReqDto.getRoadNumber(), deliveryPostReqDto.getAddress(), deliveryPostReqDto.getDetailText(), deliveryPostReqDto.getMessage());
+        Delivery delivery = Delivery.createDelivery(orderDeliveryPostReqDto.getName(), orderDeliveryPostReqDto.getEmail(),
+                orderDeliveryPostReqDto.getRoadNumber(), orderDeliveryPostReqDto.getAddress(), orderDeliveryPostReqDto.getDetailText(), orderDeliveryPostReqDto.getMessage());
 
         List<OrderItem> orderItem = new ArrayList<>();
         for (Basket basket : basketList) {
-            orderItem.add(OrderItem.createOrderItem((basket.getItem()), basket.getItemTotal(), basket.getItemCount(), basket.getSize()));
+            orderItem.add(OrderItem.createOrderItem(basket));
         }
         Order order = Order.createOrder(userById, delivery, orderItem);
 
@@ -62,7 +62,9 @@ public class OrderServiceImpl implements OrderService {
         if (basketList.size() == countOverAry.size()) {
             return ResponseEntity.badRequest().body(new MessageResponse("품절된 상품으로 주문할 수 없습니다."));
         }
-        String result = countOverAry.stream().map(n -> String.valueOf(n)).collect(Collectors.joining());
+        String result = countOverAry.stream()
+                .map(n -> String.valueOf(n))
+                .collect(Collectors.joining());
 
         return result.length() != 0 ? ResponseEntity.accepted().body(new MessageResponse(result)) : null;
     }

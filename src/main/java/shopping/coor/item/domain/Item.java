@@ -151,8 +151,6 @@ public class Item extends BaseEntityAggregateRoot<Item> {
             default:
                 break;
         }
-
-
     }
 
     private int getRestStock(int quantityCurrent, int quantityNext, String title) {

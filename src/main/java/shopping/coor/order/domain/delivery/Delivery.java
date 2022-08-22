@@ -3,6 +3,7 @@ package shopping.coor.order.domain.delivery;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import shopping.coor.order.domain.Order;
+import shopping.coor.order.presentation.http.request.OrderDeliveryCreateReqDto;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -62,6 +63,15 @@ public class Delivery {
         delivery.setMessage(message);
         delivery.setStatus(DeliveryStatus.READY);
         return delivery;
+    }
+
+    public Delivery(OrderDeliveryCreateReqDto dto) {
+        this.dName = dto.getName();
+        this.dEmail = dto.getEmail();
+        this.roadNumber = dto.getRoadNumber();
+        this.address = dto.getAddress();
+        this.detailText = dto.getDetailText();
+        this.message = dto.getMessage();
     }
 
 }

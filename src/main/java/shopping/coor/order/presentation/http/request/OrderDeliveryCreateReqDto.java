@@ -8,6 +8,7 @@ import shopping.coor.order.domain.delivery.Delivery;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 public class OrderDeliveryCreateReqDto {
     private String name;
     private String email;

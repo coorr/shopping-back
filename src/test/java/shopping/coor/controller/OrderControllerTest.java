@@ -1,23 +1,20 @@
 package shopping.coor.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import shopping.coor.auth.application.service.UserDetailsImpl;
 import shopping.coor.basket.presentation.http.response.BasketGetResDto;
-import shopping.coor.common.WithAuthUser;
 import shopping.coor.common.presentation.response.SimpleBooleanResponse;
 import shopping.coor.order.application.service.OrderServiceTmp;
-import shopping.coor.order.presentation.OrderController;
+import shopping.coor.order.presentation.http.OrderControllertmp;
 import shopping.coor.order.presentation.http.request.OrderDeliveryPostReqDto;
 import shopping.coor.order.presentation.http.response.OrderItemResponseDto;
 import shopping.coor.order.presentation.http.response.OrderResponseDto;
@@ -27,115 +24,60 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 class OrderControllerTest {
 
-    @InjectMocks
-    private OrderController orderController;
+    @InjectMocks private OrderControllertmp orderController;
 
-    @Mock
-    private OrderServiceTmp orderService;
+    @Mock private OrderServiceTmp orderService;
 
     private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
 
+    OrderDeliveryPostReqDto orderDeliveryPostReqDto;
+    UserDetailsImpl user;
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
+
+        user = UserDetailsImpl.builder().id(1L).build();
+
+        orderDeliveryPostReqDto = OrderDeliveryPostReqDto.builder()
+                .name("김진성")
+                .email("wlsdiqkdrk@naver.com")
+                .roadNumber(66778)
+                .address("서울특별시 강서후 방화동 250-43")
+                .detailText("201호")
+                .message("22")
+                .build();
     }
 
 
     @Test
-    @WithAuthUser
-    public void 주문_생성_요청() throws Exception {
-        // given
-        var request = deliveryRequestDto();
-//        ResponseEntity<SimpleBooleanResponse> responseEntity = ResponseEntity.status(HttpStatus.OK).body(simpleBooleanResponse());
+    @DisplayName("주문을 생성한다.")
+    public void createOrder() throws Exception {
+        given(orderService.postOrder(any(), any())).willReturn(new SimpleBooleanResponse(true));
 
-//        when(orderService.postOrder(any(), any())).thenReturn(simpleBooleanResponse());
-        // when
-        ResultActions result = mockMvc.perform(
-                        post("/api/order")
-                        .contentType(APPLICATION_JSON)
-                                .content(new Gson().toJson(request))
-        );
-        System.out.println("result = " + result);
-        // then
-//        result.andExpect(status().isOk())
-//                .andExpect(jsonPath("message", messageResponse().getMessage()).exists()).andReturn();
+        Boolean result = orderController.postOrder(orderDeliveryPostReqDto, user).getBody().getResult();
+
+        assertThat(result).isTrue();
     }
 
-//    @Test
-//    public void 주문_상품_품절_체크_요청() throws Exception {
-//        // given
-//        Long userId = 1L;
-//        ResponseEntity<MessageResponse> responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageResponse());
-//
-//        when(orderService.quantityCheckOrder(any())).thenReturn(responseEntity);
-//        // when
-//        ResultActions result = mockMvc.perform(
-//                MockMvcRequestBuilders.post("/api/order/quantityCheckOrder/{userId}", userId)
-//        );
-//        // then
-//        result.andExpect(status().isOk())
-//                .andExpect(jsonPath("message", messageResponse().getMessage()).exists()).andReturn();
-//    }
-//
-//    @Test
-//    public void 상품_품절_삭제_요청() throws Exception {
-//        // given
-//        Long userId = 1L;
-//        List<BasketGetResDto> basketGetResDto = basketResponseDto();
-//        when(orderService.soldOutItemRemove(any())).thenReturn(basketResponseDto());
-//        // when
-//        ResultActions result = mockMvc.perform(
-//                MockMvcRequestBuilders.post("/api/order/soldOutItemRemove/{userId}", userId)
-//        );
-//        // then
-//        result.andExpect(status().isOk()).andReturn();
-//        assertEquals(basketGetResDto.size(), 4);
-//    }
-//
-//    @Test
-//    public void 상품_내역_조회_요청() throws Exception {
-//        // given
-//        Long userId = 1L;
-//        List<OrderResponseDto> orderResponseDto = orderResponseDto();
-//        when(orderService.getOrderUserById(any(), any(), any(), any())).thenReturn(orderResponseDto);
-//        // when
-//        ResultActions result = mockMvc.perform(
-//                MockMvcRequestBuilders.get("/api/order/getOrderUserById/{userId}", userId )
-//                        .contentType(APPLICATION_JSON)
-//                .param("startDate","20220504000000")
-//                .param("endDate","20220204000000")
-//        );
-//        // then
-//        result.andExpect(status().isOk()).andReturn();
-//        assertEquals(orderResponseDto.size(), 2, "상품 내역 제대로 조회가 되었는지 확인");
-//    }
-//
-//    @Test
-//    public void 상품_취소_요청() throws Exception {
-//        // given
-//        Long userId = 1L;
-//        List<OrderResponseDto> orderResponseDto = orderResponseDto();
-//        when(orderService.cancelOrderItem(any(), any(), any())).thenReturn(orderResponseDto);
-//        // when
-//        ResultActions result = mockMvc.perform(
-//                MockMvcRequestBuilders.post("/api/order/cancelOrderItem/{userId}", userId )
-//                        .contentType(APPLICATION_JSON)
-//                        .param("startDate","20220504000000")
-//                        .param("endDate","20220204000000")
-//        );
-//        // then
-//        result.andExpect(status().isOk()).andReturn();
-//        assertEquals(orderResponseDto.size(), 2, "상품 내역 제대로 조회가 되었는지 확인");
-//    }
+    @Test
+    @DisplayName("주문 하기 전 상품 품절 체크를 한다.")
+    public void beforeOrderItemSoldOutCheck() throws Exception {
+        given(orderService.checkOrder(anyLong())).willReturn(null);
+
+        String result = orderController.checkOrder(1L).getBody();
+
+        assertThat(result).isNull();
+    }
+
 
 
 
@@ -159,16 +101,7 @@ class OrderControllerTest {
     }
 
 
-    private OrderDeliveryPostReqDto deliveryRequestDto() {
-        return OrderDeliveryPostReqDto.builder()
-                .name("김진성")
-                .email("wlsdiqkdrk@naver.com")
-                .roadNumber(66778)
-                .address("서울특별시 강서후 방화동 250-43")
-                .detailText("201호")
-                .message("22")
-                .build();
-    }
+
 
     private SimpleBooleanResponse simpleBooleanResponse() {
         return SimpleBooleanResponse.builder()

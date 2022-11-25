@@ -70,7 +70,7 @@ public class ItemService {
         return getItemChangeDto(items);
     }
     @Transactional
-    public void deleteItem( Long itemId) {
+    public void deleteItem(Long itemId) {
         Item item = getItemById(itemId);
 
         item.delete(LocalDateTime.now());
@@ -129,6 +129,7 @@ public class ItemService {
         for (ImageUpdateReqDto imageUpdateReqDto : itemUpdateReqDto.getImagePath()) {
             imageId.remove(imageUpdateReqDto.getId());
         }
+
         return imageId;
     }
 

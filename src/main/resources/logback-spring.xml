@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!--    로그 파일 경로 설정  -->
-<!--    <property name="LOGS_ABSOLUTE_PATH" value="/home/ec2-user/app/step3/logs" />-->
-    <property name="LOGS_ABSOLUTE_PATH" value="./logs" />
+    <property name="LOGS_ABSOLUTE_PATH" value="/home/ec2-user/app/step3/logs" />
+<!--    <property name="LOGS_ABSOLUTE_PATH" value="./logs" />-->
     콘솔 로그 패턴, 운영시 끄기
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">

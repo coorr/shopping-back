@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import shopping.coor.auth.application.exception.JwtExceptionFilter;
 import shopping.coor.auth.application.jwt.AuthEntryPointJwt;
 import shopping.coor.auth.application.jwt.AuthTokenFilter;
+import shopping.coor.auth.application.jwt.JwtUtils;
 import shopping.coor.auth.application.service.UserDetailsServiceImpl;
 
 
@@ -25,13 +27,24 @@ import shopping.coor.auth.application.service.UserDetailsServiceImpl;
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsServiceImpl userDetailsService;
-	private final AuthTokenFilter authenticationJwtTokenFilter;
 	private final AuthEntryPointJwt unauthorizedHandler;
-	private final JwtExceptionFilter jwtExceptionFilter;
+	private final JwtUtils jwtUtils;
 
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+	}
+
+	@Bean
+	public WebSecurityCustomizer webSecurityCustomizer(){
+		return web -> {
+			web.ignoring()
+					.antMatchers(
+							"/static/**",
+							"/test/**",
+							"/test"
+							);
+		};
 	}
 
 	@Bean
@@ -60,8 +73,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated();
 
 
-		http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-		http.addFilterBefore(jwtExceptionFilter, AuthTokenFilter.class);
+		http.addFilterBefore(new AuthTokenFilter(jwtUtils, userDetailsService), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(new JwtExceptionFilter(), AuthTokenFilter.class);
 	}
 
 

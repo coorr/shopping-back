@@ -42,7 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.antMatchers(
 							"/static/**",
 							"/test/**",
-							"/test"
+							"/test",
+							"/api/user/**"
 							);
 		};
 	}
@@ -64,12 +65,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests()
-				.antMatchers("/api/user/**").permitAll()
 				.antMatchers("/api/item/**").permitAll()
 				.antMatchers("/api/items/**").permitAll()
 				.antMatchers("/api/basket/**").permitAll()
 				.antMatchers("/api/order/**").permitAll()
-				.antMatchers("/static/**").permitAll()
 				.anyRequest().authenticated();
 
 

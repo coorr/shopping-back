@@ -43,7 +43,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 							"/static/**",
 							"/test/**",
 							"/test",
-							"/api/user/**"
+							"/api/user/**",
+							"/api/user/signin"
 							);
 		};
 	}

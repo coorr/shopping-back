@@ -1,7 +1,9 @@
 package shopping.coor.item.application.service;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -11,15 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import shopping.coor.item.application.exception.ItemNotFoundException;
-import shopping.coor.item.domain.image.Image;
+import shopping.coor.item.domain.Item;
 import shopping.coor.item.domain.ItemRepository;
+import shopping.coor.item.domain.image.Image;
+import shopping.coor.item.domain.image.ImageRepository;
 import shopping.coor.item.presentation.http.request.ImageUpdateReqDto;
 import shopping.coor.item.presentation.http.request.ItemCreateReqDto;
 import shopping.coor.item.presentation.http.request.ItemUpdateReqDto;
 import shopping.coor.item.presentation.http.response.ItemGetResDto;
 import shopping.coor.item.presentation.http.response.ItemsGetResDto;
-import shopping.coor.item.domain.Item;
-import shopping.coor.item.domain.image.ImageRepository;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -143,8 +145,8 @@ public class ItemService {
 
             try (InputStream inputStream = file.getInputStream()) {
 //                    S3 임시 주석
-//                    amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-//                            .withCannedAcl(CannedAccessControlList.PublicRead));
+                    amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                            .withCannedAcl(CannedAccessControlList.PublicRead));
             } catch (IOException e) {
                 e.printStackTrace();
             }

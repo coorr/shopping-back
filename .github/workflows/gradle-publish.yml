@@ -1,10 +1,10 @@
 name: CI/CD
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+#on:
+#  push:
+#    branches: [ master ]
+#  pull_request:
+#    branches: [ master ]
 
 jobs:
   build:
@@ -29,28 +29,28 @@ jobs:
       - name: Clean build test with Gradle
         run: ./gradlew clean build -x test
         shell: bash
-        
-      - name: Make zip file 
+
+      - name: Make zip file
         run: zip -r ./shop-back.zip .
         shell: bash
-      
-      - name: Configure AWS credentials 
+
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-          
-      - name: Upload to S3 
+
+      - name: Upload to S3
         run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./shop-back.zip s3://${{ secrets.AWS_S3_BUCKET }}/shop-back.zip
 
       - name: Code Deploy
         run: aws deploy create-deployment --application-name ${{ secrets.AWS_CODEDEPLOY_NAME }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ secrets.AWS_CODEDEPLOY_GROUP }} --s3-location bucket=${{ secrets.AWS_S3_BUCKET }},bundleType=zip,key=shop-back.zip
-  
-          
-          
-          
-          
-          
-          
-          
+
+
+
+
+
+
+
+

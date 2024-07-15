@@ -6,24 +6,25 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
-import shopping.coor.auth.domain.User.User;
-import shopping.coor.basket.domain.Basket;
-import shopping.coor.item.application.exception.NotEnoughStockException;
-import shopping.coor.item.domain.Item;
-import shopping.coor.basket.domain.BasketRepository;
-import shopping.coor.basket.presentation.http.response.BasketGetResDto;
-import shopping.coor.order.domain.*;
-import shopping.coor.order.domain.delivery.Delivery;
-import shopping.coor.order.domain.delivery.DeliveryStatus;
-import shopping.coor.order.domain.orderItem.OrderItem;
-import shopping.coor.order.presentation.http.request.OrderDeliveryPostReqDto;
-import shopping.coor.item.domain.ItemRepository;
-import shopping.coor.order.domain.OrderRepository;
-import shopping.coor.order.presentation.http.response.OrderItemResponseDto;
-import shopping.coor.order.presentation.http.response.OrderResponseDto;
-import shopping.coor.auth.domain.User.UserRepository;
-import shopping.coor.auth.presentation.http.request.MessageResponse;
-import shopping.coor.order.application.service.OrderServiceImpl;
+import shopping.coor.domain.user.User;
+import shopping.coor.domain.basket.Basket;
+import shopping.coor.domain.item.exception.NotEnoughStockException;
+import shopping.coor.domain.item.Item;
+import shopping.coor.domain.basket.BasketRepository;
+import shopping.coor.domain.basket.dto.BasketGetResDto;
+import shopping.coor.domain.order.Order;
+import shopping.coor.domain.order.enums.OrderStatus;
+import shopping.coor.domain.delivery.Delivery;
+import shopping.coor.domain.delivery.DeliveryStatus;
+import shopping.coor.domain.order.item.OrderItem;
+import shopping.coor.domain.order.dto.OrderDeliveryPostReqDto;
+import shopping.coor.domain.item.ItemRepository;
+import shopping.coor.domain.order.OrderRepository;
+import shopping.coor.domain.order.dto.OrderItemResponseDto;
+import shopping.coor.domain.order.dto.OrderResponseDto;
+import shopping.coor.domain.user.UserRepository;
+import shopping.coor.common.container.MessageResponse;
+import shopping.coor.domain.order.OrderServiceImpl;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -158,7 +159,7 @@ class OrderServiceTest {
         // then
         assertEquals(result.get(0).getOrderStatus(), ordersCancel().get(0).getStatus(), "취소 확인 상태");
     }
-    
+
     @Test
     public void 주문_취소_예외() throws Exception {
         // given

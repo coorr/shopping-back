@@ -8,9 +8,9 @@
 //import org.mockito.Mock;
 //import org.mockito.junit.jupiter.MockitoExtension;
 //import org.springframework.http.ResponseEntity;
-//import shopping.coor.auth.domain.User.User;
-//import shopping.coor.auth.domain.User.UserRepository;
-//import shopping.coor.auth.presentation.http.request.MessageResponse;
+//import shopping.coor.domain.user.User;
+//import shopping.coor.domain.user.UserRepository;
+//import shopping.coor.common.container.MessageResponse;
 //import shopping.coor.basket.application.service.BasketService;
 //import shopping.coor.basket.domain.Basket;
 //import shopping.coor.basket.domain.BasketRepository;

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-import shopping.coor.auth.presentation.http.request.CreateTokenRequest;
+import shopping.coor.domain.user.signin.dto.SignInPostReqDto;
 import shopping.coor.config.TestBaseConfig;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -16,7 +16,7 @@ class SignInControllerTest extends TestBaseConfig {
     @Nested
     class SignInCommandTaskTest{
 
-        private CreateTokenRequest request;
+        private SignInPostReqDto request;
 
         @BeforeEach
         void setUp() {
@@ -36,7 +36,7 @@ class SignInControllerTest extends TestBaseConfig {
             requestSignIn(request).andExpect(status().isBadRequest());
         }
 
-        private ResultActions requestSignIn(CreateTokenRequest request) throws Exception {
+        private ResultActions requestSignIn(SignInPostReqDto request) throws Exception {
             return mockMvc
                     .perform(post("/api/user/signin")
                             .contentType(MediaType.APPLICATION_JSON)

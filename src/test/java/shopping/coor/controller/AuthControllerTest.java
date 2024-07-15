@@ -14,11 +14,11 @@
 //import org.springframework.test.web.servlet.ResultActions;
 //import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 //import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-//import shopping.coor.auth.application.service.UserTokenService;
-//import shopping.coor.auth.domain.User.User;
-//import shopping.coor.auth.domain.User.UserRepository;
+//import shopping.coor.domain.user.token.UserTokenService;
+//import shopping.coor.domain.user.User;
+//import shopping.coor.domain.user.UserRepository;
 //import shopping.coor.auth.presentation.http.request.CreateTokenRequest;
-//import shopping.coor.auth.presentation.http.request.MessageResponse;
+//import shopping.coor.common.container.MessageResponse;
 //import shopping.coor.auth.presentation.http.request.SignupRequest;
 //import shopping.coor.service.UserService;
 //

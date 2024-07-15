@@ -10,16 +10,16 @@
 //import org.springframework.http.ResponseEntity;
 //import org.springframework.security.authentication.AuthenticationManager;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import shopping.coor.auth.application.service.UserTokenService;
+//import shopping.coor.domain.user.token.UserTokenService;
 //import shopping.coor.auth.application.service.jwt.JwtUtils;
-//import shopping.coor.auth.domain.Role.ERole;
-//import shopping.coor.auth.domain.Role.Role;
-//import shopping.coor.auth.domain.User.User;
+//import shopping.coor.domain.user.role.ERole;
+//import shopping.coor.domain.user.role.Role;
+//import shopping.coor.domain.user.User;
 //import shopping.coor.auth.presentation.http.request.CreateTokenRequest;
 //import shopping.coor.auth.presentation.http.request.SignupRequest;
-//import shopping.coor.auth.presentation.http.request.MessageResponse;
-//import shopping.coor.auth.domain.Role.RoleRepository;
-//import shopping.coor.auth.domain.User.UserRepository;
+//import shopping.coor.common.container.MessageResponse;
+//import shopping.coor.domain.user.role.RoleRepository;
+//import shopping.coor.domain.user.UserRepository;
 //import shopping.coor.serviceImpl.user.UserServiceImpl;
 //
 //import java.util.*;

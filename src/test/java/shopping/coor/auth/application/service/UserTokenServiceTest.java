@@ -11,9 +11,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.test.context.support.WithAnonymousUser;
-import shopping.coor.auth.application.jwt.JwtUtils;
-import shopping.coor.auth.application.service.payload.CreateTokenPayload;
-import shopping.coor.auth.domain.User.User;
+import shopping.coor.domain.user.signin.JwtService;
+import shopping.coor.domain.user.token.UserTokenReqDto;
+import shopping.coor.domain.user.User;
+import shopping.coor.domain.user.token.UserTokenService;
 
 @ExtendWith({MockitoExtension.class})
 class UserTokenServiceTest {
@@ -24,7 +25,7 @@ class UserTokenServiceTest {
     AuthenticationManager authenticationManager;
 
     @Mock
-    JwtUtils jwtUtils;
+    JwtService jwtService;
 
     @Mock
     User user;
@@ -32,12 +33,12 @@ class UserTokenServiceTest {
 
     @Nested
     class CreateTokenTest {
-        private CreateTokenPayload payload;
+        private UserTokenReqDto payload;
         private Authentication authentication;
 
         @BeforeEach
         void setUp() {
-            payload = CreateTokenPayload.builder().username("test@gmail.com").password("password").build();
+            payload = UserTokenReqDto.builder().username("test@gmail.com").password("password").build();
 
         }
 

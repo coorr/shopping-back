@@ -6,10 +6,10 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
-import shopping.coor.auth.application.service.UserDetailsImpl;
-import shopping.coor.auth.domain.Role.ERole;
-import shopping.coor.auth.domain.Role.Role;
-import shopping.coor.auth.domain.User.User;
+import shopping.coor.domain.user.UserDetailsImpl;
+import shopping.coor.domain.user.role.ERole;
+import shopping.coor.domain.user.role.Role;
+import shopping.coor.domain.user.User;
 
 import java.util.HashSet;
 import java.util.List;

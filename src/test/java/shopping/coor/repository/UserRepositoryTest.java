@@ -4,8 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import shopping.coor.auth.domain.User.User;
-import shopping.coor.auth.domain.User.UserRepository;
+import shopping.coor.domain.user.User;
+import shopping.coor.domain.user.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;

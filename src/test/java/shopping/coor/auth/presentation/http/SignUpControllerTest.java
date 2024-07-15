@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-import shopping.coor.auth.presentation.http.request.CreateUserRequest;
+import shopping.coor.domain.user.signup.dto.SignUpPostReqDto;
 import shopping.coor.config.TestBaseConfig;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -17,7 +17,7 @@ class SignUpControllerTest extends TestBaseConfig {
     @Nested
     class SignUpCommandTaskTest {
 
-        private CreateUserRequest request;
+        private SignUpPostReqDto request;
 
         @BeforeEach
         void setUp() {
@@ -47,7 +47,7 @@ class SignUpControllerTest extends TestBaseConfig {
             requestSignup(request).andExpect(status().isBadRequest());
         }
 
-        private ResultActions requestSignup(CreateUserRequest request) throws Exception {
+        private ResultActions requestSignup(SignUpPostReqDto request) throws Exception {
             return mockMvc.perform(
                     post("/api/user/signup")
                             .contentType(MediaType.APPLICATION_JSON)

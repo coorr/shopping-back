@@ -2,7 +2,7 @@
 
 나만의 웹 사이트 개발 프로젝트
 
-Site - [https://lookshop.cf/](https://lookshop.cf/)
+Site - ~~[https://lookshop.cf/](https://lookshop.cf/)~~ (현재는 운영 X)
 
 Front - [https://github.com/coorr/shopping-front](https://github.com/coorr/shopping-front)
 

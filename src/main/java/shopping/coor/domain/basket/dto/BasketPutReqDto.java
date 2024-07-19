@@ -1,9 +1,9 @@
 package shopping.coor.domain.basket.dto;
 
 import lombok.*;
+import shopping.coor.domain.item.Item;
 import shopping.coor.domain.user.User;
 import shopping.coor.domain.basket.Basket;
-import shopping.coor.domain.item.Item;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -41,8 +41,8 @@ public class BasketPutReqDto {
     @NotNull
     private String title;
 
-    public Basket toBasket(BasketPutReqDto dto, User user, Item item) {
-        return new Basket(dto, user, item);
+    public Basket toBasket(BasketPutReqDto dto, User user, Item items) {
+        return new Basket(dto, user, items);
     }
 
 }

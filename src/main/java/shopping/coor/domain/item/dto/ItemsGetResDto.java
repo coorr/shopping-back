@@ -18,12 +18,12 @@ public class ItemsGetResDto {
     private int discount_price;
     private List<ItemImageGetResDto> images;
 
-    public ItemsGetResDto(Item item) {
-        itemId = item.getId();
-        title = item.getTitle();
-        price = item.getPrice();
-        discount_price = item.getDiscountPrice();
-        images = item.getImages().stream()
+    public ItemsGetResDto(Item items) {
+        itemId = items.getId();
+        title = items.getTitle();
+        price = items.getPrice();
+        discount_price = items.getDiscountPrice();
+        images = items.getImages().stream()
                 .map(image -> new ItemImageGetResDto(image))
                 .collect(Collectors.toList());
     }

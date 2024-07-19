@@ -24,7 +24,7 @@ public class SignUpService {
 
     @Transactional
     public void signUp(SignUpPostReqDto dto) {
-        if (userRepository.existsByUsername(dto.getUsername())) {
+        if (userRepository.existsByName(dto.getUsername())) {
             throw new UserAlreadyExistsException("이미 존재하는 아이디입니다.");
         }
         if (userRepository.existsByEmail(dto.getEmail())) {

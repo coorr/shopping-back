@@ -6,15 +6,12 @@ import shopping.coor.domain.order.Order;
 import shopping.coor.domain.order.dto.OrderDeliveryCreateReqDto;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
@@ -22,41 +19,39 @@ public class Delivery {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "delivery_id")
+    @Column(name = "id")
     private Long id;
 
     @JsonIgnore
     @OneToOne(mappedBy = "delivery", fetch = LAZY)
     private Order order;
 
-    @NotBlank
-    @Size(max = 20)
-    private String dName;
+    @Column(name = "name")
+    private String name;
 
-    @NotBlank
-    @Size(max = 50)
-    @Email
-    private String dEmail;
+    @Column(name = "email")
+    private String email;
 
-    @NotNull
+    @Column(name = "road_number")
     private int roadNumber;
 
-    @NotBlank
+    @Column(name = "address")
     private String address;
 
-    @NotBlank
+    @Column(name = "detail_text")
     private String detailText;
 
+    @Column(name = "message")
     private String message;
 
     @Enumerated(EnumType.STRING)
-    private DeliveryStatus status; //READY, COMP
+    @Column(name = "status")
+    private DeliveryStatus status;
 
     public static Delivery createDelivery(String dName, String dEmail, int roadNumber, String address, String detailText, String message) {
         Delivery delivery = new Delivery();
-//        delivery.setOrder(order);
-        delivery.setDName(dName);
-        delivery.setDEmail(dEmail);
+        delivery.setName(dName);
+        delivery.setEmail(dEmail);
         delivery.setRoadNumber(roadNumber);
         delivery.setAddress(address);
         delivery.setDetailText(detailText);
@@ -66,8 +61,8 @@ public class Delivery {
     }
 
     public Delivery(OrderDeliveryCreateReqDto dto) {
-        this.dName = dto.getName();
-        this.dEmail = dto.getEmail();
+        this.name = dto.getName();
+        this.email = dto.getEmail();
         this.roadNumber = dto.getRoadNumber();
         this.address = dto.getAddress();
         this.detailText = dto.getDetailText();

@@ -44,7 +44,7 @@ public class UserTokenService {
         return UserToken.builder()
                 .token(jwt)
                 .id(userDetails.getId())
-                .username(userDetails.getUsername())
+                .username(userDetails.getName())
                 .email(userDetails.getEmail())
                 .roles(roles)
                 .build();

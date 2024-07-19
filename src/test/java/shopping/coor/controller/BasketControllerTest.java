@@ -13,7 +13,7 @@
 //import org.springframework.test.web.servlet.ResultActions;
 //import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 //import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-//import shopping.coor.common.container.MessageResponse;
+//import shopping.coor.common.MessageResponse;
 //import shopping.coor.basket.application.service.BasketService;
 //import shopping.coor.basket.presentation.http.BasketController;
 //import shopping.coor.basket.presentation.http.request.BasketPostReqDto;

@@ -3,8 +3,8 @@ package shopping.coor.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import shopping.coor.domain.user.User;
 import shopping.coor.domain.item.Item;
+import shopping.coor.domain.user.User;
 import shopping.coor.domain.item.ItemRepository;
 import shopping.coor.domain.order.Order;
 import shopping.coor.domain.order.enums.OrderStatus;
@@ -69,7 +69,6 @@ class OrderRepositoryTest {
         List<Order> orders = Arrays.asList(
                 Order.builder()
                         .id(1L)
-                        .orderDate(stringToLocalDateTime("20220503000000"))
                         .status(OrderStatus.ORDER)
                         .user(user())
                         .orderItems(orderItems())
@@ -90,7 +89,7 @@ class OrderRepositoryTest {
     private User user() {
         return User.builder()
                 .id(1L)
-                .username("kim1")
+                .name("kim1")
                 .email("W@naver.com")
                 .password("123123")
                 .build();
@@ -110,8 +109,8 @@ class OrderRepositoryTest {
     private Delivery delivery() {
         return Delivery.builder()
                 .id(1L)
-                .dName("kim")
-                .dEmail("kim@naver.com")
+                .name("kim")
+                .email("kim@naver.com")
                 .roadNumber(66788)
                 .address("서울특별시 강서후 방화동 250-43")
                 .detailText("2323")

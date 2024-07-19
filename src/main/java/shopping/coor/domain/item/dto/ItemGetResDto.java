@@ -9,7 +9,8 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class ItemGetResDto {
 
     private Long itemId;
@@ -25,19 +26,19 @@ public class ItemGetResDto {
     private String info;
     private List<ItemImageGetResDto> images;
 
-    public ItemGetResDto(Item item) {
-        this.itemId = item.getId();
-        this.title = item.getTitle();
-        this.price = item.getPrice();
-        this.discount_price = item.getDiscountPrice();
-        this.quantityS = item.getQuantityS();
-        this.quantityM = item.getQuantityM();
-        this.quantityL = item.getQuantityL();
-        this.category = item.getCategory();
-        this.size = item.getSize();
-        this.material = item.getMaterial();
-        this.info = item.getInfo();
-        this.images = item.getImages().stream()
+    public ItemGetResDto(Item items) {
+        this.itemId = items.getId();
+        this.title = items.getTitle();
+        this.price = items.getPrice();
+        this.discount_price = items.getDiscountPrice();
+        this.quantityS = items.getQuantityS();
+        this.quantityM = items.getQuantityM();
+        this.quantityL = items.getQuantityL();
+        this.category = items.getCategory();
+        this.size = items.getSizeInfo();
+        this.material = items.getMaterial();
+        this.info = items.getInfo();
+        this.images = items.getImages().stream()
                 .map(i -> new ItemImageGetResDto(i))
                 .collect(Collectors.toList());
     }

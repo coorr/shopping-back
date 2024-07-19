@@ -3,7 +3,7 @@ package shopping.coor.domain.user.signup;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
-import shopping.coor.common.AbstractValidator;
+import shopping.coor.common.validator.AbstractValidator;
 import shopping.coor.domain.user.signup.dto.SignUpPostReqDto;
 
 @Component

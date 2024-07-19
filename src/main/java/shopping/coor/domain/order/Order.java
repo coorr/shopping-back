@@ -2,56 +2,49 @@ package shopping.coor.domain.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-import shopping.coor.domain.user.User;
+import shopping.coor.common.model.BaseEntityCreateUpdateAggregate;
 import shopping.coor.domain.delivery.Delivery;
 import shopping.coor.domain.delivery.DeliveryStatus;
-import shopping.coor.domain.order.item.OrderItem;
 import shopping.coor.domain.order.enums.OrderStatus;
+import shopping.coor.domain.order.item.OrderItem;
+import shopping.coor.domain.user.User;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Table(name = "orders")
-@Getter @Setter
+@Table(name = "order")
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Order {
+public class Order extends BaseEntityCreateUpdateAggregate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id")
+    @Column(name = "id")
     private Long id;
 
     @JsonIgnore
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "u_id")
     private User user;
+
+    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "d_id")
+    private Delivery delivery;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private OrderStatus status;
 
     @Builder.Default
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
-
-    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "delivery_id")
-    private Delivery delivery;
-
-    @Enumerated(EnumType.STRING)
-    private OrderStatus status;
-
-    @DateTimeFormat(pattern = "yyyy-mm-dd'T'HH:mm:ss")
-    private LocalDateTime orderDate;
-
-    @PrePersist
-    public void orderDate(){
-        this.orderDate = LocalDateTime.now();
-    }
 
 
     public void setUser(User users) {

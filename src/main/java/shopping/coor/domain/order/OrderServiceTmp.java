@@ -3,6 +3,7 @@ package shopping.coor.domain.order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shopping.coor.domain.item.Item;
 import shopping.coor.domain.user.UserService;
 import shopping.coor.domain.user.User;
 import shopping.coor.domain.basket.BasketService;
@@ -13,7 +14,6 @@ import shopping.coor.domain.order.item.OrderItem;
 import shopping.coor.domain.order.dto.OrderDeliveryCreateReqDto;
 import shopping.coor.domain.item.exception.NotEnoughStockException;
 import shopping.coor.domain.item.ItemService;
-import shopping.coor.domain.item.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +52,8 @@ public class OrderServiceTmp {
 
         List<String> soldOutList = new ArrayList<>();
         for (Basket basket : basketList) {
-            Item item = itemService.getItemById(basket.getItem().getId());
-            soldOutList = itemCountCheck(basket, item, soldOutList);
+            Item items = itemService.getItemById(basket.getItem().getId());
+            soldOutList = itemCountCheck(basket, items, soldOutList);
         }
 
         if (basketList.size() == soldOutList.size()) {
@@ -71,9 +71,9 @@ public class OrderServiceTmp {
                 .collect(Collectors.joining());
     }
 
-    private List<String> itemCountCheck(Basket basket, Item item, List<String> soldOutList) {
+    private List<String> itemCountCheck(Basket basket, Item items, List<String> soldOutList) {
         try {
-            item.stockCheck(basket.getItemCount(), basket.getSize());
+            items.stockCheck(basket.getCount(), basket.getSize());
         } catch (NotEnoughStockException e) {
             soldOutList.add(basket.getItem().getTitle() + " " + basket.getSize() + "\n");
         }

@@ -3,6 +3,7 @@ package shopping.coor.domain.basket;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shopping.coor.domain.item.Item;
 import shopping.coor.domain.user.UserService;
 import shopping.coor.domain.user.User;
 import shopping.coor.domain.basket.enums.BasketOrder;
@@ -13,7 +14,6 @@ import shopping.coor.domain.basket.dto.BasketPutReqDto;
 import shopping.coor.domain.basket.dto.BasketGetResDto;
 import shopping.coor.common.container.SimpleBooleanResponse;
 import shopping.coor.domain.item.ItemService;
-import shopping.coor.domain.item.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class BasketService {
         List<Long> basketIds = basketRepository.findByUser(user);
 
         for (BasketPostReqDto dto : basketPostReqDto) {
-            Item item = itemService.getItemById(dto.getItemId());
+            Item items = itemService.getItemById(dto.getItemId());
 
             if (basketIds.contains(dto.getKeyIndex())) {
                 Basket basketDuplicate = getBasketById(dto.getKeyIndex());
@@ -50,7 +50,7 @@ public class BasketService {
                 continue;
             }
 
-            basketList.add(dto.toBasket(dto, user, item));
+            basketList.add(dto.toBasket(dto, user, items));
         }
         basketRepository.saveAll(basketList);
 
@@ -59,14 +59,14 @@ public class BasketService {
 
     public void checkBasket(List<BasketPostReqDto> basketPostReqDto) {
         for (BasketPostReqDto dto : basketPostReqDto) {
-            Item item = itemService.getItemById(dto.getItemId());
-            item.stockCheck(dto.getItemCount(), dto.getSize());
+            Item items = itemService.getItemById(dto.getItemId());
+            items.stockCheck(dto.getItemCount(), dto.getSize());
         }
     }
 
     public SimpleBooleanResponse checkItem(Long itemId, BasketItemPostGetDto dto) {
-        Item item = itemService.getItemById(itemId);
-        item.stockCheck(dto.getItemCount()+1 , dto.getSize());
+        Item items = itemService.getItemById(itemId);
+        items.stockCheck(dto.getItemCount()+1 , dto.getSize());
         return new SimpleBooleanResponse(true);
     }
 
@@ -83,8 +83,8 @@ public class BasketService {
                 continue;
             }
 
-            Item item = itemService.getItemById(dto.getItemId());
-            basketList.add(dto.toBasket(dto, user, item));
+            Item items = itemService.getItemById(dto.getItemId());
+            basketList.add(dto.toBasket(dto, user, items));
         }
         basketRepository.saveAll(basketList);
         List<Basket> result = basketRepository.findBasketAndItemAndUserById(user);

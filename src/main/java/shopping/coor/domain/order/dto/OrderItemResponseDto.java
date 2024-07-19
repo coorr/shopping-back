@@ -21,9 +21,9 @@ public class OrderItemResponseDto {
 
     public OrderItemResponseDto(OrderItem orderItem) {
         this.orderItemId = orderItem.getId();
-        this.itemId = orderItem.getItem().getId();
-        this.image = orderItem.getItem().getImages();
-        this.title = orderItem.getItem().getTitle();
+        this.itemId = orderItem.getItems().getId();
+        this.image = orderItem.getItems().getImages();
+        this.title = orderItem.getItems().getTitle();
         this.count = orderItem.getOrderCount();
         this.total = orderItem.getTotalPrice();
         this.size = orderItem.getOrderSize();

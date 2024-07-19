@@ -1,4 +1,4 @@
-package shopping.coor.common.container;
+package shopping.coor.common;
 
 import lombok.*;
 

@@ -22,7 +22,7 @@ public class WithAuthUserSecurityContextFactory implements WithSecurityContextFa
         Role role = new Role(1L, ERole.ROLE_USER);
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(role);
-        User user = User.builder().email("test@naver.com").username("test").roles(roleSet).build();
+        User user = User.builder().email("test@naver.com").name("test").roles(roleSet).build();
 
         UserDetails userDetails = UserDetailsImpl.build(user);
         UsernamePasswordAuthenticationToken token =

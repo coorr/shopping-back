@@ -27,8 +27,8 @@ public class BasketGetResDto {
     public BasketGetResDto(Basket basket) {
         this.keyIndex = basket.getId();
         this.itemId = basket.getItem().getId();
-        this.itemTotal = basket.getItemTotal();
-        this.itemCount = basket.getItemCount();
+        this.itemTotal = basket.getTotal();
+        this.itemCount = basket.getCount();
         this.size = basket.getSize();
         this.discount = basket.getItem().getDiscountPrice();
         this.image = basket.getItem().getImages();

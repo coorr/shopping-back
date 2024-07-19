@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import shopping.coor.domain.basket.enums.BasketOrder;
 import shopping.coor.domain.basket.dto.BasketPatchCountReqDto;
-import shopping.coor.common.AbstractValidator;
+import shopping.coor.common.validator.AbstractValidator;
 
 @Component
 public class BasketPatchCountReqDtoValidator extends AbstractValidator<BasketPatchCountReqDto> {

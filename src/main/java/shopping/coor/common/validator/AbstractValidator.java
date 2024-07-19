@@ -1,4 +1,4 @@
-package shopping.coor.common;
+package shopping.coor.common.validator;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

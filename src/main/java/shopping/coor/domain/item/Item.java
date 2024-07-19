@@ -3,17 +3,12 @@ package shopping.coor.domain.item;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Where;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.LastModifiedBy;
-import shopping.coor.common.BaseEntityAggregateRoot;
-import shopping.coor.domain.item.image.Image;
+import shopping.coor.common.model.BaseEntityCreateUpdateAggregate;
 import shopping.coor.domain.item.dto.ItemUpdateReqDto;
 import shopping.coor.domain.item.exception.NotEnoughStockException;
+import shopping.coor.domain.item.image.Image;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,51 +20,46 @@ import java.util.List;
 @AllArgsConstructor
 @DynamicUpdate
 @Where(clause = "deleted = false")
-public class Item extends BaseEntityAggregateRoot<Item> {
+public class Item extends BaseEntityCreateUpdateAggregate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "item_id")
+    @Column(name = "id")
     private Long id;
 
-    @NotBlank
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @NotNull
+    @Column(name = "price", nullable = false)
     private int price;
 
-    @NotNull
+    @Column(name = "discount_price", nullable = false)
     private int discountPrice;
 
-    @NotNull
+    @Column(name = "quantityS", nullable = false)
     private int quantityS;
 
-    @NotNull
+    @Column(name = "quantityM", nullable = false)
     private int quantityM;
 
-    @NotNull
+    @Column(name = "quantityL", nullable = false)
     private int quantityL;
 
-    @NotNull
+    @Column(name = "category")
     private String category;
 
-    @Column(length = 1000)
-    private String size;
+    @Column(name = "size_info")
+    private String sizeInfo;
 
-    @Column(length = 1000)
+    @Column(name = "material")
     private String material;
 
-    @Column(length = 1000)
+    @Column(name = "info")
     private String info;
 
-    @CreatedBy
-    @Column(updatable = false)
-    private Long createdBy;
+    @Column(name = "deleted")
+    private boolean deleted = false;
 
-    @LastModifiedBy
-    private Long updateBy;
-
-    @Builder.Default
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
@@ -95,16 +85,15 @@ public class Item extends BaseEntityAggregateRoot<Item> {
         this.quantityM = reqDto.getQuantityM();
         this.quantityL = reqDto.getQuantityL();
         this.category = reqDto.getCategory();
-        this.size = reqDto.getSize();
+        this.sizeInfo = reqDto.getSize();
         this.material = reqDto.getMaterial();
         this.info = reqDto.getInfo();
 
         return this;
     }
 
-    public Item delete(LocalDateTime deleteBy) {
-        this.setDeleted(true);
-        this.deletedAt = deleteBy;
+    public Item delete() {
+        this.deleted = true;
 
         return this;
     }

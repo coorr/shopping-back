@@ -17,7 +17,7 @@
 //import shopping.coor.domain.user.User;
 //import shopping.coor.auth.presentation.http.request.CreateTokenRequest;
 //import shopping.coor.auth.presentation.http.request.SignupRequest;
-//import shopping.coor.common.container.MessageResponse;
+//import shopping.coor.common.MessageResponse;
 //import shopping.coor.domain.user.role.RoleRepository;
 //import shopping.coor.domain.user.UserRepository;
 //import shopping.coor.serviceImpl.user.UserServiceImpl;

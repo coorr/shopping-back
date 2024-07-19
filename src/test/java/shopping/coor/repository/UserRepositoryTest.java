@@ -21,7 +21,7 @@ class UserRepositoryTest {
     @BeforeEach
     void init() {
         User.builder()
-                .username("kim1")
+                .name("kim1")
                 .password("123123")
                 .email("w@naver.com")
                 .build();
@@ -31,7 +31,7 @@ class UserRepositoryTest {
     public void 회원가입_저장() throws Exception {
         // given
         User user = User.builder()
-                .username("kim1")
+                .name("kim1")
                 .password("123123")
                 .email("w@naver.com")
                 .build();
@@ -40,7 +40,7 @@ class UserRepositoryTest {
         User save = userRepository.save(user);
 
         // then
-        assertEquals(user.getUsername(), save.getUsername());
+        assertEquals(user.getName(), save.getName());
         assertEquals(user.getPassword(), save.getPassword());
         assertEquals(user.getEmail(), save.getEmail());
     }

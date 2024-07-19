@@ -3,8 +3,8 @@ package shopping.coor.domain.order.item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import shopping.coor.domain.basket.Basket;
-import shopping.coor.domain.order.Order;
 import shopping.coor.domain.item.Item;
+import shopping.coor.domain.order.Order;
 
 import javax.persistence.*;
 
@@ -23,8 +23,8 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "item_id")
-    private Item item;
+    @JoinColumn(name = "iid")
+    private Item items;
 
     @JsonIgnore
     @ManyToOne(fetch = LAZY)
@@ -38,18 +38,18 @@ public class OrderItem {
 
     public static OrderItem createOrderItem(Basket basket) {
         OrderItem orderItem = new OrderItem();
-        orderItem.setItem(basket.getItem());
-        orderItem.setOrderPrice(basket.getItemTotal());
-        orderItem.setOrderCount(basket.getItemCount());
+        orderItem.setItems(basket.getItem());
+        orderItem.setOrderPrice(basket.getTotal());
+        orderItem.setOrderCount(basket.getCount());
         orderItem.setOrderSize(basket.getSize());
 
-        Item item = basket.getItem();
-        item.removeStock(basket.getItemCount(), basket.getSize());
+        Item items = basket.getItem();
+        items.removeStock(basket.getCount(), basket.getSize());
         return orderItem;
     }
 
     public void cancel(String orderSize) {
-        getItem().addStock(orderCount, orderSize);
+        getItems().addStock(orderCount, orderSize);
     }
 
     // 주문상품 전체 가격 조회

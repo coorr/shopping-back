@@ -12,18 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import shopping.coor.domain.item.dto.*;
 import shopping.coor.domain.item.exception.ItemNotFoundException;
 import shopping.coor.domain.item.image.Image;
 import shopping.coor.domain.item.image.ImageRepository;
-import shopping.coor.domain.item.dto.ImageUpdateReqDto;
-import shopping.coor.domain.item.dto.ItemCreateReqDto;
-import shopping.coor.domain.item.dto.ItemUpdateReqDto;
-import shopping.coor.domain.item.dto.ItemGetResDto;
-import shopping.coor.domain.item.dto.ItemsGetResDto;
+import shopping.coor.domain.item.image.dto.ImageUpdateReqDto;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -46,9 +42,9 @@ public class ItemService {
     private final Executor executor;
 
     public ItemGetResDto getItem(final Long itemId) {
-        Item item = getItemById(itemId);
+        Item items = getItemById(itemId);
 
-        return new ItemGetResDto(item);
+        return new ItemGetResDto(items);
     }
 
     public List<ItemsGetResDto> getItems(Long itemLastId, int size, String category) {
@@ -71,49 +67,49 @@ public class ItemService {
     }
     @Transactional
     public void deleteItem(Long itemId) {
-        Item item = getItemById(itemId);
+        Item items = getItemById(itemId);
 
-        item.delete(LocalDateTime.now());
+        items.delete();
     }
 
 
     @Transactional
     public Long createItem(MultipartFile[] multipartFiles, ItemCreateReqDto itemCreateReqDto) {
-        Item item = itemCreateReqDto.toEntity();
+        Item items = itemCreateReqDto.toEntity();
         List<Image> images = new ArrayList<>();
 
         if (multipartFiles == null)  {
-            Item result = itemRepository.save(item);
+            Item result = itemRepository.save(items);
             return result.getId();
         }
 
         for (MultipartFile file : multipartFiles) {
             String fileName = getFileName(file);
-            images.add(Image.createImage(fileName, item));
+            images.add(Image.createImage(fileName, items));
         }
-        item.addImage(images);
-        Item result = itemRepository.save(item);
+        items.addImage(images);
+        Item result = itemRepository.save(items);
         return result.getId();
     }
 
     @Transactional
     public Boolean updateItem(Long itemId, MultipartFile[] multipartFiles, ItemUpdateReqDto itemUpdateReqDto) {
-        Item item = itemRepository.getItemList(itemId);
+        Item items = itemRepository.getItemList(itemId);
         List<Image> images = new ArrayList<>();
-        List<Long> imageId = existImageByIdDelete(itemUpdateReqDto, item);
+        List<Long> imageId = existImageByIdDelete(itemUpdateReqDto, items);
 
-        item.update(itemUpdateReqDto);
+        items.update(itemUpdateReqDto);
         System.out.println("imageId = " + imageId);
         imageRepository.deleteAllByIdInBatch(imageId);
 
         if (multipartFiles != null) {
             for (MultipartFile file : multipartFiles) {
                 String fileName = getFileName(file);
-                images.add(Image.createImage(fileName, item));
+                images.add(Image.createImage(fileName, items));
             }
 
-            item.addImage(images);
-            item.update(itemUpdateReqDto);
+            items.addImage(images);
+            items.update(itemUpdateReqDto);
 
             return Boolean.TRUE;
         }
@@ -121,8 +117,8 @@ public class ItemService {
         return Boolean.TRUE;
     }
 
-    private List<Long> existImageByIdDelete(ItemUpdateReqDto itemUpdateReqDto, Item item) {
-        List<Long> imageId = item.getImages().stream()
+    private List<Long> existImageByIdDelete(ItemUpdateReqDto itemUpdateReqDto, Item items) {
+        List<Long> imageId = items.getImages().stream()
                 .map(id -> id.getId())
                 .collect(Collectors.toList());
 

@@ -2,14 +2,11 @@ package shopping.coor.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import shopping.coor.domain.user.role.Role;
-import shopping.coor.common.BaseEntityAggregateRoot;
+import shopping.coor.common.model.BaseEntityCreateUpdateAggregate;
 import shopping.coor.domain.order.Order;
+import shopping.coor.domain.user.role.Role;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,40 +14,34 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(	name = "users",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "username"),
-        })
+@Table
 @Getter
 @NoArgsConstructor
 @Setter
 @Builder
 @AllArgsConstructor
-public class User extends BaseEntityAggregateRoot<User> implements Serializable {
+public class User extends BaseEntityCreateUpdateAggregate implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "id")
     private Long id;
 
-    @NotBlank
-    @Size(max = 20)
-    private String username;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @NotBlank
-    @Size(max = 50)
-    @Email
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @NotBlank
-    @Size(max = 120)
     @JsonIgnore
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Builder.Default
     @ManyToMany
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "u_id"),
+            inverseJoinColumns = @JoinColumn(name = "r_id"))
     private Set<Role> roles = new HashSet<>();
 
     @Builder.Default
@@ -60,14 +51,7 @@ public class User extends BaseEntityAggregateRoot<User> implements Serializable 
 
 
     public User(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
-
-    public User(Long id, String username, String email, String password) {
-
-        this.username = username;
+        this.name = username;
         this.email = email;
         this.password = password;
     }

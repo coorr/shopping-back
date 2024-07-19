@@ -5,30 +5,29 @@ import lombok.*;
 import shopping.coor.domain.item.Item;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.LAZY;
 
 
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Builder
 public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "image_id")
+    @Column(name = "id")
     private Long id;
 
-    @NotBlank
+    @Column(name = "location")
     private String location;
 
     @JsonIgnore
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "item_id")
+    @JoinColumn(name = "i_id")
     private Item item;
 
     public Image(Long imageId, String location) {
@@ -36,10 +35,10 @@ public class Image {
         this.location = location;
     }
 
-    public static Image createImage(String location, Item itemId) {
+    public static Image createImage(String location, Item itemsId) {
         Image image = new Image();
         image.setLocation(location);
-        image.setItem(itemId);
+        image.setItem(itemsId);
         return image;
     }
 }

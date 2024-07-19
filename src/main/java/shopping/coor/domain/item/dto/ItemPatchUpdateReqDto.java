@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import shopping.coor.domain.item.image.dto.ImageUpdateReqDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

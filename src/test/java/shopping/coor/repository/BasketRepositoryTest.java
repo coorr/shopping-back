@@ -50,8 +50,8 @@ class BasketRepositoryTest {
 
         // then
         assertEquals(basketList.size(), result.size());
-        assertEquals(basketList.get(0).getItemCount(), result.get(0).getItemCount());
-        assertEquals(basketList.get(0).getItemTotal(), result.get(0).getItemTotal());
+        assertEquals(basketList.get(0).getCount(), result.get(0).getCount());
+        assertEquals(basketList.get(0).getTotal(), result.get(0).getTotal());
     }
 
 //    @Test
@@ -96,7 +96,7 @@ class BasketRepositoryTest {
         List<Order> orders = new ArrayList<>();
         return User.builder()
                 .id(1L)
-                .username("kim1")
+                .name("kim1")
                 .email("W@naver.com")
                 .password("123123")
                 .orders(orders)
@@ -116,7 +116,7 @@ class BasketRepositoryTest {
     }
     private List<Basket> baskets() {
         List<Basket> basketList = Arrays.asList(
-                Basket.builder().id(1L).item(item()).user(user()).itemTotal(60000).itemCount(2).size("S").build()
+                Basket.builder().id(1L).items(item()).user(user()).total(60000).count(2).size("S").build()
         );
         return basketList;
     }

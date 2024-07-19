@@ -11,15 +11,14 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User,Long> {
 
     // To Do : UserDetails -> user 변경 시 loadUserByUsername 수정
-    @Query("select u from User u join fetch u.roles where u.username = ?1 ")
+    @Query("select u from User u join fetch u.roles where u.name = ?1 ")
     Optional<User> findByEmail(String email);
-    Optional<User> findByUsername(String username);
 
-    @Query("select u from User u join fetch u.roles where u.username = ?1 ")
-    User findByUsernameJoinRoles(String username);
+    @Query("select u from User u join fetch u.roles where u.name = ?1 ")
+    User findByNameJoinRoles(String username);
 
 
-    Boolean existsByUsername(String username);
+    Boolean existsByName(String username);
 
     Boolean existsByEmail(String email);
 

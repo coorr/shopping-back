@@ -23,7 +23,7 @@ public class OrderResponseDto {
 
     public OrderResponseDto(Order order) {
         this.orderId = order.getId();
-        this.orderDate = order.getOrderDate();
+        this.orderDate = order.getCreatedAt();
         this.orderStatus = order.getStatus();
         this.deliveryStatus = order.getDelivery().getStatus();
         this.orderItems = order.getOrderItems().stream()

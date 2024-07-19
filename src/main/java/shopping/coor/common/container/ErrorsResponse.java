@@ -1,51 +1,47 @@
 package shopping.coor.common.container;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.validation.FieldError;
+import org.springframework.validation.Errors;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
 public class ErrorsResponse {
-    private LocalDateTime timestamp = LocalDateTime.now();
-    private String message;
 
+    private static final int MAX_ERRORS_COUNT = 20;
 
+    private final List<SimpleErrorResponse> errors;
 
-    //@Valid의 Parameter 검증을 통과하지 못한 필드가 담긴다.
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty("errors")
-    private List<CustomFieldError> customFieldErrors;
-
-
-    static public ErrorsResponse create() {
-        return new ErrorsResponse();
+    private ErrorsResponse(List<SimpleErrorResponse> errors) {
+        this.errors = errors.size() > MAX_ERRORS_COUNT
+                ? errors.subList(0, MAX_ERRORS_COUNT - 1)
+                : errors;
     }
 
-    public ErrorsResponse message(String message) {
-        this.message = message;
-        return this;
+    public static ErrorsResponse create(Errors errors) {
+
+        List<SimpleErrorResponse> errorResponseList = errors.getFieldErrors()
+                .stream()
+                .map(e -> SimpleErrorResponse.createByError(e))
+                .collect(Collectors.toList());
+
+        errorResponseList.addAll(errors.getGlobalErrors()
+                .stream()
+                .map(e -> SimpleErrorResponse.createByError(e))
+                .collect(Collectors.toList()));
+
+        return new ErrorsResponse(errorResponseList);
     }
 
+    public static ErrorsResponse create(String message, String field, String redirectionUrl) {
+        return new ErrorsResponse(List.of(new SimpleErrorResponse(message, field, redirectionUrl)));
+    }
 
-    public void setCustomFieldErrors(List<FieldError> fieldErrors) {
+    public static ErrorsResponse create(String message, String field) {
+        return new ErrorsResponse(List.of(new SimpleErrorResponse(message, field)));
+    }
 
-        customFieldErrors = new ArrayList<>();
-
-        fieldErrors.forEach(error -> {
-            customFieldErrors.add(new CustomFieldError(
-                    error.getCodes()[0],
-                    error.getRejectedValue(),
-                    error.getDefaultMessage()
-            ));
-        });
+    public List<SimpleErrorResponse> getErrors() {
+        return errors;
     }
 }
+

@@ -1,6 +1,7 @@
 package shopping.coor.domain.item.dto;
 
 import lombok.*;
+import shopping.coor.domain.item.image.dto.ImageUpdateReqDto;
 
 import java.util.List;
 

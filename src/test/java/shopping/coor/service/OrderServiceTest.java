@@ -6,10 +6,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import shopping.coor.domain.item.Item;
 import shopping.coor.domain.user.User;
 import shopping.coor.domain.basket.Basket;
 import shopping.coor.domain.item.exception.NotEnoughStockException;
-import shopping.coor.domain.item.Item;
 import shopping.coor.domain.basket.BasketRepository;
 import shopping.coor.domain.basket.dto.BasketGetResDto;
 import shopping.coor.domain.order.Order;
@@ -23,7 +23,7 @@ import shopping.coor.domain.order.OrderRepository;
 import shopping.coor.domain.order.dto.OrderItemResponseDto;
 import shopping.coor.domain.order.dto.OrderResponseDto;
 import shopping.coor.domain.user.UserRepository;
-import shopping.coor.common.container.MessageResponse;
+import shopping.coor.common.MessageResponse;
 import shopping.coor.domain.order.OrderServiceImpl;
 
 import java.time.LocalDateTime;
@@ -75,9 +75,9 @@ class OrderServiceTest {
         // given
         User user = user();
         List<Basket> basketList = Arrays.asList(
-                Basket.builder().item(item()).itemCount(4).itemTotal(30000).size("S").user(user()).build(),
-                Basket.builder().item(item()).itemCount(2).itemTotal(530000).size("M").user(user()).build(),
-                Basket.builder().item(item()).itemTotal(2).itemTotal(430000).size("L").user(user()).build()
+                Basket.builder().items(item()).count(4).total(30000).size("S").user(user()).build(),
+                Basket.builder().items(item()).count(2).total(530000).size("M").user(user()).build(),
+                Basket.builder().items(item()).total(2).total(430000).size("L").user(user()).build()
         );
         when(userRepository.getById(1L)).thenReturn(user);
         when(basketRepository.findAllByUserId(any(User.class))).thenReturn(basketList);
@@ -91,9 +91,9 @@ class OrderServiceTest {
         // given
         User user = user();
         List<Basket> basketList = Arrays.asList(
-                Basket.builder().item(item()).itemCount(3).itemTotal(30000).size("S").user(user()).build(),
-                Basket.builder().item(item()).itemCount(2).itemTotal(530000).size("M").user(user()).build(),
-                Basket.builder().item(item()).itemTotal(2).itemTotal(430000).size("L").user(user()).build()
+                Basket.builder().items(item()).count(3).total(30000).size("S").user(user()).build(),
+                Basket.builder().items(item()).count(2).total(530000).size("M").user(user()).build(),
+                Basket.builder().items(item()).total(2).total(430000).size("L").user(user()).build()
         );
         when(userRepository.getById(1L)).thenReturn(user);
         when(basketRepository.findAllByUserId(any(User.class))).thenReturn(basketList);
@@ -113,9 +113,9 @@ class OrderServiceTest {
         // given
         User user = user();
         List<Basket> basketList = Arrays.asList(
-                Basket.builder().item(item()).itemCount(3).itemTotal(30000).size("S").user(user()).build(),
-                Basket.builder().item(item()).itemCount(3).itemTotal(530000).size("M").user(user()).build(),
-                Basket.builder().item(item()).itemCount(3).itemTotal(430000).size("L").user(user()).build()
+                Basket.builder().items(item()).count(3).total(30000).size("S").user(user()).build(),
+                Basket.builder().items(item()).count(3).total(530000).size("M").user(user()).build(),
+                Basket.builder().items(item()).count(3).total(430000).size("L").user(user()).build()
         );
         when(userRepository.getById(1L)).thenReturn(user);
         when(basketRepository.findAllByUserId(any(User.class))).thenReturn(basketList);
@@ -182,22 +182,22 @@ class OrderServiceTest {
 
     private List<Order> orders() {
         List<Order> orders = Arrays.asList(
-                Order.builder().id(1L).orderDate(stringToLocalDateTime(start)).status(OrderStatus.ORDER).user(user()).orderItems(orderItems()).delivery(delivery()).build()
+                Order.builder().id(1L).status(OrderStatus.ORDER).user(user()).orderItems(orderItems()).delivery(delivery()).build()
         );
         return orders;
     }
 
     private List<Order> ordersCancel() {
         List<Order> orders = Arrays.asList(
-                Order.builder().id(1L).orderDate(stringToLocalDateTime(start)).status(OrderStatus.CANCEL).user(user()).orderItems(orderItems()).delivery(deliveryComp()).build()
+                Order.builder().id(1L).status(OrderStatus.CANCEL).user(user()).orderItems(orderItems()).delivery(deliveryComp()).build()
         );
         return orders;
     }
 
     private List<OrderItem> orderItems() {
         List<OrderItem> orderItems = Arrays.asList(
-                OrderItem.builder().id(5L).item(item()).orderCount(1).orderSize("S").orderPrice(18000).build(),
-                OrderItem.builder().id(6L).item(item()).orderCount(1).orderSize("M").orderPrice(18000).build()
+                OrderItem.builder().id(5L).items(item()).orderCount(1).orderSize("S").orderPrice(18000).build(),
+                OrderItem.builder().id(6L).items(item()).orderCount(1).orderSize("M").orderPrice(18000).build()
         );
         return orderItems;
     }
@@ -224,7 +224,7 @@ class OrderServiceTest {
         List<Order> orders = new ArrayList<>();
         return User.builder()
                 .id(1L)
-                .username("kim1")
+                .name("kim1")
                 .email("W@naver.com")
                 .password("123123")
                 .orders(orders)
@@ -232,9 +232,9 @@ class OrderServiceTest {
     }
     private List<Basket> basketList() {
         List<Basket> basketList = Arrays.asList(
-                Basket.builder().item(item()).itemCount(2).itemTotal(30000).size("S").user(user()).build(),
-                Basket.builder().item(item()).itemCount(2).itemTotal(530000).size("M").user(user()).build(),
-                Basket.builder().item(item()).itemTotal(2).itemTotal(430000).size("L").user(user()).build()
+                Basket.builder().items(item()).count(2).total(30000).size("S").user(user()).build(),
+                Basket.builder().items(item()).count(2).total(530000).size("M").user(user()).build(),
+                Basket.builder().items(item()).total(2).total(430000).size("L").user(user()).build()
         );
         return basketList;
     }

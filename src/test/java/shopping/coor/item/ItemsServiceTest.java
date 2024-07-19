@@ -1,4 +1,4 @@
-package shopping.coor.item.application.service;
+package shopping.coor.item;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -6,14 +6,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import shopping.coor.domain.item.Item;
 import shopping.coor.domain.user.User;
 import shopping.coor.domain.basket.Basket;
 import shopping.coor.domain.item.exception.ItemNotFoundException;
 import shopping.coor.domain.item.ItemService;
 import shopping.coor.domain.item.image.Image;
-import shopping.coor.domain.item.Item;
 import shopping.coor.domain.item.ItemRepository;
-import shopping.coor.domain.item.dto.ImageUpdateReqDto;
+import shopping.coor.domain.item.image.dto.ImageUpdateReqDto;
 import shopping.coor.domain.item.dto.ItemCreateReqDto;
 import shopping.coor.domain.item.dto.ItemUpdateReqDto;
 import shopping.coor.domain.item.dto.ItemGetResDto;
@@ -36,7 +36,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class})
-class ItemServiceTest {
+class ItemsServiceTest {
     @InjectMocks
     ItemService itemService;
 
@@ -115,7 +115,7 @@ class ItemServiceTest {
         List<Order> orders = new ArrayList<>();
         return User.builder()
                 .id(1L)
-                .username("kim1")
+                .name("kim1")
                 .email("W@naver.com")
                 .password("123123")
                 .orders(orders)
@@ -158,9 +158,9 @@ class ItemServiceTest {
 
     private List<Basket> basketList() {
         List<Basket> basketList = Arrays.asList(
-                Basket.builder().item(item()).itemCount(2).itemTotal(30000).size("S").user(user()).build(),
-                Basket.builder().item(item()).itemCount(2).itemTotal(530000).size("M").user(user()).build(),
-                Basket.builder().item(item()).itemTotal(2).itemTotal(430000).size("L").user(user()).build()
+                Basket.builder().items(item()).count(2).total(30000).size("S").user(user()).build(),
+                Basket.builder().items(item()).count(2).total(530000).size("M").user(user()).build(),
+                Basket.builder().items(item()).total(2).total(430000).size("L").user(user()).build()
         );
         return basketList;
     }

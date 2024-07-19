@@ -50,7 +50,7 @@ public class ItemCreateReqDto {
                 .quantityM(this.getQuantityM())
                 .quantityL(this.getQuantityL())
                 .category(this.getCategory())
-                .size(this.getSize())
+                .sizeInfo(this.getSize())
                 .material(this.getMaterial())
                 .info(this.getInfo())
                 .build();

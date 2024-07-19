@@ -1,4 +1,4 @@
-package shopping.coor.domain.item.dto;
+package shopping.coor.domain.item.image.dto;
 
 import lombok.Builder;
 import lombok.Getter;

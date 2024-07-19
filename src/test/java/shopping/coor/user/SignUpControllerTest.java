@@ -1,4 +1,4 @@
-package shopping.coor.auth.presentation.http;
+package shopping.coor.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;

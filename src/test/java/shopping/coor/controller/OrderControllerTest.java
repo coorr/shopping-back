@@ -100,15 +100,6 @@ class OrderControllerTest {
         return orderItemResponseDtoList;
     }
 
-
-
-
-    private SimpleBooleanResponse simpleBooleanResponse() {
-        return SimpleBooleanResponse.builder()
-                .result(true)
-                .build();
-    }
-
     private List<BasketGetResDto> basketResponseDto() {
         List<BasketGetResDto> basket = Arrays.asList(
                 BasketGetResDto.builder().itemId(10L).itemTotal(30000).itemCount(5).size("L").discount(28000).build(),

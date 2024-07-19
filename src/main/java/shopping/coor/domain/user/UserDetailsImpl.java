@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class UserDetailsImpl implements UserDetails {
 	private Long id;
 
-	private String username;
+	private String name;
 
 	private String email;
 
@@ -35,7 +35,7 @@ public class UserDetailsImpl implements UserDetails {
 
 		return new UserDetailsImpl(
 				user.getId(),
-				user.getUsername(),
+				user.getName(),
 				user.getEmail(),
 				user.getPassword(),
 				authorities);
@@ -53,7 +53,7 @@ public class UserDetailsImpl implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return username;
+		return name;
 	}
 
 	@Override

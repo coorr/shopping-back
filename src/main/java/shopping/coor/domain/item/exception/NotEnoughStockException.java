@@ -1,8 +1,8 @@
 package shopping.coor.domain.item.exception;
 
-import shopping.coor.common.exception.ApplicationLogicException;
+import shopping.coor.common.exception.SimpleMessageIllegalArgumentException;
 
-public class NotEnoughStockException extends ApplicationLogicException {
+public class NotEnoughStockException extends SimpleMessageIllegalArgumentException {
 
     public NotEnoughStockException() {
         super("품절된 상품으로 주문할 수 없습니다.");

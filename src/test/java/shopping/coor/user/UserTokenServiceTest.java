@@ -1,4 +1,4 @@
-package shopping.coor.auth.application.service;
+package shopping.coor.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

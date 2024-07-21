@@ -1,4 +1,4 @@
-package shopping.coor.infra.redis;
+package shopping.coor.infrastructure.redis;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

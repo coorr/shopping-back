@@ -3,6 +3,7 @@ package shopping.coor.common.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -49,13 +50,12 @@ public class GlobalExceptionHandler {
         return ErrorsResponse.create("치명적인 에러가 발생하였습니다. 관리자에게 문의하세요", null);
     }
 
-//    @ExceptionHandler(ExpiredLoginSessionException.class)
-//    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-//    public ErrorsResponse handleValidationExpiredLoginSessionException(ExpiredLoginSessionException e, HttpServletRequest request) {
-//        log.info(e.toString(), e);
-//
-//        return ErrorsResponse.create(e.getMessage(), null);
-//    }
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public ErrorsResponse handleAccessDeniedException(AccessDeniedException e) {
+        log.info(e.toString(), e);
+        return ErrorsResponse.create(e.getMessage(), null);
+    }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
@@ -77,50 +77,4 @@ public class GlobalExceptionHandler {
         log.error(e.toString(), e);
         return ErrorsResponse.create("URL not found", null);
     }
-
-
-
-//    @ExceptionHandler(ApplicationLogicException.class)
-//    public ResponseEntity<ErrorsResponse> handleValidationUserAlreadyExistsException(ApplicationLogicException e) {
-//        if (e.getMessage() != null)
-//            log.error(e.getMessage(), e);
-//
-//        ErrorsResponse response = ErrorsResponse.create().message(e.getMessage());
-//
-//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-//    }
-//
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<ErrorsResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-//        if (e.getMessage() != null)
-//            log.error(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
-//
-//        ErrorsResponse response = ErrorsResponse.create()
-//                .message(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
-//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-//    }
-//
-//    @ExceptionHandler(BindException.class)
-//    public ResponseEntity<ErrorsResponse> handleBindException(BindException e) {
-//        if (e.getMessage() != null)
-//            log.error(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
-//
-//        ErrorsResponse response = ErrorsResponse.create()
-//                .message(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
-//
-//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-//    }
-//
-//    @ExceptionHandler(ValidationIllegalArgumentException.class)
-//    public ResponseEntity<ErrorsResponse> handleValidationIllegalArgumentException(ValidationIllegalArgumentException e) {
-//        if (e.getMessage() != null)
-//            log.error(e.getMessage());
-//
-//        ErrorsResponse response = ErrorsResponse.create()
-//                .message(e.getMessage());
-//
-//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-//    }
-
-
 }

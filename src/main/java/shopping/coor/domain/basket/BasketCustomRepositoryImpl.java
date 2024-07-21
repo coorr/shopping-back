@@ -21,7 +21,7 @@ public class BasketCustomRepositoryImpl implements BasketCustomRepository {
         return query
                 .selectFrom(basket)
                 .innerJoin(user).on(basket.user.id.eq(user.id))
-                .innerJoin(item).on(basket.items.id.eq(item.id))
+                .innerJoin(item).on(basket.item.id.eq(item.id))
                 .where(basket.user.eq(userId))
                 .fetch();
     }
@@ -29,7 +29,7 @@ public class BasketCustomRepositoryImpl implements BasketCustomRepository {
     public Basket findBasketAndItemByIdAndSizeAndUserById(Long itemId, String size, Long userId) {
         return query
                 .selectFrom(basket)
-                .where(basket.items.id.eq(itemId)
+                .where(basket.item.id.eq(itemId)
                         .and(basket.size.eq(size))
                         .and(basket.user.id.eq(userId)))
                 .fetchOne();

@@ -12,10 +12,10 @@ public class SignUpPostReqDtoValidator extends AbstractValidator<SignUpPostReqDt
     @Override
     public void validateTarget(SignUpPostReqDto request, Errors errors) {
         if (!StringUtils.hasText(request.getUsername())) {
-            errors.rejectValue("username", "아이디를 입력해주세요.");
+            errors.rejectValue("username", null, "아이디를 입력해주세요.");
         }
         if (!StringUtils.hasText(request.getPassword())) {
-            errors.rejectValue("password", "비밀번호를 입력해주세요.");
+            errors.rejectValue("password", null, "비밀번호를 입력해주세요.");
         }
     }
 }

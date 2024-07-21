@@ -1,4 +1,4 @@
-package shopping.coor.infra.redis;
+package shopping.coor.infrastructure.redis;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

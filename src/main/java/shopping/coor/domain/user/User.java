@@ -38,7 +38,7 @@ public class User extends BaseEntityCreateUpdateAggregate implements Serializabl
     private String password;
 
     @Builder.Default
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "u_id"),
             inverseJoinColumns = @JoinColumn(name = "r_id"))

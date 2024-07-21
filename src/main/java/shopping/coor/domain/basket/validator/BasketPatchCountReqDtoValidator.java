@@ -13,7 +13,7 @@ public class BasketPatchCountReqDtoValidator extends AbstractValidator<BasketPat
         try {
             BasketOrder.valueOf(target.getOrder());
         } catch (Exception e) {
-            errors.rejectValue("order", "필수 값을 채워주세요.");
+            errors.rejectValue("order", null, "필수 값을 채워주세요.");
         }
     }
 }

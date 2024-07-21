@@ -1,4 +1,4 @@
-package shopping.coor.infra.redis;
+package shopping.coor.infrastructure.redis;
 
 import org.springframework.data.repository.CrudRepository;
 

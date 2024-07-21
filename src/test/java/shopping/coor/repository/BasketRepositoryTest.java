@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import shopping.coor.domain.basket.Basket;
 import shopping.coor.domain.item.Item;
+import shopping.coor.domain.item.enums.ItemCategory;
 import shopping.coor.domain.order.Order;
 import shopping.coor.domain.user.User;
 import shopping.coor.domain.basket.BasketRepository;
@@ -111,12 +112,12 @@ class BasketRepositoryTest {
                 .quantityS(3)
                 .quantityM(3)
                 .quantityL(3)
-                .category("outwear")
+                .category(ItemCategory.OUTWEAR)
                 .build();
     }
     private List<Basket> baskets() {
         List<Basket> basketList = Arrays.asList(
-                Basket.builder().id(1L).items(item()).user(user()).total(60000).count(2).size("S").build()
+                Basket.builder().id(1L).item(item()).user(user()).total(60000).count(2).size("S").build()
         );
         return basketList;
     }

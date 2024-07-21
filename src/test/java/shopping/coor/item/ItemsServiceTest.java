@@ -73,7 +73,7 @@ class ItemsServiceTest {
     void deleteItem() throws Exception {
         given(itemRepository.findById(any())).willReturn(Optional.ofNullable(item()));
 
-        itemService.deleteItem(1L);
+        itemService.delete(1L);
 
         verify(itemRepository).findById(1L);
     }
@@ -158,9 +158,9 @@ class ItemsServiceTest {
 
     private List<Basket> basketList() {
         List<Basket> basketList = Arrays.asList(
-                Basket.builder().items(item()).count(2).total(30000).size("S").user(user()).build(),
-                Basket.builder().items(item()).count(2).total(530000).size("M").user(user()).build(),
-                Basket.builder().items(item()).total(2).total(430000).size("L").user(user()).build()
+                Basket.builder().item(item()).count(2).total(30000).size("S").user(user()).build(),
+                Basket.builder().item(item()).count(2).total(530000).size("M").user(user()).build(),
+                Basket.builder().item(item()).total(2).total(430000).size("L").user(user()).build()
         );
         return basketList;
     }

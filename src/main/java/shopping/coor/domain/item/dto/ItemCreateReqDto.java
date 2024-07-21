@@ -2,6 +2,7 @@ package shopping.coor.domain.item.dto;
 
 import lombok.*;
 import shopping.coor.domain.item.Item;
+import shopping.coor.domain.item.enums.ItemCategory;
 
 @Getter
 @AllArgsConstructor
@@ -49,7 +50,7 @@ public class ItemCreateReqDto {
                 .quantityS(this.getQuantityS())
                 .quantityM(this.getQuantityM())
                 .quantityL(this.getQuantityL())
-                .category(this.getCategory())
+                .category(ItemCategory.valueOf(this.getCategory()))
                 .sizeInfo(this.getSize())
                 .material(this.getMaterial())
                 .info(this.getInfo())

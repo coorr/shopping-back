@@ -1,4 +1,4 @@
-package shopping.coor.infra.log;
+package shopping.coor.infrastructure.log;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

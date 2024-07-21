@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Where;
 import shopping.coor.common.model.BaseEntityCreateUpdateAggregate;
 import shopping.coor.domain.item.dto.ItemUpdateReqDto;
+import shopping.coor.domain.item.enums.ItemCategory;
 import shopping.coor.domain.item.exception.NotEnoughStockException;
 import shopping.coor.domain.item.image.Image;
 
@@ -45,8 +46,9 @@ public class Item extends BaseEntityCreateUpdateAggregate {
     @Column(name = "quantityL", nullable = false)
     private int quantityL;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "category")
-    private String category;
+    private ItemCategory category;
 
     @Column(name = "size_info")
     private String sizeInfo;
@@ -84,7 +86,7 @@ public class Item extends BaseEntityCreateUpdateAggregate {
         this.quantityS = reqDto.getQuantityS();
         this.quantityM = reqDto.getQuantityM();
         this.quantityL = reqDto.getQuantityL();
-        this.category = reqDto.getCategory();
+        this.category = ItemCategory.valueOf(reqDto.getCategory());
         this.sizeInfo = reqDto.getSize();
         this.material = reqDto.getMaterial();
         this.info = reqDto.getInfo();

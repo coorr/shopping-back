@@ -1,11 +1,13 @@
 package shopping.coor.domain.user.signin;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import shopping.coor.domain.user.UserDetailsImpl;
+import shopping.coor.domain.user.signin.exception.InvalidTokenException;
 
 import java.util.Date;
 
@@ -22,7 +24,7 @@ public class JwtService {
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         return Jwts.builder()
-                .setSubject((userPrincipal.getName()))
+                .setSubject((userPrincipal.getEmail()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -37,26 +39,10 @@ public class JwtService {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
-        } catch (SignatureException e) {
-            log.error("Invalid JWT signature: {}", e.getMessage());
-            throw new JwtException("Invalid JWT signature");
-        } catch (MalformedJwtException e) {
-            log.error("Invalid JWT token: {}", e.getMessage());
-            throw new JwtException("Invalid JWT token");
-        } catch (ExpiredJwtException e) {
-            log.error("JWT token is expired: {}", e.getMessage());
-            throw new JwtException("JWT token is expired");
-        } catch (UnsupportedJwtException e) {
-            log.error("JWT token is unsupported: {}", e.getMessage());
-            throw new JwtException("JWT token is unsupported");
-        } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty: {}", e.getMessage());
-            throw new JwtException("JWT claims string is empty");
         } catch (Exception e) {
             log.error("JWT Error: {}", e.getMessage());
+            throw new InvalidTokenException();
         }
-
-        return false;
     }
 }
 

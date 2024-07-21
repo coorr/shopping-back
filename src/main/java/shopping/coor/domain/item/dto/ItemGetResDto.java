@@ -2,15 +2,13 @@ package shopping.coor.domain.item.dto;
 
 import lombok.*;
 import shopping.coor.domain.item.Item;
+import shopping.coor.domain.item.enums.ItemCategory;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ItemGetResDto {
 
     private Long itemId;
@@ -20,7 +18,7 @@ public class ItemGetResDto {
     private int quantityS;
     private int quantityM;
     private int quantityL;
-    private String category;
+    private ItemCategory category;
     private String size;
     private String material;
     private String info;

@@ -1,4 +1,4 @@
-package shopping.coor.infra.log;
+package shopping.coor.infrastructure.log;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

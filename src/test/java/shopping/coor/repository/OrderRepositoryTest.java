@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import shopping.coor.domain.item.Item;
+import shopping.coor.domain.item.enums.ItemCategory;
 import shopping.coor.domain.user.User;
 import shopping.coor.domain.item.ItemRepository;
 import shopping.coor.domain.order.Order;
@@ -100,7 +101,7 @@ class OrderRepositoryTest {
                 .price(20000)
                 .discountPrice(18000)
                 .title("시어서커 크롭 자켓 (다크네이비)")
-                .category("outwear")
+                .category(ItemCategory.OUTWEAR)
                 .quantityS(3)
                 .quantityM(3)
                 .quantityL(3)

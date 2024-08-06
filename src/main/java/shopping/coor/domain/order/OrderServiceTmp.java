@@ -52,7 +52,7 @@ public class OrderServiceTmp {
 
         List<String> soldOutList = new ArrayList<>();
         for (Basket basket : basketList) {
-            Item items = itemService.getItemById(basket.getItem().getId());
+            Item items = itemService.getItem(basket.getItem().getId());
             soldOutList = itemCountCheck(basket, items, soldOutList);
         }
 

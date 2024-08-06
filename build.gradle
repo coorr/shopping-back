@@ -94,4 +94,19 @@ configurations {
 	querydsl.extendsFrom compileClasspath
 }
 
+//ext.profile = (!project.hasProperty('profile') || !profile) ? 'local' : profile
+//sourceSets {
+//	main {
+//		java {
+//			srcDirs "src/main/java"
+//		}
+//		resources {
+//			srcDirs "src/main/resources-${profile}"
+//		}
+//	}
+//}
+//
+//bootRun {
+//	systemProperty "spring.profiles.active", profile
+//}
 

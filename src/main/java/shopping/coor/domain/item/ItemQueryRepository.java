@@ -27,15 +27,9 @@ public class ItemQueryRepository {
                 .fetchOne();
     }
 
-//    List<Item> findByIdGreaterThanOrderByIdDesc(Long itemLastId, Pageable pageable);
-//    List<Item> findByIdLessThanOrderByIdDesc(Long itemLastId, Pageable pageable);
-//
-//    List<Item> findByIdLessThanAndCategoryOrderByIdDesc(Long itemLastId, String category, Pageable pageable);
-//    List<Item> findByIdGreaterThanAndCategoryOrderByIdDesc(Long itemLastId, String category, Pageable pageable);
     public List<Item> findAllBySearchConditions(ItemSearchGetReqDto dto) {
         Pageable pageable = dto.generatePage();
         return query.selectFrom(item)
-                .innerJoin(image).on(image.item.id.eq(item.id))
                 .where(
                         this.eqItemCategory(dto.getCategory()),
                         this.ltItemLastId(dto.getItemLastId())

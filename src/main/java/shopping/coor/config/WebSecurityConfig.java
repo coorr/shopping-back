@@ -9,16 +9,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import shopping.coor.filter.JwtExceptionFilter;
-import shopping.coor.common.exception.CustomForbiddenEntryPoint;
-import shopping.coor.filter.AuthTokenFilter;
-import shopping.coor.domain.user.signin.JwtService;
 import shopping.coor.domain.user.UserDetailsServiceImpl;
+import shopping.coor.domain.user.signin.JwtService;
+import shopping.coor.filter.AuthTokenFilter;
+import shopping.coor.filter.JwtExceptionFilter;
 
 
 @Configuration
@@ -27,26 +25,11 @@ import shopping.coor.domain.user.UserDetailsServiceImpl;
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsServiceImpl userDetailsService;
-	private final CustomForbiddenEntryPoint unauthorizedHandler;
 	private final JwtService jwtService;
 
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-	}
-
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer(){
-		return web -> {
-			web.ignoring()
-					.antMatchers(
-							"/static/**",
-							"/test/**",
-							"/test",
-							"/api/user/**",
-							"/api/user/signin"
-							);
-		};
 	}
 
 	@Bean
@@ -63,13 +46,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable()
-				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests()
 				.antMatchers("/items/**").permitAll()
 				.antMatchers("/api/basket/**").permitAll()
 				.antMatchers("/api/order/**").permitAll()
 				.antMatchers("/api/user/**").permitAll()
+				.antMatchers("/static/**", "/test/**").permitAll()
 				.anyRequest().authenticated();
 
 

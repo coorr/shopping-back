@@ -1,6 +1,5 @@
 package shopping.coor.domain.item.dto;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +9,8 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ItemPostCreateReqDto {
+@NoArgsConstructor
+public class ItemPostReqDto {
 
     @NotBlank(message = "옷 정보를 입력해주세요.")
     private String title;

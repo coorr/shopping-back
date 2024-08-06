@@ -1,4 +1,4 @@
-package shopping.coor.infrastructure.aws;
+package shopping.coor.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

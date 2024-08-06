@@ -30,8 +30,8 @@ public class Image {
     @JoinColumn(name = "i_id")
     private Item item;
 
-    public Image(Long imageId, String location) {
-        this.id = imageId;
+    public Image(String location, Item item) {
+        this.item = item;
         this.location = location;
     }
 

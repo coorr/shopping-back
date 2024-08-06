@@ -37,5 +37,4 @@ public class ItemUpdateReqDto {
         this.imagePath = reqDto.getImagePath();
     }
 
-
 }

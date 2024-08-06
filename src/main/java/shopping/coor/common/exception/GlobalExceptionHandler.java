@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import shopping.coor.common.container.ErrorsResponse;
+import shopping.coor.domain.user.signin.exception.CustomAccessDeniedException;
 
 import java.io.IOException;
 
@@ -53,6 +54,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     public ErrorsResponse handleAccessDeniedException(AccessDeniedException e) {
+        log.info(e.toString(), e);
+        return ErrorsResponse.create("권한이 없습니다.", null);
+    }
+
+    @ExceptionHandler(CustomAccessDeniedException.class)
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public ErrorsResponse handleAccessCustomAccessDeniedException(CustomAccessDeniedException e) {
         log.info(e.toString(), e);
         return ErrorsResponse.create(e.getMessage(), null);
     }

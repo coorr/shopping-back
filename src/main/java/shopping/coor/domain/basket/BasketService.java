@@ -42,7 +42,7 @@ public class BasketService {
         List<Long> basketIds = basketRepository.findByUser(user);
 
         for (BasketPostReqDto dto : basketPostReqDto) {
-            Item items = itemService.getItemById(dto.getItemId());
+            Item items = itemService.getItem(dto.getItemId());
 
             if (basketIds.contains(dto.getKeyIndex())) {
                 Basket basketDuplicate = getBasketById(dto.getKeyIndex());
@@ -59,13 +59,13 @@ public class BasketService {
 
     public void checkBasket(List<BasketPostReqDto> basketPostReqDto) {
         for (BasketPostReqDto dto : basketPostReqDto) {
-            Item items = itemService.getItemById(dto.getItemId());
+            Item items = itemService.getItem(dto.getItemId());
             items.stockCheck(dto.getItemCount(), dto.getSize());
         }
     }
 
     public SimpleBooleanResponse checkItem(Long itemId, BasketItemPostGetDto dto) {
-        Item items = itemService.getItemById(itemId);
+        Item items = itemService.getItem(itemId);
         items.stockCheck(dto.getItemCount()+1 , dto.getSize());
         return new SimpleBooleanResponse(true);
     }
@@ -83,7 +83,7 @@ public class BasketService {
                 continue;
             }
 
-            Item items = itemService.getItemById(dto.getItemId());
+            Item items = itemService.getItem(dto.getItemId());
             basketList.add(dto.toBasket(dto, user, items));
         }
         basketRepository.saveAll(basketList);

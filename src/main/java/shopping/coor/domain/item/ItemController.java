@@ -29,7 +29,8 @@ public class ItemController {
         if (null == itemId.get()) {
             throw new ItemNotFoundException();
         }
-        return ResponseEntity.ok().body(itemService.getItem(itemId.get()));
+        ItemGetResDto resDto = new ItemGetResDto(itemService.getItem(itemId.get()));
+        return ResponseEntity.ok().body(resDto);
     }
 
     @GetMapping

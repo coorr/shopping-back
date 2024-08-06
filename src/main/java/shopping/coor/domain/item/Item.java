@@ -3,6 +3,7 @@ package shopping.coor.domain.item;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Where;
+import org.springframework.util.ObjectUtils;
 import shopping.coor.common.model.BaseEntityCreateUpdateAggregate;
 import shopping.coor.domain.item.dto.ItemUpdateReqDto;
 import shopping.coor.domain.item.enums.ItemCategory;
@@ -65,11 +66,32 @@ public class Item extends BaseEntityCreateUpdateAggregate {
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
-    public void addImage(List<Image> imageList) {
-        for (Image result : imageList) {
-            images.add(result);
-            result.setItem(this);
+    public Item(String title, int price, int discountPrice, int quantityS, int quantityM, int quantityL,
+                ItemCategory category, String sizeInfo, String material, String info) {
+        this.title = title;
+        this.price = price;
+        this.discountPrice = discountPrice;
+        this.quantityS = quantityS;
+        this.quantityM = quantityM;
+        this.quantityL = quantityL;
+        this.category = category;
+        this.sizeInfo = sizeInfo;
+        this.material = material;
+        this.info = info;
+    }
+
+    public void addImage(List<Image> images) {
+        for (Image image : images) {
+            image.setItem(this);
         }
+        this.images = images;
+    }
+
+    public void setItem(List<Image> images) {
+        if (ObjectUtils.isEmpty(images)) {
+            return;
+        }
+        this.images = images;
     }
 
     public Item(Long id, String title, int  discountPrice, int quantityS) {
@@ -94,10 +116,8 @@ public class Item extends BaseEntityCreateUpdateAggregate {
         return this;
     }
 
-    public Item delete() {
+    public void delete() {
         this.deleted = true;
-
-        return this;
     }
 
     public void addStock(int quantity, String size) {

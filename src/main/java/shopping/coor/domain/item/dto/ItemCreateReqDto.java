@@ -5,9 +5,6 @@ import shopping.coor.domain.item.Item;
 import shopping.coor.domain.item.enums.ItemCategory;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 public class ItemCreateReqDto {
     private String title;
 
@@ -21,39 +18,29 @@ public class ItemCreateReqDto {
 
     private int quantityL;
 
-    private String category;
+    private ItemCategory category;
 
-    private String size;
+    private String sizeInfo;
 
     private String material;
 
     private String info;
 
-    public ItemCreateReqDto(ItemPostCreateReqDto reqDto) {
-        this.title = reqDto.getTitle();
-        this.price = reqDto.getPrice();
-        this.discountPrice = reqDto.getDiscountPrice();
-        this.quantityS = reqDto.getQuantityS();
-        this.quantityM = reqDto.getQuantityM();
-        this.quantityL = reqDto.getQuantityL();
-        this.category = reqDto.getCategory();
-        this.size = reqDto.getSize();
-        this.material = reqDto.getMaterial();
-        this.info = reqDto.getInfo();
+    public ItemCreateReqDto(ItemPostReqDto dto) {
+        this.title = dto.getTitle();
+        this.price = dto.getPrice();
+        this.discountPrice = dto.getDiscountPrice();
+        this.quantityS = dto.getQuantityS();
+        this.quantityM = dto.getQuantityM();
+        this.quantityL = dto.getQuantityL();
+        this.category = ItemCategory.valueOf(dto.getCategory());
+        this.sizeInfo = dto.getSize();
+        this.material = dto.getMaterial();
+        this.info = dto.getInfo();
     }
 
     public Item toEntity() {
-        return Item.builder()
-                .title(this.getTitle())
-                .price(this.getPrice())
-                .discountPrice(this.getDiscountPrice())
-                .quantityS(this.getQuantityS())
-                .quantityM(this.getQuantityM())
-                .quantityL(this.getQuantityL())
-                .category(ItemCategory.valueOf(this.getCategory()))
-                .sizeInfo(this.getSize())
-                .material(this.getMaterial())
-                .info(this.getInfo())
-                .build();
+        return new Item(this.title, this.price, this.discountPrice, this.quantityS, this.quantityM,
+                this.quantityL, this.category, this.sizeInfo, this.material, this.info);
     }
 }
